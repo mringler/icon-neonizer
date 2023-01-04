@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="configure.css" />
+</head>
+
+<body>
+
+
+    <div style="display: flex;">
+        <img id="originalIcon" style="height: 200px; width: 200px; border: 2px solid rgb(143, 143, 143);" />
+        <img id="neonIcon" style="width: 200px; width: 200px; border: 2px solid rgb(143, 143, 143);" />
+    </div>
+
+    <div>
+        <button id="clearStorage">Clear Storage</button>
+        <button id="recreateImage">Recreate Icon</button>
+        <button id="logIcon">Log Current Icon</button>
+        <button id="viewIcon">Show Icon Url</button>
+        <button id="requestIcons">Get Icons</button>
+    </div>
+
+    <form id="tracer-options" class="form" nosubmit>
+
+        <div class="form-section">
+
+            <div class="form-section-header">Svg Options</div>
+
+            <div class="row">
+
+                <div class="form-element">
+                    <div class="label">Stroke width</div>
+                    <input type="number" step="1" data-prop="strokewidth" />
+                </div>
+
+                <div class="form-element">
+                    <div class="label">Fill style</div>
+                    <select data-prop="fillstyle">
+                        <option value="fill">Fill</option>
+                        <option value=" stroke+fill">Stroke &amp; Fill</option>
+                        <option value=" stroke">Stroke</option>
+                    </select>
+                </div>
+
+                <div class=" form-element">
+                    <div class="label">Trim</div>
+                    <select data-prop="trim">
+                        <option value="0">Off</option>
+                        <option value=" 1">Keep aspect ratio</option>
+                        <option value=" 2">All</option>
+                    </select>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="form-section">
+
+            <div class="form-section-header">Tracer Options</div>
+
+            <div class=" row">
+
+                <div class="form-element">
+                    <div class="label">Line tracer error margin</div>
+                    <input type="number" step="0.1" data-prop="ltres" />
+                </div>
+
+                <div class="form-element">
+                    <div class="label">Curve tracer error margin</div>
+                    <input type="number" step="0.1" data-prop="qtres" />
+                </div>
+
+            </div>
+
+            <div class="form-element">
+                <div class="label">Minimum required number of pixels on shape outlines</div>
+                <input type="number" step="1" data-prop="pathomit" />
+            </div>
+
+            <div class="row">
+                <div class="form-element">
+                    <div class="label">Blur radius</div>
+                    <input type="number" step="0.1" data-prop="blurradius" />
+                </div>
+
+                <div class="form-element">
+                    <div class="label">Blur delta</div>
+                    <input type="number" step="0.1" data-prop="blurdelta" />
+                </div>
+
+            </div>
+        </div>
+        <div class="form-section">
+
+
+            <div class="form-section-header">Interpolation Options</div>
+
+            <div class="row">
+
+                <div class="form-element">
+                    <div class="label">Disable Interpolation</div>
+                    <input type="checkbox" data-prop="interpolationMode" />
+                </div>
+
+                <div class="form-element">
+                    <label>
+                        <input type="checkbox" data-prop="rightangleenhance" />
+                        <span class="label">
+                            Preserve right angles
+                        </span>
+                    </label>
+                    
+                </div>
+
+            </div>
+
+        </div>
+        <div class="form-section">
+            <div class="form-section-header">Color quantization Options</div>
+
+            <div class="form-element">
+                <div class="label">Colorsampling mode</div>
+                <select data-prop="colorsampling">
+                    <option value="0">Use generated palette</option>
+                    <option value="1">Sample image randomly</option>
+                    <option value="2">Sample image along a grid</option>
+                    <option value="3">Set manually</option>
+                </select>
+            </div>
+
+            <div class=" form-element">
+                <div class="label">Palette</div>
+
+                <div>
+                    <input type="color" data-prop="pal" />
+                    <button>remove</button>
+                </div>
+
+                <button>Add</button>
+            </div>
+
+            <div class="form-element">
+                <div class="label">Number of colors on initial palette</div>
+                <input type="number" step="1" data-prop="numberofcolors" />
+            </div>
+
+            <div class="form-element">
+                <div class="label">Number of clustering cycles</div>
+                <input type="number" step="1" data-prop="colorquantcycles" />
+            </div>
+
+            <div class="form-element">
+                <div class="label">Prune color ratio</div>
+                <input type="number" step="0.1" data-prop="mincolorratio" />
+            </div>
+
+        </div>
+        <div class="form-section">
+
+            <div>
+                <button id="traceImage" class="bg-orange">Go</button>
+            </div>
+
+        </div>
+
+    </form>
+
+    <script src="configure.ts" type="module"></script>
+</body>
+
+</html>
