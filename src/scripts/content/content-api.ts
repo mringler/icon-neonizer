@@ -1,4 +1,4 @@
-import type { ApiCaller, ApiMessage, BackgroundApiInterface, ContentApiInterface } from "@/core/ApiInterfaces";
+import type { ApiCaller, ApiMessage, BackgroundApiInterface, ContentApiInterface } from "../ApiInterfaces";
 import { Favicon } from "./favicon";
 
 

@@ -18,8 +18,8 @@ export namespace FaviconRequestFilter {
     }
 
     function requestFilter(requestDetails: browser.webRequest._OnBeforeRequestDetails): browser.webRequest.BlockingResponse | undefined | Promise<browser.webRequest.BlockingResponse> {
-        const iconUrl = requestDetails.requestId;
-        const filter = browser.webRequest.filterResponseData(iconUrl);
+        const iconUrl = requestDetails.url;
+        const filter = browser.webRequest.filterResponseData(requestDetails.requestId);
         const data: ArrayBuffer[] = [];
 
         const storedIconPromise = IconStorage.loadIcon(iconUrl);

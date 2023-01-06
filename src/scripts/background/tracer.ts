@@ -6,19 +6,31 @@ import { SvgDrawerGradient } from './svg-drawer-gradient';
 
 export namespace Tracer {
 
-    export async function traceUrl(iconUrl: string): Promise<string> {
-        const options = getTracerOptions();
-        console.log(options)
+    export async function traceUrl(
+        iconUrl: string,
+        customOptions: Partial<Options> | null = null
+    ): Promise<string> {
+        const options = getOptions(customOptions);
         const imageData = await ImageLoader.loadUrl(iconUrl);
-        options.strokewidth = imageData.width > 100 ? 6 : 2;
+        if (!customOptions?.strokewidth) {
+            options.strokewidth = imageData.width > 100 ? 6 : 2;
+        }
         const drawer = new SvgDrawerGradient(options, '');
         return ImageTracerBrowser.fromImageData(imageData, options, drawer);
     }
 
-    export async function traceBuffer(buffer: ArrayBuffer): Promise<string> {
-        const options = getTracerOptions();
+    export async function traceBuffer(
+        buffer: ArrayBuffer,
+        options: Partial<Options> | null = null
+    ): Promise<string> {
+        options = getOptions(options);
         const drawer = new SvgDrawerGradient(options, '');
         return ImageTracerBrowser.fromBuffer(buffer, options, drawer);
+    }
+
+    export function getOptions(options: Partial<Options> | null = null): Options {
+        options ??= getTracerOptions()
+        return Options.buildFrom(options)
     }
 
     function getTracerOptions(): Partial<Options> {

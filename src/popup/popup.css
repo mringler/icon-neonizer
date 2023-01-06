@@ -1,0 +1,12 @@
+body{
+    width: 500px;
+    padding: 8px;
+    background-color: #3e3c3c;
+    color: #d3d3d3;
+}
+
+
+.panel{
+    border: 1px solid #ff00ff;
+    padding: 8px;
+}

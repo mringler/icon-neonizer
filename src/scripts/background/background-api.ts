@@ -1,11 +1,15 @@
-import type { ApiMessage, BackgroundApiInterface } from "../core/ApiInterfaces";
+import type { ApiMessage, BackgroundApiInterface } from "../ApiInterfaces";
 import { IconStorage } from "./icon-storage";
 import { Tracer } from "./tracer";
 
 const backgroundApi: BackgroundApiInterface = {
     processIconUrl,
     getStoredIcon: IconStorage.loadIcon,
-    storeIcon: IconStorage.storeIcon
+    storeIcon: IconStorage.storeIcon,
+    getStoredIcons: IconStorage.loadAll,
+    removeIcon: IconStorage.removeIcon,
+    getOptions: Tracer.getOptions,
+    traceWithOptions: Tracer.traceUrl
 }
 
 async function processIconUrl(iconUrl: string, force = false): Promise<string|null> {
