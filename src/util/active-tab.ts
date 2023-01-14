@@ -1,5 +1,12 @@
 export async function loadActiveTab() {
-    const tabs = await browser.tabs.query({ active: true, currentWindow: true });
+    return await browser.tabs.getCurrent()
+}
 
-    return tabs.length > 0 ? tabs[0] : null;
+export async function loadOpenerTab(): Promise<browser.tabs.Tab | null> {
+    const tab = await loadActiveTab()
+    const sourceTabId = tab.openerTabId
+    if (sourceTabId === undefined) {
+        return null
+    }
+    return browser.tabs.get(sourceTabId)
 }

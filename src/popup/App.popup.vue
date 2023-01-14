@@ -1,30 +1,79 @@
 <script setup lang="ts">
-import ImageDisplay from '@/components/ImageDisplay.vue'
 import OpenExtensionPage from '@/components/OpenExtensionPage.vue';
+import ImageDisplayForUrl from '@/components/ImageDisplayForUrl.vue';
 
-function closePopup(){
-  window.close()
+import { loadActiveTab } from '@/util/active-tab';
+import { onBeforeMount, ref, Ref } from 'vue'
+import { loadOriginalUrl as loadOriginalFaviconUrl } from '../util/content-api';
+import { Blacklist } from '@/scripts/background/blacklist';
+
+const url: Ref<string | null> = ref(null)
+const isBlacklisted = ref(false)
+
+async function loadUrl() {
+    const tab = await loadActiveTab()
+    if (!tab) {
+        return
+    }
+    url.value = await loadOriginalFaviconUrl(tab)
+    isBlacklisted.value = await Blacklist.isBlacklisted(url.value)
+}
+onBeforeMount(loadUrl)
+
+
+function closePopup() {
+    window.close()
 }
 
 </script>
 
 <template>
 
-  <div class="panel">
-    <header>
-      <img alt="Vue logo" class="logo" src="/icons/icon-neonizer.svg" width="75" height="75" />
-      <h1>Icon Neonizer</h1>
-    </header>
+    <v-card
+        title="Icon Neonizer"
+        class="panel-card ma-3"
+    >
+        <v-card-subtitle>
+            <v-tooltip
+                v-if="isBlacklisted"
+                text="No automatic processing: source is blacklisted."
+                v-slot:activator="{ props }"
+            >
+                <v-icon
+                    v-bind="props"
+                    class="mr-2 text-info"
+                >mdi-block-helper</v-icon>
+            </v-tooltip>
+            <span class="wrap-on-hover">{{ url }}</span>
+        </v-card-subtitle>
+        <v-card-text>
+            <ImageDisplayForUrl
+                v-if="url"
+                :url="url"
+                class="justify-space-between"
+            />
+        </v-card-text>
 
-    <main>
-      <ImageDisplay />
-      <OpenExtensionPage @opened="closePopup"/>
-    </main>
-  </div>
+        <v-card-actions>
+            <OpenExtensionPage
+                @opened="closePopup"
+                block
+                variant="tonal"
+            />
+        </v-card-actions>
+
+    </v-card>
+
 </template>
 <style scoped>
+.panel-card {
+    border: 1px solid #ff00ff;
+    padding: 8px;
+    background-color: transparent;
+    width: 500px;
+}
 
-header {
-  display: flex;
+.wrap-on-hover:hover {
+    word-break: break-all;
 }
 </style>

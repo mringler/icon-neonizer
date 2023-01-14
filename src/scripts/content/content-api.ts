@@ -2,9 +2,9 @@ import type { ApiCaller, ApiMessage, BackgroundApiInterface, ContentApiInterface
 import { Favicon } from "./favicon";
 
 
-export function initContentApi(iconUrl: string) {
+export function initContentApi(iconUrl: string, isBackupUrl: boolean) {
 
-    const contentApi = setupContentApi(iconUrl);
+    const contentApi = setupContentApi(iconUrl, isBackupUrl);
     const listener = (
         message: ApiMessage<ContentApiInterface>,
         sender: browser.runtime.MessageSender,
@@ -21,7 +21,7 @@ export function initContentApi(iconUrl: string) {
     browser.runtime.onMessage.addListener(listener);
 }
 
-function setupContentApi(iconUrl: string): ContentApiInterface {
+function setupContentApi(iconUrl: string, isBackupUrl:boolean): ContentApiInterface {
     return {
         log: (...args: any[]) => console.log(...args),
         setIcon: Favicon.setSvg,
@@ -29,7 +29,7 @@ function setupContentApi(iconUrl: string): ContentApiInterface {
         getOriginalFaviconUrl: () => iconUrl,
         getCurrentFavicon: Favicon.getCurrentFavicon,
         getCurrentFaviconData: Favicon.getCurrentFaviconData,
-        rebuildIcon: () => replaceFaviconUrl(iconUrl, true),
+        rebuildIcon: () => replaceFavicon(iconUrl, true, !isBackupUrl),
     };
 }
 
@@ -37,9 +37,9 @@ const callBackgroundApi: ApiCaller<BackgroundApiInterface> = (command, args) => 
     return browser.runtime.sendMessage({ command, args }) as ReturnType<ApiCaller<BackgroundApiInterface>>;
 }
 
-export async function replaceFaviconUrl(iconUrl: string, force = false) {
+export async function replaceFavicon(iconUrl: string, force = false, store = true) {
 
-    const icon = await callBackgroundApi('processIconUrl', [iconUrl, force]);
+    const icon = await callBackgroundApi('processIconUrl', [iconUrl, force, store]);
     if (!icon) {
         console.log('no icon - not updating');
         return

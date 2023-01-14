@@ -1,0 +1,64 @@
+<svg viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" desc="Created with imagetracer.js version " >
+ <linearGradient id="my_gradient_254-254-254" x1="0" y1="1" x2="1" y2="1">
+   <stop offset="0%" stop-opacity="1" style="stop-color:rgb(254,254,254)"/>
+   <stop offset="100%" stop-opacity="1" style="stop-color:rgb(214,214,214)"/>
+ </linearGradient>
+ <linearGradient id="my_gradient_234-72-57" x1="0" y1="1" x2="0" y2="0">
+   <stop offset="0%" stop-opacity="1" style="stop-color:rgb(255,0,0)"/>
+   <stop offset="100%" stop-opacity="1" style="stop-color:rgb(255,0,255)"/>
+ </linearGradient>
+ <linearGradient id="my_gradient_253-253-253" x1="1" y1="0" x2="0" y2="1">
+   <stop offset="0%" stop-opacity="1" style="stop-color:rgb(253,253,253)"/>
+   <stop offset="100%" stop-opacity="1" style="stop-color:rgb(213,213,213)"/>
+ </linearGradient>
+ <linearGradient id="my_gradient_247-187-13" x1="0" y1="1" x2="0" y2="0">
+   <stop offset="0%" stop-opacity="1" style="stop-color:rgb(255,255,0)"/>
+   <stop offset="100%" stop-opacity="1" style="stop-color:rgb(145,145,0)"/>
+ </linearGradient>
+ <linearGradient id="my_gradient_67-134-244" x1="1" y1="0" x2="1" y2="1">
+   <stop offset="0%" stop-opacity="1" style="stop-color:rgb(0,128,255)"/>
+   <stop offset="100%" stop-opacity="1" style="stop-color:rgb(0,128,365)"/>
+ </linearGradient>
+ <linearGradient id="my_gradient_229-241-236" x1="0" y1="0" x2="0" y2="1">
+   <stop offset="0%" stop-opacity="1" style="stop-color:rgb(229,241,236)"/>
+   <stop offset="100%" stop-opacity="1" style="stop-color:rgb(189,201,196)"/>
+ </linearGradient>
+ <linearGradient id="my_gradient_175-211-223" x1="0" y1="1" x2="1" y2="1">
+   <stop offset="0%" stop-opacity="1" style="stop-color:rgb(0,255,255)"/>
+   <stop offset="100%" stop-opacity="1" style="stop-color:rgb(0,145,145)"/>
+ </linearGradient>
+ <linearGradient id="my_gradient_246-175-143" x1="1" y1="1" x2="0" y2="1">
+   <stop offset="0%" stop-opacity="1" style="stop-color:rgb(255,255,0)"/>
+   <stop offset="100%" stop-opacity="1" style="stop-color:rgb(145,145,0)"/>
+ </linearGradient>
+ <linearGradient id="my_gradient_52-168-84" x1="1" y1="1" x2="1" y2="0">
+   <stop offset="0%" stop-opacity="1" style="stop-color:rgb(0,255,128)"/>
+   <stop offset="100%" stop-opacity="1" style="stop-color:rgb(0,365,128)"/>
+ </linearGradient>
+ <linearGradient id="my_gradient_63-139-214" x1="1" y1="0" x2="1" y2="1">
+   <stop offset="0%" stop-opacity="1" style="stop-color:rgb(0,128,255)"/>
+   <stop offset="100%" stop-opacity="1" style="stop-color:rgb(0,128,365)"/>
+ </linearGradient>
+ <path desc="colorId:0 segment:0 r:254 g:254 b:254 isHole:0" fill="url(#my_gradient_254-254-254)" stroke="none" stroke-width="1" opacity="1" d="M 15.5 0 Q 26.2 0.8 30 8.5 L 32 16.5 L 30 23.5 L 23.5 30 L 15.5 32 L 8.5 30 L 2 23.5 L 0 15.5 L 2 8.5 L 8.5 2 L 15.5 0 Z M 11.5 4 L 9.5 5 L 4 11.5 Q 2.5 19 5 22.5 L 11.5 28 Q 19 29.5 22.5 27 L 28 19.5 L 28 14 L 16 14 L 16 18 L 22 18 L 22 20.5 L 18.5 23 L 13.5 23 L 9 18.5 L 9 13.5 L 11 10 L 13.5 9 L 21.5 10 L 24 6.5 Q 20.9 2.1 11.5 4 Z" />
+ <path desc="colorId:1 segment:0 r:254 g:254 b:254 isHole:0" fill="url(#my_gradient_254-254-254)" stroke="none" stroke-width="1" opacity="0.1" d="M 5.5 3 L 3.5 6 L 5.5 3 Z" />
+ <path desc="colorId:1 segment:1 r:254 g:254 b:254 isHole:0" fill="url(#my_gradient_254-254-254)" stroke="none" stroke-width="1" opacity="0.1" d="M 26.5 3 L 28.5 6 L 26.5 3 Z" />
+ <path desc="colorId:1 segment:2 r:254 g:254 b:254 isHole:0" fill="url(#my_gradient_254-254-254)" stroke="none" stroke-width="1" opacity="0.1" d="M 3.5 26 L 5.5 29 L 3.5 26 Z" />
+ <path desc="colorId:1 segment:3 r:254 g:254 b:254 isHole:0" fill="url(#my_gradient_254-254-254)" stroke="none" stroke-width="1" opacity="0.1" d="M 28.5 26 L 26.5 29 L 28.5 26 Z" />
+ <path desc="colorId:5 segment:0 r:234 g:72 b:57 isHole:0" fill="url(#my_gradient_234-72-57)" stroke="none" stroke-width="1" opacity="1" d="M 13.5 4 Q 20.4 3.3 23 6 L 20.5 10 Q 19.1 7.4 14.5 8 L 8.5 13 L 6 12 Q 5.3 7.3 9.5 6 L 13.5 4 Z" />
+ <path desc="colorId:7 segment:0 r:253 g:253 b:253 isHole:0" fill="url(#my_gradient_253-253-253)" stroke="none" stroke-width="1" opacity="0.9" d="M 5.5 4 L 4.5 6 L 5.5 4 Z" />
+ <path desc="colorId:7 segment:1 r:253 g:253 b:253 isHole:0" fill="url(#my_gradient_253-253-253)" stroke="none" stroke-width="1" opacity="0.9" d="M 26.5 4 L 27.5 6 L 26.5 4 Z" />
+ <path desc="colorId:7 segment:2 r:253 g:253 b:253 isHole:0" fill="url(#my_gradient_253-253-253)" stroke="none" stroke-width="1" opacity="0.9" d="M 4.5 26 L 5.5 28 L 4.5 26 Z" />
+ <path desc="colorId:7 segment:3 r:253 g:253 b:253 isHole:0" fill="url(#my_gradient_253-253-253)" stroke="none" stroke-width="1" opacity="0.9" d="M 27.5 26 L 26.5 28 L 27.5 26 Z" />
+ <path desc="colorId:8 segment:0 r:247 g:187 b:13 isHole:0" fill="url(#my_gradient_247-187-13)" stroke="none" stroke-width="1" opacity="1" d="M 5.5 11 L 9 13.5 L 8 17.5 Q 10.3 18.8 7.5 20 L 5.5 21 Q 3.1 18.9 4 13.5 L 5.5 11 Z" />
+ <path desc="colorId:9 segment:0 r:67 g:134 b:244 isHole:0" fill="url(#my_gradient_67-134-244)" stroke="none" stroke-width="1" opacity="1" d="M 16 14 L 27 14 L 27 20.5 L 24.5 24 L 21 23 L 23 18 L 16 18 L 16 14 Z" />
+ <path desc="colorId:10 segment:0 r:229 g:241 b:236 isHole:0" fill="url(#my_gradient_229-241-236)" stroke="none" stroke-width="1" opacity="1" d="M 10.5 20 L 11.5 22 L 10.5 20 Z" />
+ <path desc="colorId:11 segment:0 r:175 g:211 b:223 isHole:0" fill="url(#my_gradient_175-211-223)" stroke="none" stroke-width="1" opacity="1" d="M 27.5 14 L 28 18.5 L 27 18.5 L 27.5 14 Z" />
+ <path desc="colorId:11 segment:1 r:175 g:211 b:223 isHole:0" fill="url(#my_gradient_175-211-223)" stroke="none" stroke-width="1" opacity="1" d="M 6.5 23 L 8.5 26 L 6.5 23 Z" />
+ <path desc="colorId:11 segment:2 r:175 g:211 b:223 isHole:0" fill="url(#my_gradient_175-211-223)" stroke="none" stroke-width="1" opacity="1" d="M 25.5 23 L 24.5 25 L 25.5 23 Z" />
+ <path desc="colorId:13 segment:0 r:246 g:175 b:143 isHole:0" fill="url(#my_gradient_246-175-143)" stroke="none" stroke-width="1" opacity="1" d="M 8.5 6 L 6.5 9 L 8.5 6 Z" />
+ <path desc="colorId:13 segment:1 r:246 g:175 b:143 isHole:0" fill="url(#my_gradient_246-175-143)" stroke="none" stroke-width="1" opacity="1" d="M 23.5 6 L 24 7.5 L 21 9.5 L 23.5 6 Z" />
+ <path desc="colorId:13 segment:2 r:246 g:175 b:143 isHole:0" fill="url(#my_gradient_246-175-143)" stroke="none" stroke-width="1" opacity="1" d="M 14.5 8 L 18 8.5 L 14.5 9 L 14.5 8 Z" />
+ <path desc="colorId:13 segment:3 r:246 g:175 b:143 isHole:0" fill="url(#my_gradient_246-175-143)" stroke="none" stroke-width="1" opacity="1" d="M 8.5 14 L 9 17.5 L 8 17.5 L 8.5 14 Z" />
+ <path desc="colorId:14 segment:0 r:52 g:168 b:84 isHole:0" fill="url(#my_gradient_52-168-84)" stroke="none" stroke-width="1" opacity="1" d="M 8.5 19 L 11.5 23 L 18.5 24 L 21.5 23 L 23 26 L 15.5 28 Q 8.9 27.1 6 22.5 L 8.5 19 Z" />
+ <path desc="colorId:17 segment:0 r:63 g:139 b:214 isHole:0" fill="url(#my_gradient_63-139-214)" stroke="none" stroke-width="1" opacity="1" d="M 22.5 23 L 23.5 25 L 22.5 23 Z" />
+</svg>

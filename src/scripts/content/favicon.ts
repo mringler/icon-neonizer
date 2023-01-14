@@ -1,8 +1,8 @@
 export namespace Favicon {
 
-    export function getPageFaviconUrl(): string {
+    export function getPageFaviconUrl(): string | null {
         const url = getLargestFaviconHtmlElement()?.href?.trim();
-        return (url && url.substring(0, 10) !== 'data:image') ? url : getGoogleApiUrl();
+        return (url && url.substring(0, 10) !== 'data:image') ? url : null;
     }
 
     export function getCurrentFaviconData(): string | null {
@@ -23,7 +23,7 @@ export namespace Favicon {
         return decodeURIComponent(svgData);
     }
 
-    function getGoogleApiUrl(): string {
+    export function getGoogleApiUrl(): string {
         const domain = window.location.hostname
         return `https://www.google.com/s2/favicons?domain=${domain}&sz=256`
     }
@@ -74,6 +74,11 @@ export namespace Favicon {
     }
 
     export function setSvg(svgString: string): void {
+        updateLinkElements(svgString)
+        window.onload = () => updateLinkElements(svgString)
+    }
+
+    function updateLinkElements(svgString: string){
         if (!document.head || !svgString) {
             return;
         }
@@ -88,6 +93,7 @@ export namespace Favicon {
         for (let i = 0; i < elements.length; i++) {
             fixupLinkElement(elements[i], svgString);
         }
+
     }
 
     function fixupLinkElement(linkElement: HTMLLinkElement, svgString: string): void {

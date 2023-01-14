@@ -1,4 +1,15 @@
+import type { Options } from '@image-tracer/core'
 import LZString from 'lz-string'
+import type { BlacklistedPage } from './blacklist'
+import type { GradientDrawerOptions } from './svg-drawer/gradient-drawer-options'
+
+const NonIconKey = {
+    options: '--options--',
+    blacklistedPages: '--blacklist--'
+} as const
+
+type NonIconKeyLiteral = typeof NonIconKey[keyof typeof NonIconKey]
+
 
 type ImageEntry = {
     i: string // icon
@@ -42,8 +53,14 @@ export namespace IconStorage {
         return icon
     }
 
+    async function loadAllImageData(): Promise<Record<string, ImageEntry>> {
+        const storeData = await browser.storage.local.get()
+        Object.values(NonIconKey).forEach((key) => delete (storeData[key]))
+        return storeData as Promise<Record<string, ImageEntry>>
+    }
+
     export async function loadAll(): Promise<ImageDataRecord[]> {
-        const entries = await browser.storage.local.get(null as unknown as string) as Record<string, ImageEntry>
+        const entries = await loadAllImageData()
         const encoder = new TextEncoder();
         return Object.entries(entries).map(([url, data]) => {
             return {
@@ -58,5 +75,41 @@ export namespace IconStorage {
 
     export async function removeIcon(url: string): Promise<void> {
         return browser.storage.local.remove(url)
+    }
+
+    export async function cleanup() {
+        const twoWeeksAgo = Date.now() - 12096e5;
+        const entries = await loadAllImageData()
+        Object.entries(entries).forEach(([url, data]) => {
+            (!data.k && data.a < twoWeeksAgo) && removeIcon(url)
+        })
+    }
+
+    async function storeNonIcon<ValueType = any>(key: NonIconKeyLiteral, value: ValueType) {
+        return browser.storage.local.set({ [key]: value });
+    }
+
+    async function loadNonIcon<ValueType = any>(key: NonIconKeyLiteral, defaultValue?: ValueType): Promise<typeof defaultValue> {
+        const entry = await browser.storage.local.get(key);
+        return entry[key] as ValueType ?? defaultValue
+    }
+
+    export async function storeOptions(options: GradientDrawerOptions) {
+        return storeNonIcon<GradientDrawerOptions>(NonIconKey.options, options)
+    }
+
+    export async function loadOptions(): Promise<GradientDrawerOptions | undefined> {
+        return loadNonIcon<GradientDrawerOptions>(NonIconKey.options)
+    }
+
+    // Blacklist 
+
+    export async function storeBlacklist(blacklist: BlacklistedPage[]) {
+        blacklist.sort()
+        return storeNonIcon(NonIconKey.blacklistedPages, blacklist)
+    }
+
+    export async function loadBlacklist(): Promise<BlacklistedPage[]> {
+        return loadNonIcon<BlacklistedPage[]>(NonIconKey.blacklistedPages, []) as Promise<BlacklistedPage[]>
     }
 }

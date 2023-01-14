@@ -19,7 +19,6 @@ const openExtensionPage = async () => {
 <template>
 
     <v-btn
-        icon="mdi-sync"
         color="primary"
         variant="plain"
         @click="openExtensionPage"

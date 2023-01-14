@@ -1,39 +1,35 @@
 <script setup lang="ts">
 
-import { CreatePaletteMode, Options, RgbColor, FillStyle, TrimMode } from '@image-tracer/core';
-import { ref, Ref, computed, WritableComputedRef, watch } from 'vue'
+import { ColorBuilderOption, GradientDrawerOptions, GradientBuilderOption } from '@/scripts/background/svg-drawer/gradient-drawer-options';
+import { CreatePaletteMode, RgbColor, FillStyle, TrimMode } from '@image-tracer/core';
+import { watch, ref } from 'vue'
 import ImagePixelColorPickerPopup from './ImagePixelColorPickerPopup.vue';
 import SelectedColorChips from './SelectedColorChips.vue';
 
 type Props = {
-    options: Options,
+    options: GradientDrawerOptions,
     imageData?: ImageData | (() => Promise<ImageData>),
 }
 const props = defineProps<Props>()
-const emit = defineEmits(['update:options'])
-const options: Ref<Options> = ref({} as Options)
-const isValid = ref(true)
-const colorPalette:Ref<RgbColor[]> = ref([] as RgbColor[])
+
+function autoOpenColorPicker(): boolean {
+    return !Boolean(props.options.palette?.length)
+}
+
+function usePaletteMode(): boolean {
+    return props.options.colorsampling === CreatePaletteMode.PALETTE
+}
 
 watch(
     () => props.options,
-    () => options.value = props.options,
+    () => props.options.palette = (props.options.palette) ? props.options.palette.map(RgbColor.fromRgbColorData) : [],
     { immediate: true }
 )
-
-function usePaletteMode():boolean{
-    return options.value.colorsampling === CreatePaletteMode.PALETTE
-}
-
-function emitUpdate(){
-    options.value.pal = (usePaletteMode()) ? colorPalette.value : null 
-    emit('update:options', options)
-}
 
 const itemsColorSampling = [
     { title: 'Use generated palette', value: CreatePaletteMode.GENERATE },
     { title: 'Sample image randomly', value: CreatePaletteMode.SAMPLE },
-    { title: 'Sample image along a grid', value: CreatePaletteMode.SCAN },
+    { title: 'Sample image along grid', value: CreatePaletteMode.SCAN },
     { title: 'Choose colors', value: CreatePaletteMode.PALETTE },
 ]
 
@@ -48,41 +44,93 @@ const itemsTrim = [
     { title: 'Keep aspect ratio', value: TrimMode.KEEP_RATIO },
     { title: 'All', value: TrimMode.ALL },
 ]
+
+const colorDrawerOptions = [
+    { title: 'Saturate', value: ColorBuilderOption.saturate },
+    { title: 'Lighten', value: ColorBuilderOption.lighten },
+    { title: 'Darken', value: ColorBuilderOption.darken },
+]
+
+const gradientDrawerOptions = [
+    { title: 'Radom', value: GradientBuilderOption.random },
+    { title: 'Fixed', value: GradientBuilderOption.fixed },
+    { title: 'Flat', value: GradientBuilderOption.flat },
+]
+
+const cols = {
+    cols: 12,
+    sm: 6,
+    md: 3,
+    xl: 2
+}
 </script>
 
 <template>
-    <v-form
-        v-model="isValid"
-        @update:model-value="emitUpdate"
-    >
+    <v-form>
         <v-container>
 
             <h4>Svg Options</h4>
             <v-row>
-                <v-col cols="3">
-                    <v-text-field
-                        label="Stroke Width"
-                        v-model="options.strokewidth"
-                        required
-                        type="number"
-                        min="1"
-                    ></v-text-field>
-                </v-col>
 
-                <v-col cols="3">
+                <v-col v-bind="cols">
                     <v-select
                         label="Fill Style"
-                        v-model="options.fillstyle"
+                        v-model="props.options.fillstyle"
                         :items="itemsFillStyle"
                         required
                     ></v-select>
                 </v-col>
 
-                <v-col cols="6">
+                <v-col v-bind="cols">
+                    <v-text-field
+                        label="Stroke Width"
+                        v-model="props.options.strokewidth"
+                        required
+                        type="number"
+                        min="1"
+                        :disabled="props.options.fillstyle === FillStyle.FILL"
+                    ></v-text-field>
+                </v-col>
+
+                <v-col v-bind="cols">
                     <v-select
                         label="Trim"
-                        v-model="options.trim"
+                        v-model="props.options.trim"
                         :items="itemsTrim"
+                        required
+                    ></v-select>
+                </v-col>
+
+                <v-col v-bind="cols">
+                    <v-text-field
+                        label="Scale"
+                        v-model="props.options.scale"
+                        required
+                        type="number"
+                        step="1"
+                        min="0"
+                    ></v-text-field>
+                </v-col>
+
+            </v-row>
+
+            <v-row>
+
+                <v-col v-bind="cols">
+                    <v-select
+                        label="Colors"
+                        v-model="props.options.colorBuilder"
+                        :items="colorDrawerOptions"
+                        required
+                    ></v-select>
+                </v-col>
+
+
+                <v-col v-bind="cols">
+                    <v-select
+                        label="Gradients"
+                        v-model="props.options.gradientBuilder"
+                        :items="gradientDrawerOptions"
                         required
                     ></v-select>
                 </v-col>
@@ -92,10 +140,10 @@ const itemsTrim = [
             <h4>Tracer Options</h4>
 
             <v-row>
-                <v-col cols="6">
+                <v-col v-bind="cols">
                     <v-text-field
                         label="Line Error Margin"
-                        v-model="options.ltres"
+                        v-model="props.options.ltres"
                         required
                         type="number"
                         step="0.1"
@@ -103,33 +151,37 @@ const itemsTrim = [
                     ></v-text-field>
                 </v-col>
 
-                <v-col cols="6">
+                <v-col v-bind="cols">
                     <v-text-field
                         label="Curve Error Margin"
-                        v-model="options.qtres"
+                        v-model="props.options.qtres"
                         required
                         type="number"
                         step="0.1"
+                        min="0"
+                    ></v-text-field>
+                </v-col>
+
+                <v-col
+                    v-bind="cols"
+                    sm="12"
+                >
+                    <v-text-field
+                        label="Minimum shape outline pixel size"
+                        v-model="props.options.pathomit"
+                        required
+                        type="number"
                         min="0"
                     ></v-text-field>
                 </v-col>
             </v-row>
 
             <v-row>
-                <v-col cols="6">
-                    <v-text-field
-                        label="Minimum shape outline pixel size"
-                        v-model="options.pathomit"
-                        required
-                        type="number"
-                        min="0"
-                    ></v-text-field>
-                </v-col>
 
-                <v-col cols="3">
+                <v-col v-bind="cols">
                     <v-text-field
                         label="Blur Radius"
-                        v-model="options.blurradius"
+                        v-model="props.options.blurradius"
                         required
                         type="number"
                         step="0.1"
@@ -137,10 +189,10 @@ const itemsTrim = [
                     ></v-text-field>
                 </v-col>
 
-                <v-col cols="3">
+                <v-col v-bind="cols">
                     <v-text-field
                         label="Blur Delta"
-                        v-model="options.blurdelta"
+                        v-model="props.options.blurdelta"
                         required
                         type="number"
                         step="0.1"
@@ -153,21 +205,21 @@ const itemsTrim = [
 
             <v-row>
 
-                <v-col cols="6">
+                <v-col v-bind="cols">
                     <v-checkbox
-                        label="Interpolation Mode"
-                        v-model="options.interpolationMode"
+                        label="Interpolate Points"
+                        v-model="props.options.interpolationMode"
                         false-value="off"
                         true-value="interpolate"
                     ></v-checkbox>
                 </v-col>
 
-                <v-col cols="6">
+                <v-col v-bind="cols">
 
                     <v-checkbox
                         label="Enhance Right Angles"
-                        :disabled="options.interpolationMode === 'off'"
-                        v-model="options.rightangleenhance"
+                        :disabled="props.options.interpolationMode === 'off'"
+                        v-model="props.options.rightangleenhance"
                     ></v-checkbox>
                 </v-col>
 
@@ -178,26 +230,28 @@ const itemsTrim = [
 
             <v-row>
                 <v-col
-                    cols="12"
-                    md="3"
+                    v-bind="cols"
+                    md="6"
+                    lg="3"
                 >
                     <v-select
                         label="Sampling Mode"
-                        v-model="options.colorsampling"
+                        v-model="props.options.colorsampling"
                         :items="itemsColorSampling"
                         required
-                        @update:model-value=""
                     ></v-select>
                 </v-col>
 
                 <v-col
                     v-if="usePaletteMode()"
                     cols="12"
-                    md="9"
+                    md="6"
+                    lg="9"
                 >
 
                     <SelectedColorChips
-                        v-model:colors="colorPalette"
+                        :showPicker="autoOpenColorPicker()"
+                        v-model:colors="options.palette as RgbColor[]"
                         unique
                     >
                         <template
@@ -207,7 +261,7 @@ const itemsTrim = [
                             <ImagePixelColorPickerPopup
                                 :model-value="isShow"
                                 @update:model-value="setShow"
-                                v-model:colors="colorPalette"
+                                v-model:colors="(options.palette as RgbColor[])"
                                 :image-data="props.imageData!"
                                 unique
                             />
@@ -216,26 +270,20 @@ const itemsTrim = [
                 </v-col>
 
                 <template v-if="!usePaletteMode()">
-                    <v-col
-                        cols="4"
-                        md="3"
-                    >
+                    <v-col v-bind="cols">
                         <v-text-field
                             label="Number of Colors"
-                            v-model="options.numberofcolors"
+                            v-model="props.options.numberofcolors"
                             required
                             type="number"
                             min="1"
                         ></v-text-field>
                     </v-col>
 
-                    <v-col
-                        cols="4"
-                        md="3"
-                    >
+                    <v-col v-bind="cols">
                         <v-text-field
                             label="Clustering Cycles"
-                            v-model="options.colorquantcycles"
+                            v-model="props.options.colorquantcycles"
                             type="number"
                             min="1"
                             required
@@ -243,12 +291,13 @@ const itemsTrim = [
                     </v-col>
 
                     <v-col
-                        cols="4"
-                        md="3"
+                        v-bind="cols"
+                        offset-md="6"
+                        offset-lg="0"
                     >
                         <v-text-field
                             label="Minimum Quota"
-                            v-model="options.mincolorratio"
+                            v-model="props.options.mincolorratio"
                             type="number"
                             min="0"
                             step="0.05"
@@ -259,10 +308,6 @@ const itemsTrim = [
                 </template>
             </v-row>
         </v-container>
-        <slot
-            :options="options"
-            :isValid="isValid"
-        />
     </v-form>
 
 </template>

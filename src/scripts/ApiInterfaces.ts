@@ -1,5 +1,5 @@
-import type { Options } from "@image-tracer/core"
 import type {ImageDataRecord} from "./background/icon-storage"
+import type { GradientDrawerOptions } from "./background/svg-drawer/gradient-drawer-options"
 
 export interface ApiMessage<ApiInterface extends ScriptsApi> {
     command: keyof ApiInterface,
@@ -21,13 +21,13 @@ export interface ContentApiInterface extends ScriptsApi {
 }
 
 export interface BackgroundApiInterface extends ScriptsApi {
-    processIconUrl: (iconUrl: string, force: boolean) => Promise<string | null>
+    processIconUrl: (iconUrl: string, force: boolean, store?: boolean) => Promise<string | null>
     getStoredIcon: (iconUrl: string) => Promise<string | null>
     getStoredIcons: () => Promise<ImageDataRecord[]>
     storeIcon: (iconUrl: string, icon: string, noOverride?: boolean) => void
     removeIcon: (iconUrl: string) => void
-    getOptions: () => Options,
-    traceWithOptions: (iconUrl: string, options: Partial<Options>) => Promise<string>
+    getOptions: () => Promise<GradientDrawerOptions>,
+    traceWithOptions: (iconUrl: string, options: Partial<GradientDrawerOptions>) => Promise<string>
 }
 
 
@@ -38,13 +38,3 @@ export type ApiCaller<ApiInterface extends ScriptsApi> = <CommandName extends ke
     commandArgs: ApiCommandParameters<ApiInterface, CommandName>,
     ...args: any[]
 ) => Promise<ApiCommandReturn<ApiInterface, CommandName>>
-
-
-
-
-/*
-const test: ApiCaller<BackgroundApiInterface> = (c, a) => null
-
-test('processIconUrl', ['url', true]);
-test('processIconUrl', [true, 'ferd']);
-*/

@@ -6,8 +6,8 @@
     "description": "Replaces favicons with their neonized version.",
   
     "icons": {
-      "48": "icons/icon-neonizer.png",
-      "96": "icons/icon-neonizer.svg"
+      "48": "icons/logo-48.png",
+      "96": "icons/logo.svg"
     },
 
     "browser_specific_settings": {
@@ -28,19 +28,19 @@
     "content_scripts": [
       {
         "matches": ["<all_urls>"],
-        "js": ["content/content.js"]
+        "js": ["scripts/content.js"]
       }
     ],
     
     "background": {
-      "scripts": ["background/background.js"]
+      "scripts": ["scripts/background.js"]
     },
   
 
     "browser_action": {
-        "default_icon": "icons/icon-neonizer.svg",
+        "default_icon": "icons/logo.svg",
         "default_title": "Neonize",
-        "default_popup": "src/popup/configure.html"
+        "default_popup": "src/popup/popup.html"
     }
   }
   

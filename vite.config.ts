@@ -2,21 +2,19 @@ import { fileURLToPath, URL } from 'node:url'
 
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import typescript from '@rollup/plugin-typescript';
+import vuetify from 'vite-plugin-vuetify';
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    typescript({
-      types: [
-        "firefox-webext-browser"
-      ]
-    }),
-    vue()
+    vue(),
+    vuetify({ autoImport: true }),
   ],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src/app', import.meta.url))
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+      '~': fileURLToPath(new URL('./node_modules', import.meta.url)),
+      '#': fileURLToPath(new URL('./src/components', import.meta.url)),
     }
   },
   build: {
@@ -26,13 +24,11 @@ export default defineConfig({
     sourcemap: true,
     rollupOptions: {
       input: {
-        'background/background': "./src/background/background.ts",
-        'content/content': "./src/content/content.ts",
-        'popup/configure': "./src/popup/configure.html",
+        'popup/popup': "./src/popup/popup.html",
+        'extension-page/extension-page': "./src/extension-page/extension-page.html",
       },
       output: {
         entryFileNames: "[name].js",
-        //inlineDynamicImports: true,
       },
     },
   },

@@ -52,7 +52,7 @@ function addColor(color: RgbColor) {
     >
         <v-card max-width="fit-content">
             <v-card-title>
-                <span class="text-h5">Pick Colors From Image</span>
+                <span class="text-h5">Pick Image Colors</span>
             </v-card-title>
             <v-card-text class="d-flex">
                 <div class="picker-canvas-container">

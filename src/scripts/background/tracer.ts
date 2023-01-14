@@ -1,17 +1,21 @@
+import { faviconDownloadUrl } from '@/util/favicon-download-url-filter';
 import {
     ImageTracerBrowser, CreatePaletteMode, LayeringMode,
-    Options, FillStyle, TrimMode, ImageLoader
+    FillStyle, TrimMode, ImageLoader
 } from '@image-tracer/browser';
-import { SvgDrawerGradient } from './svg-drawer-gradient';
+import { IconStorage } from './icon-storage';
+import { GradientDrawerOptions } from './svg-drawer/gradient-drawer-options';
+import { SvgDrawerGradient } from './svg-drawer/svg-drawer-gradient';
 
 export namespace Tracer {
 
     export async function traceUrl(
         iconUrl: string,
-        customOptions: Partial<Options> | null = null
+        customOptions: Partial<GradientDrawerOptions> | null = null
     ): Promise<string> {
-        const options = getOptions(customOptions);
-        const imageData = await ImageLoader.loadUrl(iconUrl);
+        const options = await getOptions(customOptions);
+        const url = faviconDownloadUrl(iconUrl)
+        const imageData = await ImageLoader.loadUrl(url);
         if (!customOptions?.strokewidth) {
             options.strokewidth = imageData.width > 100 ? 6 : 2;
         }
@@ -21,19 +25,21 @@ export namespace Tracer {
 
     export async function traceBuffer(
         buffer: ArrayBuffer,
-        options: Partial<Options> | null = null
+        options: Partial<GradientDrawerOptions> | null = null
     ): Promise<string> {
-        options = getOptions(options);
+        options = await getOptions(options);
         const drawer = new SvgDrawerGradient(options, '');
         return ImageTracerBrowser.fromBuffer(buffer, options, drawer);
     }
 
-    export function getOptions(options: Partial<Options> | null = null): Options {
-        options ??= getTracerOptions()
-        return Options.buildFrom(options)
+    export async function getOptions(options: Partial<GradientDrawerOptions> | null = null): Promise<GradientDrawerOptions> {
+        const storedOptions = await IconStorage.loadOptions() ?? getTracerOptions()
+        const combinedOptions = Object.assign({}, storedOptions, options)
+        combinedOptions.verbose = true
+        return GradientDrawerOptions.buildFrom(combinedOptions)
     }
 
-    function getTracerOptions(): Partial<Options> {
+    function getTracerOptions(): Partial<GradientDrawerOptions> {
         return {
             numberofcolors: 32,
             colorsampling: CreatePaletteMode.SCAN,
@@ -49,13 +55,4 @@ export namespace Tracer {
 
         };
     }
-
-    /*
-    export function traceSvgString(imageData: ImageData): string {
-        const options = getTracerOptions();
-        options.strokewidth = imageData.width > 100 ? 8 : 2;
-        const tracer = new ImageTracerBrowser(options);
-        const drawer = new SvgDrawerGradient(options, '');
-        return tracer.traceImage(imageData, drawer);
-    }*/
 }

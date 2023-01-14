@@ -1,11 +1,12 @@
 <script setup lang="ts">
 
-import { ref } from 'vue'
-import type { RgbColor } from '@image-tracer/core';
+import { ref, watch } from 'vue'
+import type { RgbColor, RgbColorData } from '@image-tracer/core';
 import ColorPickerCard from './ColorPickerCard.vue';
 
 type Props = {
-    colors: RgbColor[],
+    showPicker?: boolean,
+    colors: RgbColorData[],
     unique?: boolean,
     noAdd?: boolean,
     noClear?: boolean,
@@ -15,8 +16,13 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const isAddOpen = ref(false)
+watch(
+    () => props.showPicker, 
+    () => isAddOpen.value = props.showPicker === undefined ? isAddOpen.value : props.showPicker,
+    {immediate: true}
+)
 
-const emit = defineEmits(['update:colors', 'doAdd'])
+const emit = defineEmits(['update:colors', 'doAdd', 'update:showPicker'])
 
 function addColor(color: RgbColor) {
     if(props.unique && props.colors.some(existing => existing.equals(color))){
@@ -38,16 +44,16 @@ function clear() {
 function showAdd(value = true) {
     value && emit('doAdd')
     isAddOpen.value = value
+    emit('update:showPicker', value)
 }
 
 </script>
 
 <template>
-
-    <div id="color-chips">
+    <v-chip-group class="flex-wrap mx-2">
         <v-chip
             v-for="(color, ix) in props.colors"
-            :key="color.toString()"
+            :key="color.toInt32()"
             :color="color.toCssColor()"
             class="color-chip"
             variant="elevated"
@@ -63,11 +69,13 @@ function showAdd(value = true) {
             v-if="!props.noAdd"
             prepend-icon="mdi-plus"
             @click="showAdd(!isAddOpen)"
+            label
         >Pick Color</v-chip>
         <v-chip
             v-if="props.colors.length > 0 && !props.noClear"
             prepend-icon="mdi-delete"
             @click="clear"
+            label
         >Clear All</v-chip>
 
         <slot
@@ -91,17 +99,11 @@ function showAdd(value = true) {
             </v-dialog>
         </slot>
 
-    </div>
+    </v-chip-group>
 
 </template>
 <style scoped>
 
-#color-chips .v-chip{
-    margin: 8px;
-}
-.color-chip{
-    width: 148px;
-}
 .swatch {
     width: 25px;
     height: 25px;

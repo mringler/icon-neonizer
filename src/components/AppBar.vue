@@ -1,5 +1,8 @@
 <script setup lang="ts">
 
+function reloadBackground(){
+    browser.runtime.reload()
+}
 </script>
 
 <template>
@@ -9,11 +12,10 @@
         app
         class="header-gradient"
     >
-        <v-app-bar-nav-icon @click.stop="$emit('toggleNavigation')"></v-app-bar-nav-icon>
-        <v-app-bar-nav-icon>
+        <v-app-bar-nav-icon @click.stop="$emit('toggleNavigation')">
             <img
                 alt="Icon Neonizer Logo"
-                src="/icons/icon-neonizer.png"
+                src="/icons/logo-48.png"
             />
         </v-app-bar-nav-icon>
 
@@ -21,17 +23,10 @@
 
         <v-spacer></v-spacer>
 
-        <v-btn icon>
-            <v-icon>mdi-magnify</v-icon>
+        <v-btn icon @click="reloadBackground">
+            <v-icon>mdi-reload</v-icon>
         </v-btn>
 
-        <v-btn icon>
-            <v-icon>mdi-filter</v-icon>
-        </v-btn>
-
-        <v-btn icon>
-            <v-icon>mdi-dots-vertical</v-icon>
-        </v-btn>
     </v-app-bar>
 
 </template>
