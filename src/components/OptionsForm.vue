@@ -1,8 +1,8 @@
 <script setup lang="ts">
 
-import { ColorBuilderOption, GradientDrawerOptions, GradientBuilderOption } from '@/scripts/background/svg-drawer/gradient-drawer-options';
 import { CreatePaletteMode, RgbColor, FillStyle, TrimMode } from '@image-tracer/core';
 import { watch, ref } from 'vue'
+import { ColorBuilderOption, GradientDrawerOptions, GradientBuilderOption } from '@/scripts/background/svg-drawer/gradient-drawer-options';
 import ImagePixelColorPickerPopup from './ImagePixelColorPickerPopup.vue';
 import SelectedColorChips from './SelectedColorChips.vue';
 
@@ -67,6 +67,7 @@ const cols = {
 
 <template>
     <v-form>
+
         <v-container>
 
             <h4>Svg Options</h4>
@@ -184,8 +185,9 @@ const cols = {
                         v-model="props.options.blurradius"
                         required
                         type="number"
-                        step="0.1"
+                        step="1"
                         min="0"
+                        max="5"
                     ></v-text-field>
                 </v-col>
 
@@ -193,12 +195,30 @@ const cols = {
                     <v-text-field
                         label="Blur Delta"
                         v-model="props.options.blurdelta"
-                        required
                         type="number"
-                        step="0.1"
+                        step="10"
                         min="0"
                     ></v-text-field>
                 </v-col>
+
+                <v-col v-bind="cols">
+                    <v-checkbox
+                        label="Sharpen"
+                        v-model="props.options.sharpen"
+                    ></v-checkbox>
+                </v-col>
+
+                <v-col v-bind="cols">
+                    <v-text-field
+                        label="Sharpen Delta"
+                        :disabled="!Boolean(props.options.sharpen)"
+                        v-model="props.options.sharpenThreshold"
+                        type="number"
+                        step="10"
+                        min="0"
+                    ></v-text-field>
+                </v-col>
+
             </v-row>
 
             <h4>Interpolation Options</h4>
@@ -313,5 +333,4 @@ const cols = {
 </template>
 
 <style scoped>
-
 </style>

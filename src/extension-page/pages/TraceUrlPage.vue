@@ -12,7 +12,6 @@ import FaviconStored from '@/components/image-display/FaviconStored.vue';
 import Heading from '@/components/Heading.vue';
 import type { GradientDrawerOptions } from '@/scripts/background/svg-drawer/gradient-drawer-options';
 
-
 type Props = {
     url: string
 }
@@ -23,6 +22,7 @@ const tracedSvg: Ref<string | null> = ref(null)
 const errorMessage: Ref<string | null> = ref(null)
 const saveCount = ref(0)
 
+const emit = defineEmits(['update:svg'])
 
 onBeforeMount(async () => {
     options.value = await callBackgroundApi('getOptions', []);
@@ -45,6 +45,7 @@ const save = async () => {
     IconStorage.storeIcon(props.url, tracedSvg.value)
     errorMessage.value = 'Icon updated';
     saveCount.value++
+    emit('update:svg', tracedSvg.value)
 }
 
 async function storeOptions() {

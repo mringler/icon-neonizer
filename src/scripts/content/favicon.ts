@@ -33,7 +33,7 @@ export namespace Favicon {
     }
 
     function getFaviconHtmlElements(): NodeListOf<HTMLLinkElement> {
-        return document.querySelectorAll("link[rel~='icon']");
+        return document.querySelectorAll("link[rel~='icon']"); // "link[rel$='icon'], link[rel~='image_src']"
     }
 
     function getLargestFaviconHtmlElement(): HTMLLinkElement | null {

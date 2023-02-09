@@ -20,6 +20,8 @@ const editedSvg: Ref<string | null> = ref(null)
 const snackbarMessage = ref<string | null>(null)
 const lock = ref(false)
 
+const emit = defineEmits(['update:svg'])
+
 watch(
     () => props.svg,
     () => {
@@ -55,6 +57,7 @@ const store = async () => {
     await IconStorage.storeIcon(props.url, editedSvg.value, lock.value)
     originalSvg.value = editedSvg.value
     snackbarMessage.value = 'Icon updated'
+    emit('update:svg', editedSvg.value)
 }
 </script>
 

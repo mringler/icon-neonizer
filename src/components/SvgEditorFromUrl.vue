@@ -38,6 +38,7 @@ watch(
             :url="props.url"
             :is-locked="props.isLocked"
             :svg="svg!"
+            v-bind="$attrs"
         />
     </section>
 

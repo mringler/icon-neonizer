@@ -33,7 +33,7 @@ export namespace Blacklist {
     }
 
     export async function isBlacklisted(url: string): Promise<boolean> {
-        const entry = getBlacklistEntry(url)
+        const entry = await getBlacklistEntry(url)
         return Boolean(entry)
     }
 

@@ -1,9 +1,9 @@
 import { RgbColor } from "@image-tracer/core";
 import type { HSV } from 'color-functions/dist/rgb2hsv';
-import { SaturatedColorPairBuilder } from "./saturated-color-pair-builder";
+import { ColorPairBuilder } from "./color-pair-builder";
 
 
-export class LighteningColorPairBuilder extends  SaturatedColorPairBuilder {
+export class LighteningColorPairBuilder extends  ColorPairBuilder {
 
     protected generateWhitePair(hsvColor: HSV): [RgbColor, RgbColor] {
         const h = (hsvColor.s === 0) ? Math.floor(Math.random() * 360) : hsvColor.h

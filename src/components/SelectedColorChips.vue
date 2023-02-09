@@ -1,15 +1,14 @@
 <script setup lang="ts">
-
 import { ref, watch } from 'vue'
-import type { RgbColor, RgbColorData } from '@image-tracer/core';
+import type { RgbColor } from '@image-tracer/core';
 import ColorPickerCard from './ColorPickerCard.vue';
 
 type Props = {
-    showPicker?: boolean,
-    colors: RgbColorData[],
-    unique?: boolean,
-    noAdd?: boolean,
-    noClear?: boolean,
+    showPicker?: boolean
+    colors: RgbColor[]
+    unique?: boolean
+    noAdd?: boolean
+    noClear?: boolean
 }
 const props = withDefaults(defineProps<Props>(), {
     colors: () => [] as RgbColor[],
@@ -17,15 +16,15 @@ const props = withDefaults(defineProps<Props>(), {
 
 const isAddOpen = ref(false)
 watch(
-    () => props.showPicker, 
-    () => isAddOpen.value = props.showPicker === undefined ? isAddOpen.value : props.showPicker,
-    {immediate: true}
+    () => props.showPicker,
+    () => isAddOpen.value = (props.showPicker === undefined) ? isAddOpen.value : props.showPicker,
+    { immediate: true }
 )
 
 const emit = defineEmits(['update:colors', 'doAdd', 'update:showPicker'])
 
 function addColor(color: RgbColor) {
-    if(props.unique && props.colors.some(existing => existing.equals(color))){
+    if (props.unique && props.colors.some(existing => existing.equals(color))) {
         return
     }
     emit('update:colors', props.colors.concat([color]))
@@ -70,13 +69,17 @@ function showAdd(value = true) {
             prepend-icon="mdi-plus"
             @click="showAdd(!isAddOpen)"
             label
-        >Pick Color</v-chip>
+        >
+            Pick Color
+        </v-chip>
         <v-chip
             v-if="props.colors.length > 0 && !props.noClear"
             prepend-icon="mdi-delete"
             @click="clear"
             label
-        >Clear All</v-chip>
+        >
+            Clear All
+        </v-chip>
 
         <slot
             v-if="!props.noAdd"
@@ -98,12 +101,9 @@ function showAdd(value = true) {
                 />
             </v-dialog>
         </slot>
-
     </v-chip-group>
-
 </template>
 <style scoped>
-
 .swatch {
     width: 25px;
     height: 25px;
