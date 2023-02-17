@@ -1,3 +1,5 @@
+import { FaviconHrefObserver } from "./favicon-href-observer";
+
 export namespace Favicon {
 
     export function getPageFaviconUrl(): string | null {
@@ -14,11 +16,11 @@ export namespace Favicon {
         return (data && isInlineSvg(data)) ? decodeInlineSvg(data) : data;
     }
 
-    function isInlineSvg(data: string): boolean{
+    function isInlineSvg(data: string): boolean {
         return data.substring(0, 19) === 'data:image/svg+xml,'
     }
 
-    function decodeInlineSvg(data: string): string{
+    function decodeInlineSvg(data: string): string {
         const svgData = data.substring(19)
         return decodeURIComponent(svgData);
     }
@@ -27,7 +29,7 @@ export namespace Favicon {
         const domain = window.location.hostname
         return `https://www.google.com/s2/favicons?domain=${domain}&sz=256`
     }
-    
+
     function getFaviconHtmlElement(): HTMLLinkElement | null {
         return document.querySelector("link[rel~='icon']");
     }
@@ -75,10 +77,10 @@ export namespace Favicon {
 
     export function setSvg(svgString: string): void {
         updateLinkElements(svgString)
-        window.onload = () => updateLinkElements(svgString)
+        //window.onload = () => updateLinkElements(svgString)
     }
 
-    function updateLinkElements(svgString: string){
+    function updateLinkElements(svgString: string) {
         if (!document.head || !svgString) {
             return;
         }
@@ -90,10 +92,11 @@ export namespace Favicon {
             document.head.appendChild(linkElement);
             return;
         }
+        const observe = FaviconHrefObserver.useObserver((el) => fixupLinkElement(el, svgString))
         for (let i = 0; i < elements.length; i++) {
             fixupLinkElement(elements[i], svgString);
+            observe.observe(elements[i])
         }
-
     }
 
     function fixupLinkElement(linkElement: HTMLLinkElement, svgString: string): void {
@@ -105,6 +108,5 @@ export namespace Favicon {
         if (linkElement.sizes) {
             linkElement.sizes.add('any');
         }
-
     }
 }

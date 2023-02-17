@@ -14,15 +14,6 @@ function resolveIconUrl(): [string, boolean] {
 }
 
 (async function () {
-    //@ts-ignore
-    if (window.hasRun) {
-        return;
-    }
-    //@ts-ignore
-    //window.hasRun = true;
-
-    //@ts-ignore
-    console.clear();
     const [iconUrl, isBackupUrl] = resolveIconUrl()
 
     initContentApi(iconUrl, !isBackupUrl);

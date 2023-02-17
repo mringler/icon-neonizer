@@ -43,7 +43,7 @@ onBeforeMount(async () => {
 
 
 const navigationItems = [
-  { title: 'Page Icon', type: 'subheader', prependIcon: 'mdi-draw' },
+  { title: 'Page Icon', type: 'subheader' },
   { title: 'Trace', value: 'trace', props: { to: '/', prependIcon: 'mdi-draw' } },
   { title: 'Edit', value: 'edit', props: { to: '/edit-current', prependIcon: 'mdi-pen' } },
   { title: 'Management', type: 'subheader' },
