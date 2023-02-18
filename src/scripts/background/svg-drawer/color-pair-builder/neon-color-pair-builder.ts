@@ -94,41 +94,27 @@ export class NeonColorPairBuilder extends ColorPairBuilder {
     // purple 280
 
     protected getClosestNeonColor(hue: number): ColorDef {
-        //64x − 34
-        //y/64 + 0.5
 
-        //const ix = Math.round(hue * 0.015 + 0.58) % 6
-        //0.0931253x0.697349+0.1253
         const ix = Math.round(0.0931253 * Math.pow(hue, 0.697349) + 0.1253) % neonColors.length
-        console.log(`hue ${hue} becomes ix ${ix}`)
         return neonColors[ix]
-        /*
-        const vals = Object.values(colorHues)
-        const upperIx = vals.findIndex(v => v > input)
-        const lower = vals[upperIx - 1], upper = (upperIx === -1) ? 360 : vals[upperIx]
-        return upper - input < input - lower ? upper : lower
-        */
     }
 
-    protected getShiftedColor(hsvColor: HSV) {
-
-        const shiftedColor = { ...hsvColor }
-        let hueShift = Math.random() < 0.5 ? -30 : 30
-        const rand = Math.random();
-        if (rand < 0.3) {
-            hueShift <<= 1
+    protected getShiftedColor(colorDef: ColorDef):RgbColor{
+        const keys : Array<keyof RgbColorData> = ['r','g','b']
+        const entries = keys.map(c => [c, colorDef[c]] as [keyof RgbColorData, number]).sort( ([, v1], [, v2])  => v2 - v1)
+        if(entries[1][1] - entries[2][1] < 15 && Math.random() < 0.5){
+            [entries[1], entries[2]] = [entries[2], entries[1]]
         }
-        shiftedColor.h = (shiftedColor.h + hueShift + 360) % 360
-        return shiftedColor
+        entries[1][1] = 255
+        const rgbColorData = Object.fromEntries(entries) as RgbColorData
+        return RgbColor.fromRgbColorData(rgbColorData)
     }
 
 
     protected generateSaturatedPair(hsvColor: HSV): [RgbColor, RgbColor] {
-        //const neonHsv: HSV = { h: this.getClosestHue(hsvColor.h), s: 85, v: 100 }
-        //const shiftedColor = this.getShiftedColor(neonHsv)
         const colorDef = this.getClosestNeonColor(hsvColor.h)
-        console.log(colorDef)
         const rgb = RgbColor.fromRgbColorData(colorDef)
-        return [rgb, rgb];
+        const shiftedColor = this.getShiftedColor(colorDef)
+        return [rgb, shiftedColor];
     }
 }

@@ -36,7 +36,6 @@ function emitUpdate() {
 
 function addColor(color: RgbColor) {
     if (props.unique && pickedColors.value.some(c => c.equals(color))) {
-        console.log('colro exists')
         return
     }
     pickedColors.value.push(color)

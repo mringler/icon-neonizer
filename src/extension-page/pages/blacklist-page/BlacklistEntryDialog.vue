@@ -19,8 +19,10 @@ watch(
 const emit = defineEmits(['update:page'])
 
 function resetPage() {
-    page.value.url = props.page?.url ?? ''
-    page.value.replacementUrl = props.page?.replacementUrl ?? ''
+    if(!props.page){
+        return
+    }
+    Object.assign(page.value, props.page)
 }
 
 function addUrl() {

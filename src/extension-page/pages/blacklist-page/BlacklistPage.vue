@@ -9,7 +9,6 @@ import BlacklistEntryDialog from './BlacklistEntryDialog.vue';
 
 const blacklist: Ref<BlacklistedPage[]> = ref([])
 const snackbarInput: Ref<AlertSnackbarProps> = ref({ message: null })
-const showAddUrlDialog = ref(false)
 
 onBeforeMount(loadBlacklist)
 

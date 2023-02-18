@@ -47,6 +47,7 @@ const itemsTrim = [
 
 const colorDrawerOptions = [
     { title: 'Saturate', value: ColorBuilderOption.saturate },
+    { title: 'Neon', value: ColorBuilderOption.neon },
     { title: 'Lighten', value: ColorBuilderOption.lighten },
     { title: 'Darken', value: ColorBuilderOption.darken },
 ]
