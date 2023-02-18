@@ -23,7 +23,6 @@ const timestampToDate = (timestamp: number): string => {
 </script>
 
 <template>
-
     <v-table
         theme="dark"
         class="storage-table"

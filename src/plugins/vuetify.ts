@@ -3,6 +3,7 @@ import { aliases, mdi } from 'vuetify/iconsets/mdi';
 import { createVuetify } from 'vuetify';
 
 import { en } from 'vuetify/locale';
+import { VDataTable } from 'vuetify/labs/VDataTable'
 
 // Misc
 //import { loadFonts } from './webfontloader';
@@ -52,4 +53,7 @@ export default createVuetify({
         }
     }
   },
+  components: {
+    VDataTable
+  }
 });

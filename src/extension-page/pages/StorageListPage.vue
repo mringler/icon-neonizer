@@ -4,7 +4,7 @@ import AlertSnackbar from '@/components/AlertSnackbar.vue';
 import { IconStorage, ImageDataRecord } from '@/scripts/background/icon-storage';
 import { onBeforeMount, Ref, ref, computed } from 'vue'
 import { byteToKilobyte } from '@/util/byte-to-kilobyte'
-import ImageRecordTable from '@/components/ImageRecordTable.vue';
+import ImageRecordTable from '@/components/ImageRecordDataTable.vue';
 import DataCard from '@/components/DataCard.vue';
 import LoadingContent from '@/components/LoadingContent.vue';
 
@@ -42,8 +42,6 @@ const totalSizeKb = computed(() => {
 </script>
 
 <template>
-
-
     <AlertSnackbar
         v-model:message="snackbarInput.message"
         :color="snackbarInput.color"
@@ -51,19 +49,19 @@ const totalSizeKb = computed(() => {
 
     <LoadingContent :is-loading="isLoading">
 
-        <DataCard
-            :data="dataSummary"
-            width="300px"
-            class="mb-4"
-        />
-
         <ImageRecordTable
             :imageRecords="storageData"
             @remove-record="remove"
-        />
+        >
+            <template v-slot:header>
+                <DataCard
+                    :data="dataSummary"
+                    width="300px"
+                    class="mb-4"
+                />
+
+            </template>
+        </ImageRecordTable>
     </LoadingContent>
-
 </template>
-<style scoped>
-
-</style>
+<style scoped></style>
