@@ -14,6 +14,6 @@ function resolveIconUrl(): [string, boolean] {
 (async function () {
     const [iconUrl, isBackupUrl] = resolveIconUrl()
 
-    initContentApi(iconUrl, !isBackupUrl);
+    initContentApi(iconUrl);
     replaceFavicon(iconUrl, false, !isBackupUrl);
 })();

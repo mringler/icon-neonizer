@@ -1,9 +1,10 @@
-import type { ApiMessage, BackgroundApiInterface } from "../ApiInterfaces";
+import type { ApiListener } from "../ApiInterfaces";
 import { Blacklist } from "./blacklist";
 import { IconStorage } from "./icon-storage";
 import { Tracer } from "./tracer";
 
-const backgroundApi: BackgroundApiInterface = {
+
+const backgroundApi = {
     processIconUrl,
     getStoredIcon: IconStorage.loadIcon,
     storeIcon: IconStorage.storeIcon,
@@ -12,6 +13,8 @@ const backgroundApi: BackgroundApiInterface = {
     getOptions: Tracer.getOptions,
     traceWithOptions: Tracer.traceUrl
 }
+
+export type BackgroundApiInterface = typeof backgroundApi;
 
 async function processIconUrl(iconUrl: string, force = false, store = true): Promise<string|null> {
 
@@ -40,17 +43,11 @@ async function processIconUrl(iconUrl: string, force = false, store = true): Pro
 
 export async function initBackgroundApi() {
 
-    browser.runtime.onMessage.addListener((
-        message: ApiMessage<BackgroundApiInterface>,
-        sender: browser.runtime.MessageSender,
-        sendResponse: (response?: any) => void
-    ) => {
+    const listener : ApiListener<BackgroundApiInterface> = (message, sender, sendResponse) => {
         const {command, args} = message;
         const handler = backgroundApi[command]
-        if(!handler){
-            return
-        }
-        const res = handler(...args);
+        const res = (handler as Function)(...args);
         sendResponse(res);
-    });
+    }
+    browser.runtime.onMessage.addListener(listener);
 }
