@@ -1,28 +1,15 @@
-import { FaviconHrefObserver } from "./favicon-href-observer";
-
 export namespace Favicon {
 
     export function getPageFaviconUrl(): string | null {
-        const url = getLargestFaviconHtmlElement()?.href?.trim();
+        const element = getLargestFaviconHtmlElement()
+        if(!element){
+            return null
+        }
+        if(element.dataset.oldHref){
+            return element.dataset.oldHref
+        }
+        const url = element.href?.trim();
         return (url && url.substring(0, 10) !== 'data:image') ? url : null;
-    }
-
-    export function getCurrentFaviconData(): string | null {
-        return getLargestFaviconHtmlElement()?.href?.trim() ?? null
-    }
-
-    export function getCurrentFavicon(): string | null {
-        const data = getCurrentFaviconData()
-        return (data && isInlineSvg(data)) ? decodeInlineSvg(data) : data;
-    }
-
-    function isInlineSvg(data: string): boolean {
-        return data.substring(0, 19) === 'data:image/svg+xml,'
-    }
-
-    function decodeInlineSvg(data: string): string {
-        const svgData = data.substring(19)
-        return decodeURIComponent(svgData);
     }
 
     export function getGoogleApiUrl(): string {
@@ -77,7 +64,10 @@ export namespace Favicon {
 
     export function setSvg(svgString: string): void {
         updateLinkElements(svgString)
-        //window.onload = () => updateLinkElements(svgString)
+    }
+
+    export function svgToHref(svgString: string): string{
+        return 'data:image/svg+xml,' + encodeURIComponent(svgString);
     }
 
     function updateLinkElements(svgString: string) {
@@ -85,26 +75,27 @@ export namespace Favicon {
             return;
         }
 
+        const href = svgToHref(svgString)
         const elements = getFaviconHtmlElements();
         if (elements.length === 0) {
             const linkElement = document.createElement('link');
-            fixupLinkElement(linkElement, svgString);
+            fixupLinkElement(linkElement, href);
             document.head.appendChild(linkElement);
             return;
         }
-        const observe = FaviconHrefObserver.useObserver((el) => fixupLinkElement(el, svgString))
         for (let i = 0; i < elements.length; i++) {
-            fixupLinkElement(elements[i], svgString);
-            observe.observe(elements[i])
+            const element = elements[i]
+            fixupLinkElement(element, href);
+            document.head.appendChild(element)
         }
     }
 
-    function fixupLinkElement(linkElement: HTMLLinkElement, svgString: string): void {
+    function fixupLinkElement(linkElement: HTMLLinkElement, href: string): void {
         if (!linkElement.dataset.oldHref && linkElement.href) {
             linkElement.dataset.oldHref = linkElement.href;
         }
         linkElement.type = 'image/svg+xml';
-        linkElement.href = 'data:image/svg+xml,' + encodeURIComponent(svgString);
+        linkElement.href = href;
         if (linkElement.sizes) {
             linkElement.sizes.add('any');
         }

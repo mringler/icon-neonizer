@@ -11,13 +11,9 @@ export interface ScriptsApi {
 }
 
 export interface ContentApiInterface extends ScriptsApi {
-    log: (...args: any[]) => void
     setIcon: (svg: string) => void
-    logFavicon: () => void,
     getOriginalFaviconUrl: () => string,
-    getCurrentFavicon: () => string | null,
-    getCurrentFaviconData: () => string | null,
-    rebuildIcon: () => void
+    verifyHref: (href: string) => void
 }
 
 export interface BackgroundApiInterface extends ScriptsApi {

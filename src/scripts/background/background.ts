@@ -1,11 +1,13 @@
+import { callContentApi } from "@/util/content-api";
 import { initBackgroundApi } from "./background-api";
 import { FaviconRequestFilter } from "./favicon-request-filter";
 import { IconStorage } from "./icon-storage";
 
-
-console.log('Background here');
 FaviconRequestFilter.setRequestFilter();
 initBackgroundApi();
-console.log('Background up');
 
+browser.tabs.onUpdated.addListener(
+    (tabId, changeInfo, tab) => callContentApi('verifyHref', [changeInfo.favIconUrl!], tab), 
+    {properties:['favIconUrl']}
+)
 setTimeout(() => IconStorage.cleanup(), 60_000)

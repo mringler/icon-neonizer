@@ -23,13 +23,9 @@ export function initContentApi(iconUrl: string, isBackupUrl: boolean) {
 
 function setupContentApi(iconUrl: string, isBackupUrl:boolean): ContentApiInterface {
     return {
-        log: (...args: any[]) => console.log(...args),
         setIcon: Favicon.setSvg,
-        logFavicon: () => console.log(Favicon.getCurrentFavicon()),
         getOriginalFaviconUrl: () => iconUrl,
-        getCurrentFavicon: Favicon.getCurrentFavicon,
-        getCurrentFaviconData: Favicon.getCurrentFaviconData,
-        rebuildIcon: () => replaceFavicon(iconUrl, true, !isBackupUrl),
+        verifyHref: (href: string) => verifyHref(href, iconUrl),
     };
 }
 
@@ -39,11 +35,19 @@ const callBackgroundApi: ApiCaller<BackgroundApiInterface> = (command, args) => 
 
 export async function replaceFavicon(iconUrl: string, force = false, store = true) {
 
-    const icon = await callBackgroundApi('processIconUrl', [iconUrl, force, store]);
-    if (!icon) {
+    const svgString = await callBackgroundApi('processIconUrl', [iconUrl, force, store]);
+    if (!svgString) {
         console.log('no icon - not updating');
         return
     }
-    Favicon.setSvg(icon);
-    console.log('updated icon');
+    Favicon.setSvg(svgString);
+}
+
+async function verifyHref(actualHref: string, iconUrl: string){
+    const svgString = await callBackgroundApi('processIconUrl', [iconUrl,false, false]);
+    const expectedHref = svgString ? Favicon.svgToHref(svgString) : null;
+    if(expectedHref && expectedHref === actualHref ){
+        return
+    }
+    Favicon.setSvg(svgString!);
 }
