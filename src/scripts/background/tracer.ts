@@ -35,7 +35,6 @@ export namespace Tracer {
     export async function getOptions(options: Partial<GradientDrawerOptions> | null = null): Promise<GradientDrawerOptions> {
         const storedOptions = await IconStorage.loadOptions() ?? getTracerOptions()
         const combinedOptions = Object.assign({}, storedOptions, options)
-        combinedOptions.verbose = true
         return GradientDrawerOptions.buildFrom(combinedOptions)
     }
 
