@@ -130,7 +130,7 @@ const faviconDisplayProps = {
 </template>
 
 <style scoped>
-*>>>.image-record-table .v-table__wrapper {
+*:deep(.image-record-table .v-table__wrapper) {
     overflow: unset;
 }
 
