@@ -3,18 +3,16 @@ export type ScriptsApi<T extends object = any> = {
     [K in keyof T as T[K] extends Fun ? K : never]: T[K]
 }
 
-type ApiCommandParameters<ApiInterface extends ScriptsApi, key extends keyof ApiInterface> = Parameters<ApiInterface[key]>
-type ApiCommandReturn<ApiInterface extends ScriptsApi, key extends keyof ApiInterface> = ReturnType<ApiInterface[key]>
 export type ApiCaller<ApiInterface extends ScriptsApi> = <CommandName extends keyof ApiInterface>(
     commandName: CommandName,
-    commandArgs: ApiCommandParameters<ApiInterface, CommandName>,
+    commandArgs: Parameters<ApiInterface[CommandName]>,
     ...args: any[]
-) => Promise<ApiCommandReturn<ApiInterface, CommandName>>
+) => Promise<Awaited<ReturnType<ApiInterface[CommandName]>>>
 
 export type ApiListener<ApiInterface extends ScriptsApi> = <CommandName extends keyof ApiInterface>(
     message: {
         command: CommandName,
-        args: ApiCommandParameters<ApiInterface, CommandName>
+        args: Parameters<ApiInterface[CommandName]>
     },
     sender: browser.runtime.MessageSender,
     sendResponse: (response?: any) => void
