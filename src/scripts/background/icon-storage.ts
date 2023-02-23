@@ -68,6 +68,12 @@ export namespace IconStorage {
         await browser.storage.local.set({ [cleanedUrl]: data });
     }
 
+    export async function hasIconForUrl(url: string): Promise<boolean> {
+        const cleanedUrl = cleanUrl(url)
+        const entry = await browser.storage.local.get(cleanedUrl) as Record<string, ImageEntry | null>
+        return Boolean(entry)
+    }
+
     export async function loadIcon(url: string): Promise<string | null> {
         const cleanedUrl = cleanUrl(url)
         const entry = await browser.storage.local.get(cleanedUrl) as Record<string, ImageEntry | null>

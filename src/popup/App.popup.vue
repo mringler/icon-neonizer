@@ -15,7 +15,7 @@ async function loadUrl() {
     if (!tab) {
         return
     }
-    url.value = await loadOriginalFaviconUrl(tab)
+    url.value = await loadOriginalFaviconUrl(tab.id)
     isBlacklisted.value = await Blacklist.isBlacklisted(url.value)
 }
 onBeforeMount(loadUrl)

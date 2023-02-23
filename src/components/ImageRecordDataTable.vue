@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import type { ImageDataRecord } from '@/scripts/background/icon-storage';
 import { byteToKilobyte } from '@/util/byte-to-kilobyte'
 import DownloadSvgButton from './DownloadSvgButton.vue';
@@ -120,7 +120,7 @@ const faviconDisplayProps = {
                     variant="plain"
                     icon="mdi-delete"
                     :disabled="item.columns.noAutomaticOverride"
-                    @click.stop="emit('removeRecord', item.columns)"
+                    @click.stop="emit('removeRecord', item.raw)"
                 />
             </div>
             </template>

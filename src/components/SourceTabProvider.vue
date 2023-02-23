@@ -21,7 +21,7 @@ onBeforeMount(async () => {
     const tab = await loadOpenerTab()
     sourceTab.value = tab
     try{
-        sourceIconUrl.value = await callContentApi('getOriginalFaviconUrl', [], tab)
+        sourceIconUrl.value = await callContentApi('getOriginalFaviconUrl', [], tab?.id)
     } catch(e){
         // receiving end does not exist, just log the error
         console.log('During call to content api:', e)
@@ -32,7 +32,7 @@ onBeforeMount(async () => {
 
 async function updateTabIcon(svg: string) {
     const fromTab = await loadOpenerTab()
-    fromTab && callContentApi('setIcon', [svg], fromTab)
+    fromTab && callContentApi('setIcon', [svg], fromTab.id)
 }
 
 </script>
