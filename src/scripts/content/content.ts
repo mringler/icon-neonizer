@@ -3,17 +3,18 @@ import { Favicon } from "./favicon";
 
 function resolveIconUrl(): [string, boolean] {
 
-    const iconUrl = Favicon.getPageFaviconUrl()
-    if (iconUrl) {
+    const iconUrl = Favicon.getPageFaviconHref()
+    const isInline = iconUrl?.startsWith('data:image') ?? false
+    if (iconUrl && !isInline) {
         return [iconUrl, false]
     }
     const url = window.location.host + '/favicon.ico'
-    return [url, true];
+    return [url, isInline];
 }
 
 (async function () {
-    const [iconUrl, isBackupUrl] = resolveIconUrl()
+    const [iconUrl, isInline] = resolveIconUrl()
 
     initContentApi(iconUrl);
-    replaceFavicon(iconUrl, false, !isBackupUrl);
+    replaceFavicon(iconUrl, false, isInline);
 })();

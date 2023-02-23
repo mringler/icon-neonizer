@@ -1,5 +1,5 @@
 export function faviconDownloadUrl(faviconUrl: string): string{
-    if(!faviconUrl || !faviconUrl.endsWith('/favicon.ico')){
+    if(!faviconUrl){
         return faviconUrl;
     }
     if(!faviconUrl.startsWith('http')){

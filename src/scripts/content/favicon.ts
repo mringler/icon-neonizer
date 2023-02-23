@@ -1,6 +1,6 @@
 export namespace Favicon {
 
-    export function getPageFaviconUrl(): string | null {
+    export function getPageFaviconHref(): string | null {
         const element = getLargestFaviconHtmlElement()
         if(!element){
             return null
@@ -8,8 +8,7 @@ export namespace Favicon {
         if(element.dataset.oldHref){
             return element.dataset.oldHref
         }
-        const url = element.href?.trim();
-        return (url && url.substring(0, 10) !== 'data:image') ? url : null;
+        return element.href?.trim();
     }
 
     export function getGoogleApiUrl(): string {
@@ -100,4 +99,5 @@ export namespace Favicon {
             linkElement.sizes.add('any');
         }
     }
+
 }
