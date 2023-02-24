@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, Ref, onBeforeMount, toRaw } from 'vue'
+import { ref, Ref, onBeforeMount, toRaw, computed, ComputedRef } from 'vue'
 import OptionsForm from '@/components/OptionsForm.vue'
 import { callBackgroundApi } from '@/util/background-api';
 import AlertSnackbar from '@/components/AlertSnackbar.vue';
@@ -11,6 +11,7 @@ import FaviconSvg from '@/components/image-display/FaviconSvg.vue';
 import FaviconStored from '@/components/image-display/FaviconStored.vue';
 import Heading from '@/components/Heading.vue';
 import type { GradientDrawerOptions } from '@/scripts/background/tracer/svg-drawer/gradient-drawer-options';
+import { Favicon } from '@/scripts/content/favicon';
 
 type Props = {
     url: string
@@ -29,16 +30,18 @@ onBeforeMount(async () => {
 })
 
 const retrace = async () => {
-    tracedSvg.value = await callBackgroundApi('traceWithOptions', [props.url, toRaw(options.value)])
+    tracedSvg.value = await callBackgroundApi('traceWithOptions', [url.value, toRaw(options.value)])
 }
 
-const getOriginalImageData = async (): Promise<ImageData> => {
-    const sourceUrl = faviconDownloadUrl(props.url)
+const url = computed(() => useFallback.value ? Favicon.getGoogleApiUrl(new URL(props.url).host) + '&passFilter=1' : props.url )
+
+const imageDataLoader: ComputedRef<() => Promise<ImageData>> = computed(() => () => {
+    const sourceUrl = faviconDownloadUrl(url.value)
     return ImageLoader.loadUrl(sourceUrl)
-}
+})
 
 const save = async () => {
-    if (!props.url || !tracedSvg.value) {
+    if (!url || !tracedSvg.value) {
         errorMessage.value = 'Could not save icon - no url or icon';
         return
     }
@@ -52,6 +55,8 @@ async function storeOptions() {
     IconStorage.storeOptions(toRaw(options.value))
 }
 
+const useFallback = ref(false)
+
 const iconCols = {
     cols: 4,
     md: 3,
@@ -61,7 +66,6 @@ const iconCols = {
 </script>
 
 <template>
-
     <section tag="section">
         <Heading>Trace Icon</Heading>
 
@@ -80,35 +84,39 @@ const iconCols = {
                         noFrame
                     />
 
-                    <v-btn
+                    <div class="mt-3">
+                        <v-btn
                         variant="flat"
                         color="primary"
                         @click="retrace"
-                    >trace</v-btn>
-
-                    <v-btn
+                        >trace</v-btn>
+                        
+                        <v-btn
                         :disabled="!tracedSvg"
                         variant="flat"
                         @click="save"
-                    >save</v-btn>
-
-                    <v-btn
+                        >save</v-btn>
+                        
+                        <v-btn
                         :disabled="!tracedSvg"
                         variant="flat"
                         :to=" tracedSvg ? { name: 'edit-svg', params: { svg: tracedSvg, url: props.url } } : {}"
-                    >edit</v-btn>
+                        >edit</v-btn>
+
+                    </div>
                 </v-col>
 
                 <v-col v-bind="iconCols">
 
-                    <FaviconImg :src="props.url" />
+                    <FaviconImg :src="url" />
                     <FaviconImg
-                        :src="props.url"
+                        :src="url"
                         width="27px"
                         height="27px"
                         noFrame
                     />
 
+                    <v-checkbox label="use fallback" v-model="useFallback" hideDetails/>
                 </v-col>
                 <v-col v-bind="iconCols">
 
@@ -131,7 +139,7 @@ const iconCols = {
 
         <OptionsForm
             v-model:options="options"
-            :image-data="getOriginalImageData"
+            :image-data="imageDataLoader"
         />
 
     </section>

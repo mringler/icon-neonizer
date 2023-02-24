@@ -74,6 +74,7 @@ const faviconDisplayProps = {
                 <FaviconImg
                     :src="item.columns.url"
                     v-bind="faviconDisplayProps"
+                    class="overflow-hidden"
                 />
             </template>
             <template v-slot:item.icon="{ item }">

@@ -83,9 +83,8 @@ export namespace FaviconRequestFilter {
          */
         filter.onstart = async () => {
             const [svg, isFavicon] = await Promise.all([storedIconPromise, isFaviconPromise] as const);
-
             if (!svg) {
-                if(!iconUrl.endsWith('/favicon.ico') && !isFavicon ){
+                if(!iconUrl.endsWith('/favicon.ico') || !isFavicon ){
                     console.log('INP- seems to be a regular image, stop filtering', iconUrl)
                     filter.disconnect()
                 }

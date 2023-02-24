@@ -11,8 +11,8 @@ export namespace Favicon {
         return element.href?.trim();
     }
 
-    export function getGoogleApiUrl(): string {
-        const domain = window.location.hostname
+    export function getGoogleApiUrl(domain: string|undefined): string {
+        domain ??= window.location.hostname
         return `https://www.google.com/s2/favicons?domain=${domain}&sz=256`
     }
 
@@ -44,18 +44,18 @@ export namespace Favicon {
     }
 
     function getLargestFaviconHtmlElement(): HTMLLinkElement | null {
-        const elements = getFaviconHtmlElements();
-        if (elements.length === 0) {
+        const nodes = getFaviconHtmlElements();
+        if (nodes.length === 0) {
             return null
         }
-        if (elements.length === 1) {
-            return elements[0]
+        if (nodes.length === 1) {
+            return nodes[0]
         }
         let foundSize = 0, foundIx = 0;
-        for (let elementIx = 0; elementIx < elements.length; elementIx++) {
-            const element = elements[elementIx]
-            const sizes = element.sizes
-            if (sizes.length === 0) {
+        for (let elementIx = 0; elementIx < nodes.length; elementIx++) {
+            const node = nodes[elementIx]
+            const sizes = node.sizes
+            if (sizes.length === 0 || node.type === 'image/svg+xml') {
                 continue
             }
             for (let sizeIx = 0; sizeIx < sizes.length; sizeIx++) {
@@ -69,7 +69,7 @@ export namespace Favicon {
                 break;
             }
         }
-        return elements[foundIx];
+        return nodes[foundIx];
     }
 
     export function setBase64Icon(base64Icon: string): void {
