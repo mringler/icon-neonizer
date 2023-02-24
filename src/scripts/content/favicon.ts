@@ -17,11 +17,30 @@ export namespace Favicon {
     }
 
     function getFaviconHtmlElement(): HTMLLinkElement | null {
-        return document.querySelector("link[rel~='icon']");
+        return document.querySelector<HTMLLinkElement>("link[rel~='icon']");
     }
 
     function getFaviconHtmlElements(): NodeListOf<HTMLLinkElement> {
-        return document.querySelectorAll("link[rel~='icon']"); // "link[rel$='icon'], link[rel~='image_src']"
+        return document.querySelectorAll<HTMLLinkElement>("link[rel~='icon']"); // "link[rel$='icon'], link[rel~='image_src']"
+    }
+
+    export function urlIsFavicon(url: string): boolean {
+        const urlEnd = url.replace(/https?:\/\/[^\/]+\//, '/')
+        return Boolean(document.querySelector<HTMLLinkElement>(`link[rel~='icon'][href$="${urlEnd}"]`));
+    }
+
+    export function fixupForFilteredUrl(url: string){
+        const urlEnd = url.replace(/https?:\/\/[^\/]+\//, '/')
+        const nodes = document.querySelectorAll<HTMLLinkElement>(`link[rel~='icon'][href$="${urlEnd}"]`)
+        nodes.forEach(node => {
+            node.type = 'image/svg+xml'
+            node.dataset.neFilter = "1"
+        })
+    }
+
+    export function urlIsHandledByFilter(url: string): boolean{
+        const urlEnd = url.replace(/https?:\/\/[^\/]+\//, '/')
+        return document.querySelector<HTMLLinkElement>(`link[rel~='icon'][href$="${urlEnd}"]`)?.dataset.neFilter === "1";
     }
 
     function getLargestFaviconHtmlElement(): HTMLLinkElement | null {

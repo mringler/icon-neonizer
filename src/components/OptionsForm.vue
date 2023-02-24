@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import { CreatePaletteMode, RgbColor, FillStyle, TrimMode } from '@image-tracer/core';
-import { watch, ref } from 'vue'
+import { watch } from 'vue'
 import { ColorBuilderOption, GradientDrawerOptions, GradientBuilderOption } from '@/scripts/background/tracer/svg-drawer/gradient-drawer-options';
 import ImagePixelColorPickerPopup from './ImagePixelColorPickerPopup.vue';
 import SelectedColorChips from './SelectedColorChips.vue';

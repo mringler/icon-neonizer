@@ -10,6 +10,8 @@ function buildContentApi(iconUrl: string) {
         getOriginalFaviconUrl: () => iconUrl,
         verifyHref: (href: string) => verifyHref(href, iconUrl),
         getPageFaviconHref: Favicon.getPageFaviconHref,
+        urlIsFavicon: Favicon.urlIsFavicon,
+        fixupForFilteredUrl: Favicon.fixupForFilteredUrl
     };
 }
 
@@ -24,7 +26,7 @@ const callBackgroundApi: ApiCaller<BackgroundApiInterface> = (command, args) => 
 }
 
 export async function replaceFavicon(iconUrl: string, force = false, isInline = false) {
-    if (!isInline && handledByFilter(iconUrl)) {
+    if (!isInline && needsHandling(iconUrl)) {
         return
     }
     const svgString = await callBackgroundApi('processIconUrl', [iconUrl, force]);
@@ -36,7 +38,7 @@ export async function replaceFavicon(iconUrl: string, force = false, isInline = 
 }
 
 async function verifyHref(actualHref: string, iconUrl: string): Promise<void> {
-    if (handledByFilter(iconUrl)) {
+    if (needsHandling(iconUrl)) {
         return
     }
     const svgString = await callBackgroundApi('processIconUrl', [iconUrl, false, false]);
@@ -48,6 +50,6 @@ async function verifyHref(actualHref: string, iconUrl: string): Promise<void> {
 }
 
 
-function handledByFilter(iconUrl: string) {
-    return iconUrl && iconUrl.includes('favicon') && !iconUrl.startsWith('data:image')
+function needsHandling(iconUrl: string) {
+    return iconUrl && Favicon.urlIsHandledByFilter(iconUrl) && !iconUrl.startsWith('data:image')
 }

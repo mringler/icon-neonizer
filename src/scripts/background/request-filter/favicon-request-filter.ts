@@ -8,13 +8,6 @@ export namespace FaviconRequestFilter {
     export function setRequestFilter() {
         const pattern: browser.webRequest.RequestFilter = { urls: ['*://*/*favicon*'], types: ['image'] }
 
-        /*
-        browser.webRequest.onBeforeRequest.addListener(
-            checkLargestFavicon,
-            pattern,
-            ["blocking"]
-        );*/
-
         browser.webRequest.onHeadersReceived.addListener(
             updateHeaderContentType,
             pattern,
@@ -29,27 +22,6 @@ export namespace FaviconRequestFilter {
     }
 
     const passFilterRegex = /passFilter=1$/
-
-    async function checkLargestFavicon(details: browser.webRequest._OnBeforeRequestDetails): Promise<browser.webRequest.BlockingResponse>{
-
-        if (passFilterRegex.test(details.url)){
-            return {}
-        }
-        console.log('INP- before request filter - checking favicon', details.url)
-        const url = await callContentApi('getPageFaviconHref', [], details.tabId)
-        console.log('PRE RP', details.url, passFilterRegex.test(details.url), url)
-        const [largestFaviconUrl, isFavicon] = await Promise.all([
-            callContentApi('getPageFaviconHref', [], details.tabId),
-            isFaviconUrlInTab(details.tabId, details.url),
-        ] as const)
-
-        console.log('INP- before request filter - checking favicon', details.url, largestFaviconUrl)
-        if(isFavicon && details.url !== largestFaviconUrl){
-            console.log('redirecting favicon', details.url, largestFaviconUrl)
-            return {redirectUrl: largestFaviconUrl!}
-        }
-        return {}
-    }
 
     async function updateHeaderContentType(details: browser.webRequest._OnHeadersReceivedDetails): Promise<browser.webRequest.BlockingResponse> {
 
@@ -81,8 +53,6 @@ export namespace FaviconRequestFilter {
         return { responseHeaders: headers };
     }
 
-
-
     async function replaceIconFilter(details: browser.webRequest._OnBeforeRequestDetails): Promise<browser.webRequest.BlockingResponse> {
         if (passFilterRegex.test(details.url)) {
             return {}
@@ -93,17 +63,20 @@ export namespace FaviconRequestFilter {
         if(blacklistEntry?.replacementUrl) {
             iconUrl = blacklistEntry.replacementUrl
         }
+        callContentApi('fixupForFilteredUrl', [iconUrl])
 
         const filter = browser.webRequest.filterResponseData(details.requestId);
         const data: ArrayBuffer[] = [];
 
         const storedIconPromise = IconStorage.loadIcon(iconUrl);
-        const isFaviconPromise = updateLinkTagInTab(details.tabId, details.url)
+        const isFaviconPromise = callContentApi('urlIsFavicon', [iconUrl])
+        let largestFaviconUrlPromise:Promise<string|null>|null = null
 
         const writeSvg = (svg: string) => {
             const encoder = new TextEncoder();
             filter.write(encoder.encode(svg));
         }
+
 
         /**
          * If image exists in cache, send it and end request.
@@ -112,13 +85,14 @@ export namespace FaviconRequestFilter {
             const [svg, isFavicon] = await Promise.all([storedIconPromise, isFaviconPromise] as const);
 
             if (!svg) {
-                if(!details.url.endsWith('/favicon.ico') && !isFavicon ){
-                    console.log('unknown regular favicon - regular process for', details.url)
+                if(!iconUrl.endsWith('/favicon.ico') && !isFavicon ){
+                    console.log('INP- seems to be a regular image, stop filtering', iconUrl)
                     filter.disconnect()
                 }
+                largestFaviconUrlPromise = callContentApi('getPageFaviconHref', [], details.tabId)
                 return
             }
-            console.log('delivering stored favicon for', details.url)
+            console.log('INP- replacing request with stored favicon for', iconUrl)
             writeSvg(svg);
             filter.close();
         }
@@ -141,8 +115,13 @@ export namespace FaviconRequestFilter {
             }
             const fullData = concatenateArrayBuffer(data);
 
-            const svg = await Tracer.traceBuffer(fullData);
-            IconStorage.storeIcon(iconUrl, svg);
+            const [svg, largestFaviconUrl] = await Promise.all([
+                Tracer.traceBuffer(fullData),
+                largestFaviconUrlPromise
+            ] as const);
+
+            const isLargestFavicon = !largestFaviconUrl || iconUrl.includes(largestFaviconUrl)
+            isLargestFavicon && IconStorage.storeIcon(iconUrl, svg);
             writeSvg(svg);
             filter.disconnect();
         };
@@ -176,22 +155,4 @@ export namespace FaviconRequestFilter {
         console.log('is favicon', hasLink, url, urlEnd)
         return hasLink
     }
-
-    async function updateLinkTagInTab(tabId: number, url: string): Promise<boolean>{
-        const urlEnd = url.replace(/https?:\/\/[^\/]+\//, '/')
-        const [hasLink] = await browser.tabs.executeScript(tabId, {
-            code: `
-            (function(){
-                const links = document.querySelectorAll('link[rel~="icon"][href$="${urlEnd}"]');
-                links.forEach(l => {l.type = 'image/svg+xml'; l.dataset.neFilter = "1"});
-                console.log('replacing href of', links);
-                return Boolean(links.length)
-            })()
-            `,
-            runAt: 'document_start',
-        })
-        console.log('is favicon', hasLink, url, urlEnd)
-        return hasLink
-    }
-
 }
