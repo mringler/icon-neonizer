@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, Ref, watch } from 'vue'
 import Heading from '@/components/Heading.vue';
-import { IconStorage } from '@/scripts/background/icon-storage';
+import { IconStorage } from '@/scripts/background/storage/icon-storage';
 import SvgEditor from './SvgEditor.vue';
 
 type Props = {

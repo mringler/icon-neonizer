@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { AlertSnackbarProps } from '@/components/AlertSnackbar.vue';
 import AlertSnackbar from '@/components/AlertSnackbar.vue';
-import { IconStorage, ImageDataRecord } from '@/scripts/background/icon-storage';
+import { IconStorage, ImageDataRecord } from '@/scripts/background/storage/icon-storage';
 import { onBeforeMount, Ref, ref, computed } from 'vue'
 import { byteToKilobyte } from '@/util/byte-to-kilobyte'
 import ImageRecordTable from '@/components/ImageRecordDataTable.vue';

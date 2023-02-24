@@ -5,7 +5,7 @@ import ImageDisplayForUrl from '@/components/ImageDisplayForUrl.vue';
 import { loadActiveTab } from '@/util/active-tab';
 import { onBeforeMount, ref, Ref } from 'vue'
 import { loadOriginalUrl as loadOriginalFaviconUrl } from '../util/content-api';
-import { Blacklist } from '@/scripts/background/blacklist';
+import { Blacklist } from '@/scripts/background/storage/blacklist';
 
 const url: Ref<string | null> = ref(null)
 const isBlacklisted = ref(false)

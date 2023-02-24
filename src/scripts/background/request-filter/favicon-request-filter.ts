@@ -1,18 +1,19 @@
 import { callContentApi } from "@/util/content-api";
-import { Blacklist } from "./blacklist";
-import { IconStorage } from "./icon-storage";
-import { Tracer } from "./tracer";
+import { Blacklist } from "../storage/blacklist";
+import { IconStorage } from "../storage/icon-storage";
+import { Tracer } from "../tracer/tracer";
 
 export namespace FaviconRequestFilter {
 
     export function setRequestFilter() {
         const pattern: browser.webRequest.RequestFilter = { urls: ['*://*/*favicon*'], types: ['image'] }
 
+        /*
         browser.webRequest.onBeforeRequest.addListener(
             checkLargestFavicon,
             pattern,
             ["blocking"]
-        );
+        );*/
 
         browser.webRequest.onHeadersReceived.addListener(
             updateHeaderContentType,
@@ -34,6 +35,7 @@ export namespace FaviconRequestFilter {
         if (passFilterRegex.test(details.url)){
             return {}
         }
+        console.log('INP- before request filter - checking favicon', details.url)
         const url = await callContentApi('getPageFaviconHref', [], details.tabId)
         console.log('PRE RP', details.url, passFilterRegex.test(details.url), url)
         const [largestFaviconUrl, isFavicon] = await Promise.all([
@@ -41,7 +43,7 @@ export namespace FaviconRequestFilter {
             isFaviconUrlInTab(details.tabId, details.url),
         ] as const)
 
-        console.log('XXXXXXXXXXXXX checking favicon', details.url, largestFaviconUrl)
+        console.log('INP- before request filter - checking favicon', details.url, largestFaviconUrl)
         if(isFavicon && details.url !== largestFaviconUrl){
             console.log('redirecting favicon', details.url, largestFaviconUrl)
             return {redirectUrl: largestFaviconUrl!}

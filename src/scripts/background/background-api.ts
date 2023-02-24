@@ -1,7 +1,7 @@
 import { ScriptsApi, buildApi } from "../ApiInterfaces";
-import { Blacklist } from "./blacklist";
-import { IconStorage } from "./icon-storage";
-import { Tracer } from "./tracer";
+import { Blacklist } from "./storage/blacklist";
+import { IconStorage } from "./storage/icon-storage";
+import { Tracer } from "./tracer/tracer";
 
 
 const backgroundApi = {

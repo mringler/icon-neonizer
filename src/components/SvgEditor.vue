@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, Ref, watch, inject, computed } from 'vue'
 import AlertSnackbar from './AlertSnackbar.vue';
-import { IconStorage } from '@/scripts/background/icon-storage';
+import { IconStorage } from '@/scripts/background/storage/icon-storage';
 import FaviconSvg from './image-display/FaviconSvg.vue';
 import ConfirmUnsavedChanges from './ConfirmUnsavedChanges.vue';
 import type { ConfirmProps } from './Confirmation.vue';

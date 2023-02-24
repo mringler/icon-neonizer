@@ -1,5 +1,5 @@
-import { Blacklist } from "./blacklist";
-import { IconStorage } from "./icon-storage";
+import { Blacklist } from "../storage/blacklist";
+import { IconStorage } from "../storage/icon-storage";
 
 export namespace TouchIconRequestFilter {
 

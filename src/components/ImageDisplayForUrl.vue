@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import { watch, ref, Ref } from 'vue'
-import { IconStorage } from '@/scripts/background/icon-storage';
+import { IconStorage } from '@/scripts/background/storage/icon-storage';
 import { faviconDownloadUrl } from '@/util/favicon-download-url-filter';
 import FaviconImg from './image-display/FaviconImg.vue';
 import FaviconStored from './image-display/FaviconStored.vue';

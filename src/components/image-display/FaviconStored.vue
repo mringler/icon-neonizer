@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { watch, ref, Ref } from 'vue'
-import { IconStorage } from '@/scripts/background/icon-storage';
+import { IconStorage } from '@/scripts/background/storage/icon-storage';
 import FaviconSvg from './FaviconSvg.vue';
-import { Blacklist } from '@/scripts/background/blacklist';
+import { Blacklist } from '@/scripts/background/storage/blacklist';
 
 
 type Props = {

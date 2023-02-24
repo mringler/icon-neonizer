@@ -4,13 +4,13 @@ import OptionsForm from '@/components/OptionsForm.vue'
 import { callBackgroundApi } from '@/util/background-api';
 import AlertSnackbar from '@/components/AlertSnackbar.vue';
 import { ImageLoader } from '@image-tracer/browser';
-import { IconStorage } from '@/scripts/background/icon-storage';
+import { IconStorage } from '@/scripts/background/storage/icon-storage';
 import { faviconDownloadUrl } from '@/util/favicon-download-url-filter';
 import FaviconImg from '@/components/image-display/FaviconImg.vue';
 import FaviconSvg from '@/components/image-display/FaviconSvg.vue';
 import FaviconStored from '@/components/image-display/FaviconStored.vue';
 import Heading from '@/components/Heading.vue';
-import type { GradientDrawerOptions } from '@/scripts/background/svg-drawer/gradient-drawer-options';
+import type { GradientDrawerOptions } from '@/scripts/background/tracer/svg-drawer/gradient-drawer-options';
 
 type Props = {
     url: string

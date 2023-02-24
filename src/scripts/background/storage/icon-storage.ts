@@ -1,6 +1,6 @@
 import LZString from 'lz-string'
 import type { BlacklistedPage } from './blacklist'
-import type { GradientDrawerOptions } from './svg-drawer/gradient-drawer-options'
+import type { GradientDrawerOptions } from '../tracer/svg-drawer/gradient-drawer-options'
 
 const NonIconKey = {
     options: '--options--',

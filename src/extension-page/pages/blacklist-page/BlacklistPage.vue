@@ -2,7 +2,7 @@
 import type { AlertSnackbarProps } from '@/components/AlertSnackbar.vue';
 import AlertSnackbar from '@/components/AlertSnackbar.vue';
 import Heading from '@/components/Heading.vue';
-import { Blacklist, BlacklistedPage } from '@/scripts/background/blacklist';
+import { Blacklist, BlacklistedPage } from '@/scripts/background/storage/blacklist';
 import { onBeforeMount, Ref, ref, toRaw } from 'vue'
 import BlacklistEntryDialog from './BlacklistEntryDialog.vue';
 

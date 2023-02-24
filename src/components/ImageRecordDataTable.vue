@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import type { ImageDataRecord } from '@/scripts/background/icon-storage';
+import type { ImageDataRecord } from '@/scripts/background/storage/icon-storage';
 import { byteToKilobyte } from '@/util/byte-to-kilobyte'
 import DownloadSvgButton from './DownloadSvgButton.vue';
 import FaviconImg from './image-display/FaviconImg.vue';

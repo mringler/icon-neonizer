@@ -3,7 +3,7 @@ import {
     ImageTracerBrowser, CreatePaletteMode, LayeringMode,
     FillStyle, TrimMode, ImageLoader
 } from '@image-tracer/browser';
-import { IconStorage } from './icon-storage';
+import { IconStorage } from '../storage/icon-storage';
 import { GradientDrawerOptions } from './svg-drawer/gradient-drawer-options';
 import { SvgDrawerGradient } from './svg-drawer/svg-drawer-gradient';
 
