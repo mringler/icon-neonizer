@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import OpenExtensionPage from '@/components/OpenExtensionPage.vue';
 import ImageDisplayForUrl from '@/components/ImageDisplayForUrl.vue';
-
 import { loadActiveTab } from '@/util/active-tab';
-import { onBeforeMount, ref, Ref } from 'vue'
+import { onBeforeMount, ref, Ref} from 'vue'
 import { loadOriginalUrl as loadOriginalFaviconUrl } from '../util/content-api';
 import { Blacklist } from '@/scripts/background/storage/blacklist';
 
@@ -45,6 +44,9 @@ function closePopup() {
                 >mdi-block-helper</v-icon>
             </v-tooltip>
             <span class="wrap-on-hover">{{ url }}</span>
+
+            <div>Herez: <rnd /> end {{log(rnd)}}</div>
+            
         </v-card-subtitle>
         <v-card-text>
             <ImageDisplayForUrl

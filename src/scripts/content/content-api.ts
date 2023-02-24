@@ -26,7 +26,7 @@ const callBackgroundApi: ApiCaller<BackgroundApiInterface> = (command, args) => 
 }
 
 export async function replaceFavicon(iconUrl: string, force = false, isInline = false) {
-    if (!isInline && needsHandling(iconUrl)) {
+    if (isHandledByFilter(iconUrl)) {
         return
     }
     const svgString = await callBackgroundApi('processIconUrl', [iconUrl, force]);
@@ -38,7 +38,7 @@ export async function replaceFavicon(iconUrl: string, force = false, isInline = 
 }
 
 async function verifyHref(actualHref: string, iconUrl: string): Promise<void> {
-    if (needsHandling(iconUrl)) {
+    if (isHandledByFilter(iconUrl)) {
         return
     }
     const svgString = await callBackgroundApi('processIconUrl', [iconUrl, false, false]);
@@ -50,6 +50,6 @@ async function verifyHref(actualHref: string, iconUrl: string): Promise<void> {
 }
 
 
-function needsHandling(iconUrl: string) {
-    return iconUrl && Favicon.urlIsHandledByFilter(iconUrl) && !iconUrl.startsWith('data:image')
+function isHandledByFilter(iconUrl: string) {
+    return iconUrl && Favicon.urlIsHandledByFilter(iconUrl)
 }
