@@ -130,7 +130,8 @@ export namespace IconStorage {
     }
 
     export async function storeOptions(options: GradientDrawerOptions) {
-        return storeNonIcon<GradientDrawerOptions>(NonIconKey.options, options)
+        const {verbose, ...storeOptions} = options
+        return storeNonIcon<GradientDrawerOptions>(NonIconKey.options, storeOptions)
     }
 
     export async function loadOptions(): Promise<GradientDrawerOptions | undefined> {
