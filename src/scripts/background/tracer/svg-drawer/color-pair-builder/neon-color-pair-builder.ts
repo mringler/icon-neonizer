@@ -16,32 +16,37 @@ const neonColors: ColorDef[] = [
         name: 'Neon Red',
         hex: '#ff3131',
         h: 0, s: 81, v: 100,
-        r: 255, g: 49, b: 49, a: 255,
-    },{
+        r: 255, g: 49, b: 49,
+    }, {
         name: 'Neon Orange',
         hex: '#ff5f1f',
         h: 17, s: 88, v: 100,
-        r: 255, g: 95, b: 31, a: 255,
+        r: 255, g: 95, b: 31,
     }, {
         name: 'Neon Yellow',
         hex: '#ccff15',
         h: 73, s: 92, v: 100,
-        r: 204, g: 255, b: 21, a: 255,
+        r: 204, g: 255, b: 21,
     }, {
         name: 'Neon Green',
         hex: '#0fff50',
         h: 136, s: 94, v: 100,
-        r: 15, g: 255, b: 80, a: 255,
+        r: 15, g: 255, b: 80,
     }, {
         name: 'Neon Blue',
         hex: '#1f51ff',
         h: 226, s: 88, v: 100,
-        r: 31, g: 81, b: 255, a: 255,
+        r: 31, g: 81, b: 255,
+    }, {
+        name: 'Neon Purple',
+        hex: '#7d12ff',
+        h: 267, s: 93, v: 100,
+        r: 125, g: 18, b: 255,
     }, {
         name: 'Neon Pink',
         hex: '#ff10f0',
         h: 303, s: 94, v: 100,
-        r: 255, g: 16, b: 240, a: 255,
+        r: 255, g: 16, b: 240,
     },
 ]
 
@@ -52,7 +57,8 @@ const colorHues = {
     green: 136, // 0fff50
     lightBlue: 175,
     blue: 226, // 1F51FF
-    purple: 280, // pink: FF10F0
+    purple: 267,
+    pink: 280, // pink: FF10F0
 }
 // red 0
 // orange: 25
@@ -60,12 +66,13 @@ const colorHues = {
 // green 135
 // light blue 175
 // blue 225
-// purple 280
+// purple 267
+// pink 280
 
 export class NeonColorPairBuilder extends ColorPairBuilder {
 
     protected generateWhitePair(hsvColor: HSV): [RgbColor, RgbColor] {
-        const none = new RgbColor(0,0,0,0)
+        const none = new RgbColor(0, 0, 0, 0)
         return [none, none]
     }
 
@@ -79,7 +86,8 @@ export class NeonColorPairBuilder extends ColorPairBuilder {
     // green 135
     // light blue 175
     // blue 225
-    // purple 280
+    // purple 267
+    // pink 280
 
     protected getClosestNeonColor(hue: number): ColorDef {
 
@@ -87,10 +95,10 @@ export class NeonColorPairBuilder extends ColorPairBuilder {
         return neonColors[ix]
     }
 
-    protected getShiftedColor(colorDef: ColorDef):RgbColor{
-        const keys : Array<keyof RgbColorData> = ['r','g','b']
-        const entries = keys.map(c => [c, colorDef[c]] as [keyof RgbColorData, number]).sort( ([, v1], [, v2])  => v2 - v1)
-        if(entries[1][1] - entries[2][1] < 15 && Math.random() < 0.5){
+    protected getShiftedColor(colorDef: ColorDef): RgbColor {
+        const keys: Array<keyof RgbColorData> = ['r', 'g', 'b']
+        const entries = keys.map(c => [c, colorDef[c]] as [keyof RgbColorData, number]).sort(([, v1], [, v2]) => v2 - v1)
+        if (entries[1][1] - entries[2][1] < 15 && Math.random() < 0.5) {
             [entries[1], entries[2]] = [entries[2], entries[1]]
         }
         entries[1][1] = 255

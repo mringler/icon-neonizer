@@ -51,6 +51,7 @@ export namespace Tracer {
             desc: false,
             //numberofcolors: 32
             trim: TrimMode.KEEP_RATIO,
+            verbose: false,
 
         };
     }

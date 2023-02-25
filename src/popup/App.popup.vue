@@ -43,10 +43,7 @@ function closePopup() {
                     class="mr-2 text-info"
                 >mdi-block-helper</v-icon>
             </v-tooltip>
-            <span class="wrap-on-hover">{{ url }}</span>
-
-            <div>Herez: <rnd /> end {{log(rnd)}}</div>
-            
+            <span class="wrap-on-hover">{{ url }}</span>            
         </v-card-subtitle>
         <v-card-text>
             <ImageDisplayForUrl
