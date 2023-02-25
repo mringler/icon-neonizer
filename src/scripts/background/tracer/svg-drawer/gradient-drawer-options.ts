@@ -3,6 +3,7 @@ import type { ColorPairBuilder } from "./color-pair-builder/color-pair-builder";
 import { DarkeningColorPairBuilder } from "./color-pair-builder/darkening-color-pair-builder";
 import { LighteningColorPairBuilder } from "./color-pair-builder/lightening-color-pair-builder";
 import { NeonColorPairBuilder } from "./color-pair-builder/neon-color-pair-builder";
+import { PreSelectedColorPairBuilder } from "./color-pair-builder/pre-selected-color-pair-builder.";
 import { SaturatedColorPairBuilder } from "./color-pair-builder/saturated-color-pair-builder";
 import { GradientBuilder } from "./gradient-builder/gradient-builder";
 import { GradientBuilderFixed } from "./gradient-builder/gradient-builder-fixed";
@@ -13,6 +14,7 @@ export enum ColorBuilderOption {
     lighten = 'lighten',
     saturate = 'saturate',
     neon = 'neon',
+    whiteout = 'whiteout'
 }
 
 export enum GradientBuilderOption {
@@ -32,6 +34,7 @@ export namespace GradientDrawerOptions {
             case ColorBuilderOption.darken: return new DarkeningColorPairBuilder()
             case ColorBuilderOption.lighten: return new LighteningColorPairBuilder()
             case ColorBuilderOption.neon: return new NeonColorPairBuilder()
+            case ColorBuilderOption.whiteout: return new PreSelectedColorPairBuilder()
             case ColorBuilderOption.saturate:
             default:
                 return new SaturatedColorPairBuilder()

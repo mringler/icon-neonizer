@@ -67,7 +67,7 @@ export class SvgDrawerGradient extends SvgDrawer {
     }
 
     protected colorToRgbString(color: RgbColor): string {
-        if (color.a < 100 || Math.max(color.r, color.g, color.b) < 20) {
+        if (this.colorPairBuilder.isTooDark(color)) {
             return super.colorToRgbString(color)
         }
 

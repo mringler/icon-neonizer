@@ -8,6 +8,10 @@ export abstract class ColorPairBuilder{
     protected abstract generateBlackPair(hsvColor: HSV, alpha: number): [RgbColor, RgbColor];
     protected abstract generateSaturatedPair(hsvColor: HSV): [RgbColor, RgbColor];
 
+    public isTooDark(color: RgbColor): boolean{
+        return color.a < 100 || Math.max(color.r, color.g, color.b) < 20
+    }
+
     protected hsvToRgb(hsv: HSV, alpha = 255): RgbColor {
         const rgb = hsv2rgb(hsv.h, hsv.s, hsv.v) as RgbColorData
         rgb.a = alpha

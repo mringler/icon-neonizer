@@ -65,24 +65,12 @@ const colorHues = {
 export class NeonColorPairBuilder extends ColorPairBuilder {
 
     protected generateWhitePair(hsvColor: HSV): [RgbColor, RgbColor] {
-        return [new RgbColor(0,0,0,0), new RgbColor(0,0,0,0)]
-        const h = (hsvColor.s === 0) ? Math.floor(Math.random() * 360) : hsvColor.h
-        return [
-            this.hsvToRgb({ h, s: 50, v: hsvColor.v }),
-            this.hsvToRgb({ h: h, s: 0, v: 85 }),
-        ]
+        const none = new RgbColor(0,0,0,0)
+        return [none, none]
     }
 
     protected generateBlackPair(hsvColor: HSV, alpha: number): [RgbColor, RgbColor] {
-        return [new RgbColor(0,0,0,0), new RgbColor(0,0,0,0)]
-        hsvColor.s = 100
-        if (hsvColor.v < 15) {
-            hsvColor.v = 10
-        }
-        return [
-            this.hsvToRgb(hsvColor, alpha),
-            new RgbColor(0, 0, 0, alpha)
-        ];
+        return this.generateWhitePair(hsvColor)
     }
 
     // red 0
