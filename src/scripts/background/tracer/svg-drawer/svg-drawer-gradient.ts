@@ -16,6 +16,7 @@ export class SvgDrawerGradient extends SvgDrawer {
     protected colorPairBuilder: ColorPairBuilder
     protected gradientBuilder: GradientBuilder
     protected fullOpacityThreshold: number
+    protected removeBackground: boolean
 
     public constructor(
         options: Partial<GradientDrawerOptions>,
@@ -26,24 +27,68 @@ export class SvgDrawerGradient extends SvgDrawer {
         this.gradientBuilder = GradientDrawerOptions.getGradientBuilderFromOption(options.gradientBuilder)
         const ot = options.fullOpacityThreshold
         this.fullOpacityThreshold = !ot && ot !== 0 ? 1 : Math.max(0, Math.min(Number(ot), 1))
+        this.removeBackground = Boolean(options.removeBackground)
     }
 
-    public draw(traceData: TraceData): string {
+    public init(traceData: TraceData): void {
+        this.fullOpacityThreshold >= 1 && this.adjustColorOpacity(traceData)
+        this.removeBackground && this.removeBackgroundArea(traceData)
+        super.init(traceData)
         this.setDimensions(traceData)
         this.gradientBuilder.init(traceData, this.options.scale)
-
-        this.adjustColorOpacity(traceData)
-
-        return super.draw(traceData)
     }
 
-    protected adjustColorOpacity(traceData: TraceData){
-        if(this.fullOpacityThreshold >= 1){
+    protected removeBackgroundArea(traceData: TraceData) {
+        const [colorIx, areaIx] = this.findBackgroundIndex(traceData)
+        if (colorIx === undefined || areaIx === undefined) {
+            return
+        }
+        const areas = traceData.areasByColor[colorIx]
+        const removeIds = [areaIx, ...areas[areaIx].childHoles]
+        removeIds.sort().reverse().forEach(ix => areas.splice(ix, 1))
+    }
+
+    protected findBackgroundIndex(traceData: TraceData): [number, number] | undefined[] {
+        const { width: w, height: h } = traceData
+
+        const hasPoint = (lines: TraceData['areasByColor'][number][number]['lineAttributes'], x: number, y: number) => {
+            let startsAt = false, endsAt = false
+            for (let lineIx = 0; lineIx < lines.length && !(startsAt && endsAt); lineIx++) {
+                startsAt ||= lines[lineIx].x1 === x && lines[lineIx].y1 === y
+                endsAt ||= lines[lineIx].x2 === x && lines[lineIx].y2 === y
+            }
+            return startsAt && endsAt
+        }
+
+        const isBackground = (area: TraceData['areasByColor'][number][number]) => {
+            const lines = area.lineAttributes
+            return !area.isHole &&
+                lines.length >= 4 &&
+                area.boundingBox[0] === 0 &&
+                area.boundingBox[1] === 0 &&
+                area.boundingBox[2] === w &&
+                area.boundingBox[3] === h &&
+                [[0, 0], [w, 0], [w, h], [0, h]].reduce((foundPoints, [x, y]) => foundPoints || hasPoint(area.lineAttributes, x, y), false)
+        }
+        for (let colorIx = 0; colorIx < traceData.areasByColor.length; colorIx++) {
+            const areas = traceData.areasByColor[colorIx]
+            for (let areaIx = 0; areaIx < areas.length; areaIx++) {
+                if (!isBackground(areas[areaIx])) {
+                    continue
+                }
+                return [colorIx, areaIx]
+            }
+        }
+        return []
+    }
+
+    protected adjustColorOpacity(traceData: TraceData) {
+        if (this.fullOpacityThreshold >= 1) {
             return
         }
         const threshold = 255 * this.fullOpacityThreshold
-        for(let color of traceData.colors){
-            if(color.a < threshold){
+        for (let color of traceData.colors) {
+            if (color.a < threshold) {
                 continue
             }
             color.a = 255

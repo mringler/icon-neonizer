@@ -150,6 +150,13 @@ const cols = {
                     ></v-text-field>
                 </v-col>
 
+                <v-col v-bind="cols">
+                    <v-checkbox
+                        label="Remove Background"
+                        v-model="props.options.removeBackground"
+                    ></v-checkbox>
+                </v-col>
+
             </v-row>
 
             <h4>Tracer Options</h4>

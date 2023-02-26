@@ -26,6 +26,8 @@ export enum GradientBuilderOption {
 export interface GradientDrawerOptions extends Options {
     colorBuilder: ColorBuilderOption,
     gradientBuilder: GradientBuilderOption,
+    fullOpacityThreshold?: number,
+    removeBackground?: boolean,
 }
 
 export namespace GradientDrawerOptions {
