@@ -15,6 +15,7 @@ export class SvgDrawerGradient extends SvgDrawer {
 
     protected colorPairBuilder: ColorPairBuilder
     protected gradientBuilder: GradientBuilder
+    protected fullOpacityThreshold: number
 
     public constructor(
         options: Partial<GradientDrawerOptions>,
@@ -23,13 +24,30 @@ export class SvgDrawerGradient extends SvgDrawer {
         super(options, version);
         this.colorPairBuilder = GradientDrawerOptions.getColorPairBuilderFromOption(options.colorBuilder)
         this.gradientBuilder = GradientDrawerOptions.getGradientBuilderFromOption(options.gradientBuilder)
+        const ot = options.fullOpacityThreshold
+        this.fullOpacityThreshold = !ot && ot !== 0 ? 1 : Math.max(0, Math.min(Number(ot), 1))
     }
 
     public draw(traceData: TraceData): string {
         this.setDimensions(traceData)
         this.gradientBuilder.init(traceData, this.options.scale)
 
+        this.adjustColorOpacity(traceData)
+
         return super.draw(traceData)
+    }
+
+    protected adjustColorOpacity(traceData: TraceData){
+        if(this.fullOpacityThreshold >= 1){
+            return
+        }
+        const threshold = 255 * this.fullOpacityThreshold
+        for(let color of traceData.colors){
+            if(color.a < threshold){
+                continue
+            }
+            color.a = 255
+        }
     }
 
     protected setDimensions(traceData: TraceData) {

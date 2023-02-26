@@ -138,6 +138,18 @@ const cols = {
                     ></v-select>
                 </v-col>
 
+
+                <v-col v-bind="cols">
+                    <v-text-field
+                        label="Full Opacity Threshold"
+                        v-model="props.options.fullOpacityThreshold"
+                        type="number"
+                        step="0.1"
+                        min="0"
+                        max="1"
+                    ></v-text-field>
+                </v-col>
+
             </v-row>
 
             <h4>Tracer Options</h4>
