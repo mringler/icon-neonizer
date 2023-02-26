@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { onBeforeMount, ref, Ref, provide } from 'vue'
-import AppBar from '@/components/AppBar.vue'
-import NavigationDrawer from '@/components/NavigationDrawer.vue'
-import Confirmation, { ConfirmProps } from '@/components/Confirmation.vue';
+import AppBar from '@/components/util/AppBar.vue'
+import NavigationDrawer from '@/components/util/NavigationDrawer.vue'
+import Confirmation, { ConfirmProps } from '@/components/util/Confirmation.vue';
 
 
 export type WithLoading = <T>(promise: Promise<T>) => Promise<T>

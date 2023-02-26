@@ -3,14 +3,13 @@
 import { CreatePaletteMode, RgbColor, FillStyle, TrimMode } from '@image-tracer/core';
 import { watch } from 'vue'
 import { ColorBuilderOption, GradientDrawerOptions, GradientBuilderOption } from '@/scripts/background/tracer/svg-drawer/gradient-drawer-options';
-import ImagePixelColorPickerPopup from './ImagePixelColorPickerPopup.vue';
-import SelectedColorChips from './SelectedColorChips.vue';
+import ImagePixelColorPickerPopup from './color-picker/ImagePixelColorPickerPopup.vue';
+import SelectedColorChips from './color-picker/SelectedColorChips.vue';
 
-type Props = {
+const props = defineProps<{
     options: GradientDrawerOptions,
     imageData?: ImageData | (() => Promise<ImageData>),
-}
-const props = defineProps<Props>()
+}>()
 
 function autoOpenColorPicker(): boolean {
     return !Boolean(props.options.palette?.length)
@@ -72,7 +71,52 @@ const cols = {
 
         <v-container>
 
-            <h4>Svg Options</h4>
+            <v-row>
+                <v-col class="text-h6">Svg Options</v-col>
+            </v-row>
+
+            <v-row>
+
+                <v-col v-bind="cols">
+                    <v-select
+                        label="Colors"
+                        v-model="props.options.colorBuilder"
+                        :items="colorDrawerOptions"
+                        required
+                    ></v-select>
+                </v-col>
+
+
+                <v-col v-bind="cols">
+                    <v-select
+                        label="Gradients"
+                        v-model="props.options.gradientBuilder"
+                        :items="gradientDrawerOptions"
+                        required
+                    ></v-select>
+                </v-col>
+
+
+                <v-col v-bind="cols">
+                    <v-text-field
+                        label="Full Opacity Threshold"
+                        v-model="props.options.fullOpacityThreshold"
+                        type="number"
+                        step="0.1"
+                        min="0"
+                        max="1"
+                    ></v-text-field>
+                </v-col>
+
+                <v-col v-bind="cols">
+                    <v-checkbox
+                        label="Remove Background"
+                        v-model="props.options.removeBackground"
+                    ></v-checkbox>
+                </v-col>
+
+            </v-row>
+
             <v-row>
 
                 <v-col v-bind="cols">
@@ -118,48 +162,8 @@ const cols = {
             </v-row>
 
             <v-row>
-
-                <v-col v-bind="cols">
-                    <v-select
-                        label="Colors"
-                        v-model="props.options.colorBuilder"
-                        :items="colorDrawerOptions"
-                        required
-                    ></v-select>
-                </v-col>
-
-
-                <v-col v-bind="cols">
-                    <v-select
-                        label="Gradients"
-                        v-model="props.options.gradientBuilder"
-                        :items="gradientDrawerOptions"
-                        required
-                    ></v-select>
-                </v-col>
-
-
-                <v-col v-bind="cols">
-                    <v-text-field
-                        label="Full Opacity Threshold"
-                        v-model="props.options.fullOpacityThreshold"
-                        type="number"
-                        step="0.1"
-                        min="0"
-                        max="1"
-                    ></v-text-field>
-                </v-col>
-
-                <v-col v-bind="cols">
-                    <v-checkbox
-                        label="Remove Background"
-                        v-model="props.options.removeBackground"
-                    ></v-checkbox>
-                </v-col>
-
+                <v-col class="text-h6">Tracer Options</v-col>
             </v-row>
-
-            <h4>Tracer Options</h4>
 
             <v-row>
                 <v-col v-bind="cols">
@@ -242,7 +246,9 @@ const cols = {
 
             </v-row>
 
-            <h4>Interpolation Options</h4>
+            <v-row>
+                <v-col class="text-h6">Interpolation Options</v-col>
+            </v-row>
 
             <v-row>
 
@@ -252,6 +258,7 @@ const cols = {
                         v-model="props.options.interpolationMode"
                         false-value="off"
                         true-value="interpolate"
+                        hideDetails
                     ></v-checkbox>
                 </v-col>
 
@@ -261,12 +268,15 @@ const cols = {
                         label="Enhance Right Angles"
                         :disabled="props.options.interpolationMode === 'off'"
                         v-model="props.options.rightangleenhance"
+                        hideDetails
                     ></v-checkbox>
                 </v-col>
 
             </v-row>
 
-            <h4>Color Quantization Options</h4>
+            <v-row>
+                <v-col class="text-h6">Color Quantization Options</v-col>
+            </v-row>
 
 
             <v-row>
@@ -350,8 +360,6 @@ const cols = {
             </v-row>
         </v-container>
     </v-form>
-
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

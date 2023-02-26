@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import TraceUrlPage from './TraceUrlPage.vue';
-import SourceTabProvider from '@/components/SourceTabProvider.vue';
+import SourceTabProvider from '@/components/util/SourceTabProvider.vue';
 </script>
 
 <template>

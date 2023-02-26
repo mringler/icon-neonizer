@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { AlertSnackbarProps } from '@/components/AlertSnackbar.vue';
-import AlertSnackbar from '@/components/AlertSnackbar.vue';
-import Heading from '@/components/Heading.vue';
+import type { AlertSnackbarProps } from '@/components/util/AlertSnackbar.vue';
+import AlertSnackbar from '@/components/util/AlertSnackbar.vue';
+import Heading from '@/components/util/Heading.vue';
 import { Blacklist, BlacklistedPage } from '@/scripts/background/storage/blacklist';
 import { onBeforeMount, Ref, ref, toRaw } from 'vue'
 import BlacklistEntryDialog from './BlacklistEntryDialog.vue';

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { SetLoading } from '@/extension-page/App.extension-page.vue';
 import { inject, watch } from 'vue'
-import Loading from '@/components/Loading.vue'
+import Loading from '@/components/util/Loading.vue'
 
 
 type Props = {

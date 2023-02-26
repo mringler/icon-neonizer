@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import OpenExtensionPage from '@/components/OpenExtensionPage.vue';
-import ImageDisplayForUrl from '@/components/ImageDisplayForUrl.vue';
+import ImageDisplayForUrl from '@/components/image-display/ImageDisplayForUrl.vue';
 import { loadActiveTab } from '@/util/active-tab';
 import { onBeforeMount, ref, Ref} from 'vue'
 import { loadOriginalUrl as loadOriginalFaviconUrl } from '../util/content-api';

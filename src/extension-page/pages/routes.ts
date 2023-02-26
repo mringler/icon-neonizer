@@ -1,8 +1,8 @@
 
 
 import EditCurrentSvgPage from './EditCurrentSvgPage.vue'
-import SvgEditor from '@/components/SvgEditor.vue'
-import EditSvgPage from '@/components/SvgEditorFromUrl.vue'
+import SvgEditor from '@/components/svg-editor/SvgEditor.vue'
+import EditSvgPage from '@/components/svg-editor/SvgEditorFromUrl.vue'
 import StorageListPage from './StorageListPage.vue'
 import TraceUrlPage from './TraceUrlPage.vue'
 import TraceTabPage from './TraceTabPage.vue'

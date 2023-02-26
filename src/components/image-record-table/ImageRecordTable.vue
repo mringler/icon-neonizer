@@ -2,8 +2,8 @@
 import type { ImageDataRecord } from '@/scripts/background/storage/icon-storage';
 import {byteToKilobyte} from '@/util/byte-to-kilobyte'
 import DownloadSvgButton from './DownloadSvgButton.vue';
-import FaviconImg from './image-display/FaviconImg.vue';
-import FaviconSvg from './image-display/FaviconSvg.vue';
+import FaviconImg from '../image-display/FaviconImg.vue';
+import FaviconSvg from '../image-display/FaviconSvg.vue';
 
 type Props = {
     imageRecords: ImageDataRecord[]

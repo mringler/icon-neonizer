@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import type { AlertSnackbarProps } from '@/components/AlertSnackbar.vue';
-import AlertSnackbar from '@/components/AlertSnackbar.vue';
+import type { AlertSnackbarProps } from '@/components/util/AlertSnackbar.vue';
+import AlertSnackbar from '@/components/util/AlertSnackbar.vue';
 import { IconStorage, ImageDataRecord } from '@/scripts/background/storage/icon-storage';
 import { onBeforeMount, Ref, ref, computed } from 'vue'
 import { byteToKilobyte } from '@/util/byte-to-kilobyte'
-import ImageRecordTable from '@/components/ImageRecordDataTable.vue';
-import DataCard from '@/components/DataCard.vue';
-import LoadingContent from '@/components/LoadingContent.vue';
+import ImageRecordTable from '@/components/image-record-table/ImageRecordDataTable.vue';
+import DataCard from '@/components/util/DataCard.vue';
+import LoadingContent from '@/components/util/LoadingContent.vue';
 
 
 const storageData: Ref<ImageDataRecord[]> = ref([])

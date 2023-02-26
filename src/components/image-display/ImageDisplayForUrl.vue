@@ -3,8 +3,8 @@
 import { watch, ref, Ref } from 'vue'
 import { IconStorage } from '@/scripts/background/storage/icon-storage';
 import { faviconDownloadUrl } from '@/util/favicon-download-url-filter';
-import FaviconImg from './image-display/FaviconImg.vue';
-import FaviconStored from './image-display/FaviconStored.vue';
+import FaviconImg from './FaviconImg.vue';
+import FaviconStored from './FaviconStored.vue';
 
 type Props = {
     url: string

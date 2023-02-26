@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { ref, Ref, onBeforeMount, toRaw, computed, ComputedRef } from 'vue'
-import OptionsForm from '@/components/OptionsForm.vue'
+import OptionsForm from '@/components/options-form/OptionsForm.vue'
 import { callBackgroundApi } from '@/util/background-api';
-import AlertSnackbar from '@/components/AlertSnackbar.vue';
+import AlertSnackbar from '@/components/util/AlertSnackbar.vue';
 import { ImageLoader } from '@image-tracer/browser';
 import { IconStorage } from '@/scripts/background/storage/icon-storage';
 import { faviconDownloadUrl } from '@/util/favicon-download-url-filter';
 import FaviconImg from '@/components/image-display/FaviconImg.vue';
 import FaviconSvg from '@/components/image-display/FaviconSvg.vue';
 import FaviconStored from '@/components/image-display/FaviconStored.vue';
-import Heading from '@/components/Heading.vue';
+import Heading from '@/components/util/Heading.vue';
 import type { GradientDrawerOptions } from '@/scripts/background/tracer/svg-drawer/gradient-drawer-options';
 import { Favicon } from '@/scripts/content/favicon';
 
