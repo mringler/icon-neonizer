@@ -27,10 +27,10 @@ const neonColors: ColorDef[] = [
         r: 255, g: 95, b: 31,
     }, {
         name: 'Neon Yellow',
-        hex: '#ccff15',
+        hex: '#c6f714',
         startHue: 40, endHue: 80,
-        h: 73, s: 92, v: 100,
-        r: 204, g: 255, b: 21,
+        h: 73, s: 92, v: 97,
+        r: 198, g: 247, b: 20,
     }, {
         name: 'Neon Green',
         hex: '#0fff50',
