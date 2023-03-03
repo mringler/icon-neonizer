@@ -31,7 +31,7 @@ export class SvgDrawerGradient extends SvgDrawer {
     }
 
     public init(traceData: TraceData): void {
-        this.fullOpacityThreshold >= 1 && this.adjustColorOpacity(traceData)
+        this.fullOpacityThreshold > 0 && this.adjustColorOpacity(traceData)
         this.removeBackground && this.removeBackgroundArea(traceData)
         super.init(traceData)
         this.setDimensions(traceData)

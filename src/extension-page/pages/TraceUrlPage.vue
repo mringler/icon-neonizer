@@ -29,11 +29,11 @@ onBeforeMount(async () => {
     options.value = await callBackgroundApi('getOptions', []);
 })
 
+const url = computed(() => useFallback.value ? Favicon.getGoogleApiUrl(new URL(props.url).host) + '&passFilter=1' : props.url )
+
 const retrace = async () => {
     tracedSvg.value = await callBackgroundApi('traceWithOptions', [url.value, toRaw(options.value)])
 }
-
-const url = computed(() => useFallback.value ? Favicon.getGoogleApiUrl(new URL(props.url).host) + '&passFilter=1' : props.url )
 
 const imageDataLoader: ComputedRef<() => Promise<ImageData>> = computed(() => () => {
     const sourceUrl = faviconDownloadUrl(url.value)
