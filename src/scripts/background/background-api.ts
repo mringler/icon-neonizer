@@ -16,10 +16,10 @@ const backgroundApi = {
 
 export type BackgroundApiInterface = ScriptsApi<typeof backgroundApi>;
 
-async function processIconUrl(iconUrl: string, force = false, store = true): Promise<string|null> {
+async function processIconUrl(iconUrl: string, force = false, store = true): Promise<string | null> {
 
     const blacklistEntry = await Blacklist.getBlacklistEntry(iconUrl)
-    if(blacklistEntry?.replacementUrl){
+    if (blacklistEntry?.replacementUrl) {
         iconUrl = blacklistEntry.replacementUrl
     }
     let icon = await IconStorage.loadIcon(iconUrl);
@@ -27,17 +27,17 @@ async function processIconUrl(iconUrl: string, force = false, store = true): Pro
         return icon;
     }
 
-    if(blacklistEntry){
+    if (blacklistEntry) {
         return null
     }
 
-    try{
+    try {
         icon = await Tracer.traceUrl(iconUrl);
-    }catch(e){
-        console.log(e)
+    } catch (e) {
+        console.log(`Error tracing ${iconUrl}`, e)
         return null
     }
-        store && IconStorage.storeIcon(iconUrl, icon);
+    store && IconStorage.storeIcon(iconUrl, icon);
     return icon;
 }
 

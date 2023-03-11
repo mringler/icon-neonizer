@@ -14,5 +14,5 @@ export const callContentApi: ApiCaller<ContentApiInterface> = async (command, ar
         }
         tabId = tab.id
     }
-    return browser.tabs.sendMessage(tabId, { command, args }).catch(() => console.error('Failed to call content api,  command was ', command));
+    return browser.tabs.sendMessage(tabId, { command, args }).catch(() => console.error('Failed to call content api, command was ', command));
 }

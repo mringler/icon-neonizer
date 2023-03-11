@@ -1,6 +1,13 @@
 import { initContentApi, replaceFavicon } from "./content-api";
 import { Favicon } from "./favicon";
 
+(async function () {
+    const [iconUrl, isInline] = resolveIconUrl()
+
+    initContentApi(iconUrl);
+    replaceFavicon(iconUrl, false, isInline);
+})();
+
 function resolveIconUrl(): [string, boolean] {
 
     const iconUrl = Favicon.getPageFaviconHref()
@@ -8,13 +15,6 @@ function resolveIconUrl(): [string, boolean] {
     if (iconUrl && !isInline) {
         return [iconUrl, false]
     }
-    const url = window.location.host + '/favicon.ico'
+    const url = window.location.origin + '/favicon.ico'
     return [url, isInline];
 }
-
-(async function () {
-    const [iconUrl, isInline] = resolveIconUrl()
-
-    initContentApi(iconUrl);
-    replaceFavicon(iconUrl, false, isInline);
-})();

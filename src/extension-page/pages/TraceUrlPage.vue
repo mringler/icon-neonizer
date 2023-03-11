@@ -29,10 +29,14 @@ onBeforeMount(async () => {
     options.value = await callBackgroundApi('getOptions', []);
 })
 
-const url = computed(() => useFallback.value ? Favicon.getGoogleApiUrl(new URL(props.url).host) + '&passFilter=1' : props.url )
+const url = computed(() => useFallback.value ? Favicon.getGoogleApiUrl(new URL(props.url).host) + '&passFilter=1' : props.url)
 
 const retrace = async () => {
-    tracedSvg.value = await callBackgroundApi('traceWithOptions', [url.value, toRaw(options.value)])
+    try {
+        tracedSvg.value = await callBackgroundApi('traceWithOptions', [url.value, toRaw(options.value)])
+    } catch (e) {
+        errorMessage.value = e as string;
+    }
 }
 
 const imageDataLoader: ComputedRef<() => Promise<ImageData>> = computed(() => () => {
@@ -86,21 +90,21 @@ const iconCols = {
 
                     <div class="mt-3">
                         <v-btn
-                        variant="flat"
-                        color="primary"
-                        @click="retrace"
+                            variant="flat"
+                            color="primary"
+                            @click="retrace"
                         >trace</v-btn>
-                        
+
                         <v-btn
-                        :disabled="!tracedSvg"
-                        variant="flat"
-                        @click="save"
+                            :disabled="!tracedSvg"
+                            variant="flat"
+                            @click="save"
                         >save</v-btn>
-                        
+
                         <v-btn
-                        :disabled="!tracedSvg"
-                        variant="flat"
-                        :to=" tracedSvg ? { name: 'edit-svg', params: { svg: tracedSvg, url: props.url } } : {}"
+                            :disabled="!tracedSvg"
+                            variant="flat"
+                            :to="tracedSvg ? { name: 'edit-svg', params: { svg: tracedSvg, url: props.url } } : {}"
                         >edit</v-btn>
 
                     </div>
@@ -116,7 +120,11 @@ const iconCols = {
                         noFrame
                     />
 
-                    <v-checkbox label="use fallback" v-model="useFallback" hideDetails/>
+                    <v-checkbox
+                        label="use fallback"
+                        v-model="useFallback"
+                        hideDetails
+                    />
                 </v-col>
                 <v-col v-bind="iconCols">
 
@@ -150,8 +158,5 @@ const iconCols = {
     >store options</v-btn>
 
     <AlertSnackbar v-model:message="errorMessage" />
-
 </template>
-<style scoped>
-
-</style>
+<style scoped></style>

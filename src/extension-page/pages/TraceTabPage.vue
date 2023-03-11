@@ -9,7 +9,6 @@ import SourceTabProvider from '@/components/util/SourceTabProvider.vue';
         require-url
     >
         <TraceUrlPage
-            class="ferd"
             :url="sourceIconUrl as string"
             @update:svg="updateTabIcon"
         />
