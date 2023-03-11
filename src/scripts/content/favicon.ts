@@ -97,6 +97,7 @@ export namespace Favicon {
         const elements = getFaviconHtmlElements();
         if (elements.length === 0) {
             const linkElement = document.createElement('link');
+            linkElement.rel = 'icon';
             fixupLinkElement(linkElement, href);
             document.head.appendChild(linkElement);
             return;
