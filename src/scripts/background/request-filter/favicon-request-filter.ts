@@ -116,9 +116,15 @@ export namespace FaviconRequestFilter {
             const fullData = concatenateArrayBuffer(data);
 
             const [svg, largestFaviconUrl] = await Promise.all([
-                Tracer.traceBuffer(fullData),
+                Tracer.traceBuffer(fullData).catch(() => null),
                 largestFaviconUrlPromise
             ] as const);
+
+            if(svg === null){
+                filter.write(fullData)
+                filter.close()
+                return;
+            }
 
             const isLargestFavicon = !largestFaviconUrl || iconUrl.includes(largestFaviconUrl)
             isLargestFavicon && IconStorage.storeIcon(iconUrl, svg);
