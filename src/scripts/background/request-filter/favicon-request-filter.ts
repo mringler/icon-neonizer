@@ -1,6 +1,7 @@
 import { callContentApi } from "@/util/content-api";
 import { Blacklist } from "../storage/blacklist";
 import { IconStorage } from "../storage/icon-storage";
+import { SvgColorReplacer } from "../tracer/svg-color-replacer";
 import { Tracer } from "../tracer/tracer";
 
 export namespace FaviconRequestFilter {
@@ -120,18 +121,32 @@ export namespace FaviconRequestFilter {
                 largestFaviconUrlPromise
             ] as const);
 
-            if(svg === null){
-                filter.write(fullData)
-                filter.close()
-                return;
+            if(svg){
+                const isLargestFavicon = !largestFaviconUrl || iconUrl.includes(largestFaviconUrl)
+                isLargestFavicon && IconStorage.storeIcon(iconUrl, svg);
+                closeWithSvg(svg);
+                return
             }
 
-            const isLargestFavicon = !largestFaviconUrl || iconUrl.includes(largestFaviconUrl)
-            isLargestFavicon && IconStorage.storeIcon(iconUrl, svg);
-            closeWithSvg(svg);
+            try{
+                const updatedSvg = updateSvgResponse(fullData)
+                IconStorage.storeIcon(iconUrl, updatedSvg);
+                closeWithSvg(updatedSvg);
+                return
+            } catch(e){
+
+            }
+
+            filter.write(fullData)
+            filter.close()
         };
 
         return {};
+    }
+
+    function updateSvgResponse(response: Uint8Array): string{
+        const svgString = new TextDecoder().decode(response)
+        return SvgColorReplacer.replaceColorsInSvg(svgString)
     }
 
     function concatenateArrayBuffer(buffers: ArrayBuffer[]): Uint8Array {

@@ -13,23 +13,29 @@ export namespace Tracer {
         iconUrl: string,
         customOptions: Partial<GradientDrawerOptions> | null = null
     ): Promise<string> {
-        const options = await getOptions(customOptions);
         const url = faviconDownloadUrl(iconUrl)
         const imageData = await ImageLoader.loadUrl(url);
+        return traceImageData(imageData, customOptions)
+    }
+
+    export async function traceBuffer(
+        buffer: ArrayBuffer,
+        customOptions: Partial<GradientDrawerOptions> | null = null
+    ): Promise<string> {
+        const imageData = await ImageLoader.loadImageDataFromBuffer(buffer);
+        return traceImageData(imageData, customOptions)
+    }
+
+    export async function traceImageData(
+        imageData: ImageData,
+        customOptions: Partial<GradientDrawerOptions> | null = null
+    ): Promise<string> {
+        const options = await getOptions(customOptions);
         if (!customOptions?.strokewidth) {
             options.strokewidth = imageData.width > 100 ? 6 : 2;
         }
         const drawer = new SvgDrawerGradient(options, '');
         return ImageTracerBrowser.fromImageData(imageData, options, drawer);
-    }
-
-    export async function traceBuffer(
-        buffer: ArrayBuffer,
-        options: Partial<GradientDrawerOptions> | null = null
-    ): Promise<string> {
-        options = await getOptions(options);
-        const drawer = new SvgDrawerGradient(options, '');
-        return ImageTracerBrowser.fromBuffer(buffer, options, drawer);
     }
 
     export async function getOptions(options: Partial<GradientDrawerOptions> | null = null): Promise<GradientDrawerOptions> {

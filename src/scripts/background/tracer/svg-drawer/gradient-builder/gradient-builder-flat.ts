@@ -23,16 +23,17 @@ export class GradientBuilderFlat extends GradientBuilder{
         return gradientPoints
     }
 
-    public generateGradient(id: string, color: RgbColor, colorPairBuilder: ColorPairBuilder): GradientTags
+    public generateGradient(color: RgbColor, colorPairBuilder: ColorPairBuilder): [string, GradientTags]
     {
+        const id = this.generateGradientId(color)
         const [startColor, stopColor] = colorPairBuilder.generateColorPair(color);
         const {x1, x2, y1, y2} = this.gradientPoints
 
-        return [
+        return [id, [
             `<linearGradient id="${id}" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" gradientUnits="userSpaceOnUse">`,
             `  <stop offset="0%" stop-color="${startColor.toCssColor()}"/>`,
             `  <stop offset="100%" stop-color="${stopColor.toCssColor()}"/>`,
             `</linearGradient>`
-        ];
+        ]];
     }
 }

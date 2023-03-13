@@ -111,8 +111,7 @@ export class SvgDrawerGradient extends SvgDrawer {
     }
 
     protected buildGradientForColor(color: RgbColor): string {
-        const id = this.generateGradientId(color)
-        const gradientTags = this.gradientBuilder.generateGradient(id, color, this.colorPairBuilder);
+        const [id, gradientTags] = this.gradientBuilder.generateGradient(color, this.colorPairBuilder);
         this.registerGradient(id, color, gradientTags)
 
         return id
@@ -121,12 +120,6 @@ export class SvgDrawerGradient extends SvgDrawer {
     protected registerGradient(id: string, color: RgbColor, gradientTags: GradientTags): void {
         this.gradients[id] = gradientTags;
         this.colorToGradientId.set(color, id)
-    }
-
-    protected generateGradientId(color: RgbColor): string {
-        const colorId = color.toCssColorHex().substring(1)
-        const randomChars = (Math.random() + 1).toString(36).substring(8)
-        return `${randomChars}_${colorId}`
     }
 
     protected colorToRgbString(color: RgbColor): string {
