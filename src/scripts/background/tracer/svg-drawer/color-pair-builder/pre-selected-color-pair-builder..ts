@@ -2,15 +2,6 @@ import { RgbColor, RgbColorData } from "@image-tracer/core";
 import type { HSV } from 'color-functions/dist/rgb2hsv';
 import { SaturatedColorPairBuilder } from "./saturated-color-pair-builder";
 
-const colorPairs: Array<[RgbColorData, RgbColorData]> = [
-    [{r: 209, g: 20, b: 209}, {r: 25, g: 255, b: 255}], // pink aqua
-    [{r: 209, g: 20, b: 209}, {r: 255, g: 255, b: 25}], // pink lemon
-    [{r: 209, g: 209, b: 20}, {r: 255, g: 25, b: 255}], // lemon hotpink
-    [{r: 209, g: 209, b: 20}, {r: 25, g: 255, b: 255}], // mint lemon
-    [{r: 20, g: 209, b: 209}, {r: 255, g: 255, b: 25}], // mint tea
-    [{r: 20, g: 209, b: 209}, {r: 255, g: 25, b: 255}], // mint hotpink
-]
-
 const upperColors: RgbColorData[] = [
     {r: 25, g: 255, b: 255}, // aqua
     {r: 255, g: 25, b: 255}, // hotpink
@@ -18,6 +9,7 @@ const upperColors: RgbColorData[] = [
     {r: 255, g: 25, b: 125}, // guava
     {r: 25, g: 255, b: 125}, // mint
     {r: 125, g: 25, b: 255}, // purple
+    {r: 0, g: 194, b: 255}, // light blue
 ]
 
 const lowerColors: RgbColorData[] = [
@@ -27,6 +19,7 @@ const lowerColors: RgbColorData[] = [
     {r: 209, g: 20, b: 120}, // guava
     {r: 20, g: 209, b: 120}, // oozing green
     {r: 120, g: 20, b: 209}, // purple
+    {r: 20, g: 120, b: 255}, // tropical blue
 ]
 
 export class PreSelectedColorPairBuilder extends SaturatedColorPairBuilder {
