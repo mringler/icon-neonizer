@@ -1,4 +1,5 @@
 import { Options } from "@image-tracer/core";
+import { AdaptiveColorPairBuilder } from "./color-pair-builder/adaptive-color-pair-builder";
 import type { ColorPairBuilder } from "./color-pair-builder/color-pair-builder";
 import { DarkeningColorPairBuilder } from "./color-pair-builder/darkening-color-pair-builder";
 import { LighteningColorPairBuilder } from "./color-pair-builder/lightening-color-pair-builder";
@@ -14,7 +15,8 @@ export enum ColorBuilderOption {
     lighten = 'lighten',
     saturate = 'saturate',
     neon = 'neon',
-    whiteout = 'whiteout'
+    whiteout = 'whiteout',
+    adaptive = 'adaptive',
 }
 
 export enum GradientBuilderOption {
@@ -37,6 +39,7 @@ export namespace GradientDrawerOptions {
             case ColorBuilderOption.lighten: return new LighteningColorPairBuilder()
             case ColorBuilderOption.neon: return new NeonColorPairBuilder()
             case ColorBuilderOption.whiteout: return new PreSelectedColorPairBuilder()
+            case ColorBuilderOption.adaptive: return new AdaptiveColorPairBuilder()
             case ColorBuilderOption.saturate:
             default:
                 return new SaturatedColorPairBuilder()

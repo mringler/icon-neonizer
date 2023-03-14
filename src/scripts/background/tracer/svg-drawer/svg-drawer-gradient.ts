@@ -33,6 +33,7 @@ export class SvgDrawerGradient extends SvgDrawer {
     public init(traceData: TraceData): void {
         this.fullOpacityThreshold > 0 && this.adjustColorOpacity(traceData)
         this.removeBackground && this.removeBackgroundArea(traceData)
+        this.colorPairBuilder.init(traceData)
         super.init(traceData)
         this.setDimensions(traceData)
         this.gradientBuilder.init(traceData, this.options.scale)
@@ -130,27 +131,5 @@ export class SvgDrawerGradient extends SvgDrawer {
         const id = this.colorToGradientId.get(color) ?? this.buildGradientForColor(color)
 
         return `url(#${id})`
-    }
-
-
-
-    /**
-     * Finds the value in the middle of three values.
-     * 
-     * Returns the larger one if two are equal.
-     * @param r 
-     * @param g 
-     * @param b 
-     * @returns 
-     */
-    protected mid(r: number, g: number, b: number): number {
-        if (r < g) {
-            if (b < r) return r;
-            if (g < b) return g;
-            return b
-        }
-        if (b < g) return g;
-        if (r < b) return r;
-        return b
     }
 }

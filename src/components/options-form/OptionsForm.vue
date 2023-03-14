@@ -50,6 +50,7 @@ const colorDrawerOptions = [
     { title: 'Lighten', value: ColorBuilderOption.lighten },
     { title: 'Darken', value: ColorBuilderOption.darken },
     { title: 'Whiteout', value: ColorBuilderOption.whiteout },
+    { title: 'Adaptive', value: ColorBuilderOption.adaptive },
 ]
 
 const gradientDrawerOptions = [

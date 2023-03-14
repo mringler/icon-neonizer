@@ -1,4 +1,4 @@
-import { RgbColor } from "@image-tracer/core";
+import { RgbColor, TraceData } from "@image-tracer/core";
 import type { ColorPairBuilder } from "./svg-drawer/color-pair-builder/color-pair-builder";
 import type { GradientBuilder, GradientTags } from "./svg-drawer/gradient-builder/gradient-builder";
 import { GradientDrawerOptions } from "./svg-drawer/gradient-drawer-options";
@@ -81,16 +81,23 @@ export namespace SvgColorReplacer {
         protected colorPairBuilder: ColorPairBuilder
         protected gradientBuilder: GradientBuilder
 
-        public constructor(svgDocument: Document, customOptions?: Partial<GradientDrawerOptions>) {
+        public constructor(svgDom: Document, customOptions?: Partial<GradientDrawerOptions>) {
             this.colorPairBuilder = GradientDrawerOptions.getColorPairBuilderFromOption(customOptions?.colorBuilder)
             this.gradientBuilder = GradientDrawerOptions.getGradientBuilderFromOption(customOptions?.gradientBuilder)
-            const bBox = svgDocument.querySelector('svg')?.getBBox()
-            this.gradientBuilder.init({
+
+            const traceData = this.buildMockTraceData(svgDom)
+            this.gradientBuilder.init(traceData, customOptions?.scale ?? 1)
+        }
+
+        protected buildMockTraceData(svgDom: Document): TraceData{
+            const bBox = svgDom.querySelector('svg')?.getBBox()
+
+            return {
                 areasByColor: [],
                 colors: [],
                 height: bBox?.height ?? 0,
                 width: bBox?.width ?? 0,
-            }, customOptions?.scale ?? 1)
+            }
         }
 
         public buildColorData(colorString: string): ColorData | null {
