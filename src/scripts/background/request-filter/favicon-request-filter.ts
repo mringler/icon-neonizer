@@ -70,7 +70,7 @@ export namespace FaviconRequestFilter {
 
         const storedIconPromise = IconStorage.loadIcon(iconUrl);
         const isFaviconPromise = callContentApi('urlIsFavicon', [iconUrl])
-        let largestFaviconUrlPromise:Promise<string|null>|null = null
+        let largestFaviconUrlPromise:Promise<string|undefined>|null = null
 
         const closeWithSvg = (svg: string) => {
             const encoder = new TextEncoder();

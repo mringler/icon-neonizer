@@ -25,11 +25,15 @@ const callBackgroundApi: ApiCaller<BackgroundApiInterface> = (command, args) => 
     return browser.runtime.sendMessage({ command, args });
 }
 
-export async function replaceFavicon(iconUrl: string, force = false, isInline = false) {
+export async function replaceFavicon(iconUrl: string, force = false, inlineData? :string) {
     if (isHandledByFilter(iconUrl)) {
         return
     }
-    const svgString = await callBackgroundApi('processIconUrl', [iconUrl, force]);
+    const loader = inlineData ? 
+        callBackgroundApi('processInlineData', [inlineData, iconUrl, force]) : 
+        callBackgroundApi('processIconUrl', [iconUrl, force]);
+
+    const svgString = await loader;
     if (!svgString) {
         console.log('no icon - not updating');
         return

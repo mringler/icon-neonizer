@@ -2,14 +2,12 @@
 
 import { watch, ref, Ref } from 'vue'
 import { IconStorage } from '@/scripts/background/storage/icon-storage';
-import { faviconDownloadUrl } from '@/util/favicon-download-url-filter';
 import FaviconImg from './FaviconImg.vue';
 import FaviconStored from './FaviconStored.vue';
 
-type Props = {
+const { url } = defineProps<{
     url: string
-}
-const { url } = defineProps<Props>()
+}>()
 const newImage: Ref<string | null> = ref(null)
 
 watch(
@@ -27,7 +25,7 @@ async function loadNewIcon() {
 <template>
     <div class="image-row">
 
-        <FaviconImg :src="faviconDownloadUrl(url)" class="image-display-icon"/>
+        <FaviconImg :src="url" class="image-display-icon"/>
         
         <FaviconStored :url="url" class="image-display-icon" />
         

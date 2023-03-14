@@ -9,6 +9,7 @@ type Props = {
     showLoading?: boolean,
     requireUrl?: boolean
 }
+
 const props = defineProps<Props>()
 
 const loading = ref(true)

@@ -1,9 +1,9 @@
 export namespace Favicon {
 
-    export function getPageFaviconHref(): string | null {
-        const element = getLargestFaviconHtmlElement()
+    export function getPageFaviconHref(dom?: Document): string | undefined {
+        const element = getLargestFaviconHtmlElement(dom)
         if(!element){
-            return null
+            return undefined
         }
         if(element.dataset.oldHref){
             return element.dataset.oldHref
@@ -20,8 +20,8 @@ export namespace Favicon {
         return document.querySelector<HTMLLinkElement>("link[rel~='icon']");
     }
 
-    function getFaviconHtmlElements(): NodeListOf<HTMLLinkElement> {
-        return document.querySelectorAll<HTMLLinkElement>("link[rel~='icon']"); // "link[rel$='icon'], link[rel~='image_src']"
+    function getFaviconHtmlElements(dom = document): NodeListOf<HTMLLinkElement> {
+        return dom.querySelectorAll<HTMLLinkElement>("link[rel~='icon']"); // "link[rel$='icon'], link[rel~='image_src']"
     }
 
     export function urlIsFavicon(url: string): boolean {
@@ -43,8 +43,8 @@ export namespace Favicon {
         return document.querySelector<HTMLLinkElement>(`link[rel~='icon'][href$="${urlEnd}"]`)?.dataset.neFilter === "1";
     }
 
-    function getLargestFaviconHtmlElement(): HTMLLinkElement | null {
-        const nodes = getFaviconHtmlElements();
+    function getLargestFaviconHtmlElement(dom?: Document): HTMLLinkElement | null {
+        const nodes = getFaviconHtmlElements(dom);
         if (nodes.length === 0) {
             return null
         }

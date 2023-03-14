@@ -18,13 +18,31 @@ export namespace SvgColorReplacer {
         svgString: string,
         customOptions?: Partial<GradientDrawerOptions>
     ): string {
-        const svgDocument = new DOMParser().parseFromString(svgString, 'image/svg+xml')
-        const paths = svgDocument.querySelectorAll<SvgColorElements>('path,circle,rect')
+        const svgDom = parseSvg(svgString)
+        const paths = svgDom.querySelectorAll<SvgColorElements>('path,circle,rect')
 
-        const colorDataBuilder = new ColorDataBuilder(svgDocument, customOptions)
+        const colorDataBuilder = new ColorDataBuilder(svgDom, customOptions)
         const colorMap = updatePathColors(colorDataBuilder, paths)
-        insertGradientsIntoSvg(svgDocument, colorMap)
-        return new XMLSerializer().serializeToString(svgDocument)
+
+        fixupSvg(svgDom)
+        insertGradientsIntoSvg(svgDom, colorMap)
+        return new XMLSerializer().serializeToString(svgDom)
+    }
+
+    function fixupSvg(svgDocument: Document) {
+        const svgNode = svgDocument.querySelector('svg')!
+        svgNode.removeAttribute('width')
+        svgNode.removeAttribute('height')
+        svgNode.querySelectorAll('style').forEach(style => style.remove())
+    }
+
+    function parseSvg(svgString: string): Document {
+        const svgDocument = new DOMParser().parseFromString(svgString, 'image/svg+xml')
+        const errorNode = svgDocument.querySelector('parsererror');
+        if (errorNode) {
+            throw new Error('Error parsing SVG: ' + errorNode.textContent)
+        }
+        return svgDocument
     }
 
     function insertGradientsIntoSvg(svgDocument: Document, colorMap: ColorMap) {
@@ -63,7 +81,7 @@ export namespace SvgColorReplacer {
         protected colorPairBuilder: ColorPairBuilder
         protected gradientBuilder: GradientBuilder
 
-        public constructor(svgDocument: Document, customOptions?: Partial<GradientDrawerOptions>) { 
+        public constructor(svgDocument: Document, customOptions?: Partial<GradientDrawerOptions>) {
             this.colorPairBuilder = GradientDrawerOptions.getColorPairBuilderFromOption(customOptions?.colorBuilder)
             this.gradientBuilder = GradientDrawerOptions.getGradientBuilderFromOption(customOptions?.gradientBuilder)
             const bBox = svgDocument.querySelector('svg')?.getBBox()

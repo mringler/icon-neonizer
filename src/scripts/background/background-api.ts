@@ -1,4 +1,5 @@
 import { ScriptsApi, buildApi } from "../ApiInterfaces";
+import { InlineImageLoader } from "./inline-image-loader";
 import { Blacklist } from "./storage/blacklist";
 import { IconStorage } from "./storage/icon-storage";
 import { SvgColorReplacer } from "./tracer/svg-color-replacer";
@@ -13,21 +14,37 @@ export async function initBackgroundApi() {
 
 const backgroundApi = {
     processIconUrl,
-    processSvg,
+    processInlineData,
     getStoredIcon: IconStorage.loadIcon,
     storeIcon: IconStorage.storeIcon,
     getStoredIcons: IconStorage.loadAll,
     removeIcon: IconStorage.removeIcon,
     getOptions: Tracer.getOptions,
-    traceWithOptions: iconLoader
+    traceWithOptions
 }
 
 async function processIconUrl(iconUrl: string, force = false, store = true): Promise<string | null> {
     return processIconData(iconUrl, () => iconLoader(iconUrl), force, store)
 }
 
-async function processSvg(svgString: string, url: string, force = false, store = true) {
-    return processIconData(url, () => SvgColorReplacer.replaceColorsInSvg(svgString), force, store)
+async function processInlineData(inlineData: string, url: string, force = false, store = true) {
+    return processIconData(url, () => inlineIconLoader(inlineData), force, store)
+}
+
+async function traceWithOptions(iconUrl: string, customOptions?: Partial<GradientDrawerOptions>) {
+    return (iconUrl.startsWith('data:image')) ?
+        inlineIconLoader(iconUrl, customOptions):
+        iconLoader(iconUrl, customOptions)
+}
+
+async function inlineIconLoader(inlineData: string, customOptions?: Partial<GradientDrawerOptions>) {
+    const [contentType, data] = InlineImageLoader.parseIcon(inlineData)
+    if (!data) {
+        return ''
+    }
+    return (contentType === 'data:image/svg+xml') ?
+        SvgColorReplacer.replaceColorsInSvg(data, customOptions) :
+        Tracer.traceBuffer(new TextEncoder().encode(data), customOptions)
 }
 
 async function iconLoader(iconUrl: string, customOptions?: Partial<GradientDrawerOptions>) {
@@ -42,7 +59,7 @@ async function iconLoader(iconUrl: string, customOptions?: Partial<GradientDrawe
     if (contentType !== 'image/svg+xml') {
         return Tracer.traceBuffer(arrayBuffer, customOptions)
     }
-    
+
     const svgString = new TextDecoder().decode(arrayBuffer)
     return SvgColorReplacer.replaceColorsInSvg(svgString, customOptions)
 }

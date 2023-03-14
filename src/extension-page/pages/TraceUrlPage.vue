@@ -3,15 +3,15 @@ import { ref, Ref, onBeforeMount, toRaw, computed, ComputedRef } from 'vue'
 import OptionsForm from '@/components/options-form/OptionsForm.vue'
 import { callBackgroundApi } from '@/util/background-api';
 import AlertSnackbar from '@/components/util/AlertSnackbar.vue';
-import { ImageLoader } from '@image-tracer/browser';
 import { IconStorage } from '@/scripts/background/storage/icon-storage';
-import { faviconDownloadUrl } from '@/util/favicon-download-url-filter';
 import FaviconImg from '@/components/image-display/FaviconImg.vue';
 import FaviconSvg from '@/components/image-display/FaviconSvg.vue';
 import FaviconStored from '@/components/image-display/FaviconStored.vue';
 import Heading from '@/components/util/Heading.vue';
 import type { GradientDrawerOptions } from '@/scripts/background/tracer/svg-drawer/gradient-drawer-options';
 import { Favicon } from '@/scripts/content/favicon';
+import {useImageData} from '@/composables/imageData'
+import { useSrcUrl } from '@/composables/srcUrl';
 
 type Props = {
     url: string
@@ -33,15 +33,15 @@ const url = computed(() => useFallback.value ? Favicon.getGoogleApiUrl(new URL(p
 
 const retrace = async () => {
     try {
-        tracedSvg.value = await callBackgroundApi('traceWithOptions', [url.value, toRaw(options.value)])
+        const resolvedUrl = await useSrcUrl(url.value).value
+        tracedSvg.value = await callBackgroundApi('traceWithOptions', [resolvedUrl, toRaw(options.value)])
     } catch (e) {
         errorMessage.value = e as string;
     }
 }
 
-const imageDataLoader: ComputedRef<() => Promise<ImageData>> = computed(() => () => {
-    const sourceUrl = faviconDownloadUrl(url.value)
-    return ImageLoader.loadUrl(sourceUrl)
+const imageDataLoader: ComputedRef<() => Promise<ImageData>> = computed(() => async () => {
+    return useImageData(url.value).value
 })
 
 const save = async () => {

@@ -1,4 +1,4 @@
-import { callContentApi } from "@/util/content-api";
+import { callContentApi } from "../../util/content-api";
 import { initBackgroundApi } from "./background-api";
 import { FaviconRequestFilter } from "./request-filter/favicon-request-filter";
 import { IconStorage } from "./storage/icon-storage";

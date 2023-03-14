@@ -1,4 +1,4 @@
-import { faviconDownloadUrl } from '@/util/favicon-download-url-filter';
+import { toFaviconDownloadUrl } from '@/util/to-favicon-download-url';
 import {
     ImageTracerBrowser, CreatePaletteMode, LayeringMode,
     FillStyle, TrimMode, ImageLoader
@@ -13,7 +13,7 @@ export namespace Tracer {
         iconUrl: string,
         customOptions: Partial<GradientDrawerOptions> | null = null
     ): Promise<string> {
-        const url = faviconDownloadUrl(iconUrl)
+        const url = toFaviconDownloadUrl(iconUrl)
         const imageData = await ImageLoader.loadUrl(url);
         return traceImageData(imageData, customOptions)
     }
