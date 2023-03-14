@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { loadOpenerTab } from '@/util/active-tab';
-import { callContentApi } from '@/util/content-api';
+import { callContentApi } from '@/util/content-api-caller';
 import { onBeforeMount, Ref, ref } from 'vue';
 import AlertNoSourceTab from './AlertNoSourceTab.vue';
 import Loading from './Loading.vue';

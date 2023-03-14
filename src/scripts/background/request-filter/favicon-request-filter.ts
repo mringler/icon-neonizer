@@ -1,4 +1,4 @@
-import { callContentApi } from "@/util/content-api";
+import { callContentApi } from "@/util/content-api-caller";
 import { Blacklist } from "../storage/blacklist";
 import { IconStorage } from "../storage/icon-storage";
 import { SvgColorReplacer } from "../tracer/svg-color-replacer";

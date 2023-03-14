@@ -3,7 +3,7 @@ import OpenExtensionPage from '@/components/OpenExtensionPage.vue';
 import ImageDisplayForUrl from '@/components/image-display/ImageDisplayForUrl.vue';
 import { loadActiveTab } from '@/util/active-tab';
 import { onBeforeMount, ref, Ref} from 'vue'
-import { loadOriginalUrl as loadOriginalFaviconUrl } from '../util/content-api';
+import { loadOriginalUrl as loadOriginalFaviconUrl } from '../util/content-api-caller';
 import { Blacklist } from '@/scripts/background/storage/blacklist';
 
 const url: Ref<string | null> = ref(null)

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, Ref, onBeforeMount, toRaw, computed, ComputedRef } from 'vue'
 import OptionsForm from '@/components/options-form/OptionsForm.vue'
-import { callBackgroundApi } from '@/util/background-api';
+import { callBackgroundApi } from '@/util/background-api-caller';
 import AlertSnackbar from '@/components/util/AlertSnackbar.vue';
 import { IconStorage } from '@/scripts/background/storage/icon-storage';
 import FaviconImg from '@/components/image-display/FaviconImg.vue';
