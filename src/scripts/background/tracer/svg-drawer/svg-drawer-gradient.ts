@@ -37,6 +37,7 @@ export class SvgDrawerGradient extends SvgDrawer {
         super.init(traceData)
         this.setDimensions(traceData)
         this.gradientBuilder.init(traceData, this.options.scale)
+        console.log(traceData)
     }
 
     protected removeBackgroundArea(traceData: TraceData) {
@@ -45,8 +46,14 @@ export class SvgDrawerGradient extends SvgDrawer {
             return
         }
         const areas = traceData.areasByColor[colorIx]
-        const removeIds = [areaIx, ...areas[areaIx].childHoles]
-        removeIds.sort().reverse().forEach(ix => areas.splice(ix, 1))
+        const removeIds = [areaIx, ...areas[areaIx].childHoles].sort()
+        removeIds.reverse().forEach(ix => areas.splice(ix, 1))
+        for (const area of areas) {
+            area.childHoles = area.childHoles.map(ix => {
+                const shift = removeIds.findIndex(removedId => ix < removedId)
+                return ix - (shift === -1 ? removeIds.length : shift)
+            })
+        }
     }
 
     protected findBackgroundIndex(traceData: TraceData): [number, number] | undefined[] {
