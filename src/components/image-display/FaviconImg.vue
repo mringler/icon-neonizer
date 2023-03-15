@@ -1,16 +1,15 @@
 <script setup lang="ts">
 
 import IconFrame from './IconFrame.vue';
-import { ref } from 'vue'
+import { ref, toRef } from 'vue'
 import {useSrcUrl} from '@/composables/srcUrl'
 import {useAwaited} from '@/composables/awaited'
-import {usePropRef} from '@/composables/propRef'
 
 const props = defineProps<{
     src: string,
 }>()
 
-const [processedSrc] = useAwaited(useSrcUrl(usePropRef(props, 'src')))
+const [processedSrc] = useAwaited(useSrcUrl(toRef(props, 'src')))
 const showEmpty = ref(false)
 
 </script>
