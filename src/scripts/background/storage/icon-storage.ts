@@ -40,7 +40,7 @@ export namespace IconStorage {
         return `${protocol}://${www}${url}`
     }
 
-    function buildImageEntry(rawUrl: string, icon: string, noAutomaticOverride: boolean | 0 | 1 = false){
+    function buildImageEntry(rawUrl: string, icon: string, noAutomaticOverride: boolean | 0 | 1){
         
         const data: ImageEntry = {
             i: LZString.compressToUTF16(icon),
@@ -59,12 +59,16 @@ export namespace IconStorage {
         return data
     }
 
-    export async function storeIcon(url: string, icon: string, noAutomaticOverride: boolean | 0 | 1 = false): Promise<void> {
+    export async function storeIcon(url: string, icon: string, noAutomaticOverride?: boolean | 0 | 1): Promise<void> {
         if (!url) {
             return
         }
-        const data = buildImageEntry(url, icon, noAutomaticOverride)
         const cleanedUrl = cleanUrl(url)
+        if (noAutomaticOverride === undefined) {
+            const oldEntry = await loadImageData(cleanedUrl)
+            noAutomaticOverride = oldEntry?.k ?? false
+        }
+        const data = buildImageEntry(url, icon, noAutomaticOverride)
         await browser.storage.local.set({ [cleanedUrl]: data });
     }
 
@@ -74,10 +78,14 @@ export namespace IconStorage {
         return Boolean(entry)
     }
 
+    async function loadImageData(url: string): Promise<ImageEntry | undefined> {
+        const data = await browser.storage.local.get(url) as Record<string, ImageEntry>
+        return data[url]
+    }
+
     export async function loadIcon(url: string): Promise<string | null> {
         const cleanedUrl = cleanUrl(url)
-        const entry = await browser.storage.local.get(cleanedUrl) as Record<string, ImageEntry | null>
-        const imageEntry = entry[cleanedUrl]
+        const imageEntry = await loadImageData(cleanedUrl)
         if (!imageEntry) {
             return null//Promise.reject()
         }

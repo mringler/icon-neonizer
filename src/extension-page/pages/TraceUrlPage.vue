@@ -37,6 +37,7 @@ const retrace = async () => {
         tracedSvg.value = await callBackgroundApi('traceWithOptions', [resolvedUrl, toRaw(options.value)])
     } catch (e) {
         errorMessage.value = e as string;
+        throw e
     }
 }
 
@@ -49,7 +50,7 @@ const save = async () => {
         errorMessage.value = 'Could not save icon - no url or icon';
         return
     }
-    IconStorage.storeIcon(props.url, tracedSvg.value)
+    await IconStorage.storeIcon(props.url, tracedSvg.value)
     errorMessage.value = 'Icon updated';
     saveCount.value++
     emit('update:svg', tracedSvg.value)
