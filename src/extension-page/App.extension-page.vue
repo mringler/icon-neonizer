@@ -4,26 +4,9 @@ import AppBar from '@/components/util/AppBar.vue'
 import NavigationDrawer from '@/components/util/NavigationDrawer.vue'
 import Confirmation, { ConfirmProps } from '@/components/util/Confirmation.vue';
 import { createConfirmationDialog } from '@/composables/confirmDialog';
+import { createLoadingSpinner } from '@/composables/loadingSpinner';
 
-
-export type WithLoading = <T>(promise: Promise<T>) => Promise<T>
-export type SetLoading = (value: boolean) => void
-const loadingItems = ref(0)
-
-const setLoading = (value: boolean) => {
-  loadingItems.value += value ? 1 : -1
-}
-provide('setLoading', setLoading)
-
-const withLoading : WithLoading = async (promise) => {
-  loadingItems.value++
-  const res = await promise
-  loadingItems.value--
-  return res
-}
-provide('withLoading', withLoading)
-
-
+const loadingItems = createLoadingSpinner()
 
 const sourceTab: Ref<browser.tabs.Tab | null> = ref(null)
 provide('sourceTab', sourceTab)

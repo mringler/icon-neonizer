@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { SetLoading } from '@/extension-page/App.extension-page.vue';
-import { inject, watch } from 'vue'
+import { watchEffect } from 'vue'
 import Loading from '@/components/util/Loading.vue'
+import { useLoadingSpinner } from '@/composables/loadingSpinner';
 
 
 type Props = {
@@ -9,13 +9,9 @@ type Props = {
     showOnChrome?: boolean,
 }
 const props = defineProps<Props>()
-const setLoading: SetLoading = inject('setLoading', v => undefined)
 
-watch(
-    () => props.isLoading,
-    () => props.showOnChrome && setLoading(props.isLoading),
-    { immediate: true }
-)
+const {setLoading} = useLoadingSpinner()
+watchEffect(() => props.showOnChrome && setLoading(props.isLoading))
 
 </script>
 
