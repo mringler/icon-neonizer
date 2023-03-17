@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { ref, Ref, watch, inject, onBeforeUnmount } from 'vue'
+import { ref, Ref, watchEffect, onBeforeUnmount } from 'vue'
 import type { ConfirmProps } from './Confirmation.vue';
 import { NavigationGuard, onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router';
+import {useConfirmationDialog} from '@/composables/confirmDialog'
 
-const showConfirm: ((props: ConfirmProps) => void) | undefined = inject('showConfirm')
+const showConfirm = useConfirmationDialog()
 
 type Props = {
     noChange: boolean,
@@ -51,15 +52,13 @@ const warnOfUnsavedChanges: NavigationGuard = async (to, from, next) => {
 onBeforeRouteLeave(warnOfUnsavedChanges)
 onBeforeRouteUpdate(warnOfUnsavedChanges)
 
-watch(() => props.noChange,
-    () => { 
-        if(props.noChange){
-            window.removeEventListener('beforeunload', beforeunloadHandler);
-        } else {
-            window.addEventListener('beforeunload', beforeunloadHandler);
-        }
-    },
-    { immediate: true }
+watchEffect(() => {
+    if (props.noChange) {
+        window.removeEventListener('beforeunload', beforeunloadHandler);
+    } else {
+        window.addEventListener('beforeunload', beforeunloadHandler);
+    }
+}
 )
 
 function beforeunloadHandler(e: BeforeUnloadEvent) {
@@ -71,9 +70,5 @@ onBeforeUnmount(() => window.removeEventListener('beforeunload', beforeunloadHan
 
 </script>
 
-<template>
-
-</template>
-<style scoped>
-
-</style>
+<template></template>
+<style scoped></style>

@@ -7,7 +7,9 @@ import { byteToKilobyte } from '@/util/byte-to-kilobyte'
 import ImageRecordTable from '@/components/image-record-table/ImageRecordDataTable.vue';
 import DataCard from '@/components/util/DataCard.vue';
 import LoadingContent from '@/components/util/LoadingContent.vue';
+import { useConfirmationDialog } from '@/composables/confirmDialog';
 
+const showConfirm = useConfirmationDialog()
 
 const storageData: Ref<ImageDataRecord[]> = ref([])
 const snackbarInput: Ref<AlertSnackbarProps> = ref({ message: null })
@@ -19,7 +21,15 @@ onBeforeMount(async () => {
     isLoading.value = false
 })
 
-const remove = async (record: ImageDataRecord) => {
+const remove = async (record: ImageDataRecord, deleteLocked = false) => {
+    if(record.noAutomaticOverride && !deleteLocked){
+        return showConfirm({
+            title: 'Item is locked.',
+            message: 'Delete anyway?',
+            confirmText: 'Delete',
+            onConfirm: () => remove(record, true)
+        })
+    }
     await IconStorage.removeIcon(record.url)
     const ix = storageData.value.findIndex(el => el === record)
     storageData.value.splice(ix, 1)
@@ -51,7 +61,7 @@ const totalSizeKb = computed(() => {
 
         <ImageRecordTable
             :imageRecords="storageData"
-            @remove-record="remove"
+            @remove-record="record => remove(record)"
         >
             <template v-slot:header>
                 <DataCard

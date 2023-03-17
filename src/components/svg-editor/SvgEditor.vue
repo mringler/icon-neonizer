@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { ref, Ref, watch, inject, computed } from 'vue'
+import { ref, Ref, watch, computed } from 'vue'
 import AlertSnackbar from '../util/AlertSnackbar.vue';
 import { IconStorage } from '@/scripts/background/storage/icon-storage';
 import FaviconSvg from '../image-display/FaviconSvg.vue';
 import ConfirmUnsavedChanges from '../util/ConfirmUnsavedChanges.vue';
 import type { ConfirmProps } from '../util/Confirmation.vue';
+import { useConfirmationDialog } from '@/composables/confirmDialog';
 
-const showConfirm = inject('showConfirm', (props: ConfirmProps) => {})
+const showConfirm = useConfirmationDialog()
 
 type Props = {
     url: string,

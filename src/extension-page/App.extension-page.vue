@@ -3,6 +3,7 @@ import { onBeforeMount, ref, Ref, provide } from 'vue'
 import AppBar from '@/components/util/AppBar.vue'
 import NavigationDrawer from '@/components/util/NavigationDrawer.vue'
 import Confirmation, { ConfirmProps } from '@/components/util/Confirmation.vue';
+import { createConfirmationDialog } from '@/composables/confirmDialog';
 
 
 export type WithLoading = <T>(promise: Promise<T>) => Promise<T>
@@ -51,11 +52,7 @@ const navigationItems = [
   { title: 'Blacklist', value: 'blacklist', props: { to: '/blacklist', prependIcon: 'mdi-cancel' } },
 ]
 
-const confirmProps: Ref<ConfirmProps | null> = ref(null)
-function showConfirm(props: ConfirmProps) {
-  confirmProps.value = props
-}
-provide('showConfirm', showConfirm)
+const confirmProps = createConfirmationDialog()
 
 </script>
 

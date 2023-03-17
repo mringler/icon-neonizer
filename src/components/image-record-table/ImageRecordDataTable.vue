@@ -120,7 +120,6 @@ const faviconDisplayProps = {
                 <v-btn
                     variant="plain"
                     icon="mdi-delete"
-                    :disabled="item.columns.noAutomaticOverride"
                     @click.stop="emit('removeRecord', item.raw)"
                 />
             </div>
