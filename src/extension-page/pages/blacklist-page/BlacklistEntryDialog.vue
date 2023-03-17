@@ -87,7 +87,7 @@ function close() {
                     :disabled="!page.url"
                     @click="addUrl"
                 >
-                    Add
+                    Save
                 </v-btn>
             </v-card-actions>
         </v-card>
