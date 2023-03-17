@@ -16,7 +16,7 @@ const neonColors: ColorDef[] = [
     {
         name: 'Neon Red',
         hex: '#ff3131',
-        startHue: 345, endHue: 15,
+        startHue: 325, endHue: 15,
         h: 0, s: 81, v: 100,
         r: 255, g: 49, b: 49,
     }, {
@@ -52,28 +52,17 @@ const neonColors: ColorDef[] = [
     }, {
         name: 'Neon Purple',
         hex: '#7d12ff',
-        startHue: 247, endHue: 344,
+        startHue: 247, endHue: 284,
         h: 267, s: 93, v: 100,
         r: 125, g: 18, b: 255,
     }, {
         name: 'Neon Pink',
         hex: '#ff10f0',
-        startHue: 345, endHue: 15,
+        startHue: 285, endHue: 324,
         h: 303, s: 94, v: 100,
         r: 255, g: 16, b: 240,
     },
 ]
-
-const colorHues = {
-    red: 0, // ff5733
-    orange: 17, // FF5F1F
-    yellow: 73, // ccff15
-    green: 136, // 0fff50
-    lightBlue: 175,
-    blue: 226, // 1F51FF
-    purple: 267,
-    pink: 280, // pink: FF10F0
-}
 
 export class NeonColorPairBuilder extends ColorPairBuilder {
 
@@ -86,17 +75,8 @@ export class NeonColorPairBuilder extends ColorPairBuilder {
         return this.generateWhitePair(hsvColor)
     }
 
-    // red 0
-    // orange: 25
-    // yellow 60
-    // green 135
-    // light blue 175
-    // blue 225
-    // purple 267
-    // pink 280
-
     protected getClosestNeonColor(hue: number): ColorDef {
-        return (hue > neonColors[0].startHue) ? neonColors[0] : neonColors.find(c => c.endHue >= hue)!
+        return (hue > neonColors[neonColors.length-1].endHue) ? neonColors[0] : neonColors.find(c => c.endHue >= hue)!
     }
 
     protected getShiftedColor(colorDef: ColorDef): RgbColor {
