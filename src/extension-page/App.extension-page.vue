@@ -1,30 +1,14 @@
 <script setup lang="ts">
-import { onBeforeMount, ref, Ref, provide } from 'vue'
+import { ref } from 'vue'
 import AppBar from '@/components/util/AppBar.vue'
 import NavigationDrawer from '@/components/util/NavigationDrawer.vue'
-import Confirmation, { ConfirmProps } from '@/components/util/Confirmation.vue';
+import Confirmation from '@/components/util/Confirmation.vue';
 import { createConfirmationDialog } from '@/composables/confirmDialog';
 import { createLoadingSpinner } from '@/composables/loadingSpinner';
 
 const loadingItems = createLoadingSpinner()
-
-const sourceTab: Ref<browser.tabs.Tab | null> = ref(null)
-provide('sourceTab', sourceTab)
+const confirmProps = createConfirmationDialog()
 const showDrawer = ref(true)
-
-async function getSourceTab(): Promise<browser.tabs.Tab | null> {
-  const tab = await browser.tabs.getCurrent()
-  const sourceTabId = tab.openerTabId
-  if (sourceTabId === undefined) {
-    return null
-  }
-  return browser.tabs.get(sourceTabId)
-}
-
-onBeforeMount(async () => {
-  sourceTab.value = await getSourceTab()
-})
-
 
 const navigationItems = [
   { title: 'Page Icon', type: 'subheader' },
@@ -34,8 +18,6 @@ const navigationItems = [
   { title: 'Storage', value: 'storage', props: { to: '/storage', prependIcon: 'mdi-database' } },
   { title: 'Blacklist', value: 'blacklist', props: { to: '/blacklist', prependIcon: 'mdi-cancel' } },
 ]
-
-const confirmProps = createConfirmationDialog()
 
 </script>
 

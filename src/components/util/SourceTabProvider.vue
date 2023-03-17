@@ -1,35 +1,17 @@
 <script setup lang="ts">
+import { createSourceTab } from '@/composables/sourceTab';
 import { loadOpenerTab } from '@/util/active-tab';
 import { callContentApi } from '@/util/content-api-caller';
-import { onBeforeMount, Ref, ref } from 'vue';
 import AlertNoSourceTab from './AlertNoSourceTab.vue';
 import Loading from './Loading.vue';
 
-type Props = {
+const props = defineProps<{
     showLoading?: boolean,
     requireUrl?: boolean
-}
-
-const props = defineProps<Props>()
-
-const loading = ref(true)
-const sourceTab: Ref<browser.tabs.Tab | null> = ref(null)
-const sourceIconUrl: Ref<string | null> = ref(null)
-
+}>()
 const emit = defineEmits(['loaded'])
 
-onBeforeMount(async () => {
-    const tab = await loadOpenerTab()
-    sourceTab.value = tab
-    try{
-        sourceIconUrl.value = await callContentApi('getOriginalFaviconUrl', [], tab?.id)
-    } catch(e){
-        // receiving end does not exist, just log the error
-        console.log('During call to content api:', e)
-    }
-    loading.value = false
-    emit('loaded', tab, sourceIconUrl.value)
-})
+const {loading, sourceTab, sourceIconUrl} = createSourceTab( (tab, url) =>  emit('loaded', tab, url))
 
 async function updateTabIcon(svg: string) {
     const fromTab = await loadOpenerTab()
