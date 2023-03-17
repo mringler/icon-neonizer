@@ -37,7 +37,6 @@ export class SvgDrawerGradient extends SvgDrawer {
         super.init(traceData)
         this.setDimensions(traceData)
         this.gradientBuilder.init(traceData, this.options.scale)
-        console.log(traceData)
     }
 
     protected removeBackgroundArea(traceData: TraceData) {
