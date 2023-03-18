@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import { CreatePaletteMode, RgbColor } from '@image-tracer/core';
-import { watchEffect, computed } from 'vue'
+import { watchEffect, computed, h, DefineComponent } from 'vue'
 import type { GradientDrawerOptions } from '@/scripts/background/tracer/svg-drawer/gradient-drawer-options';
 import ColorBuilderSelect from './input/ColorBuilderSelect.vue'
 import ColorGradientSelect from './input/ColorGradientSelect.vue';
@@ -25,6 +25,7 @@ import ImageColorPickerVue from './input/ImageColorPicker.vue';
 import NumberOfColorsInput from './input/NumberOfColorsInput.vue';
 import ClusteringCyclesInput from './input/ClusteringCyclesInput.vue';
 import MinimumQuotaInput from './input/MinimumQuotaInput.vue';
+import { VRow, VCol } from 'vuetify/components';
 
 
 const props = defineProps<{
@@ -32,171 +33,86 @@ const props = defineProps<{
     imageData?: ImageData | (() => Promise<ImageData>),
 }>()
 
-const isPaletteMode = computed(() => props.options.colorsampling === CreatePaletteMode.PALETTE)
-
 watchEffect(() => props.options.palette = props.options.palette?.map(RgbColor.fromRgbColorData) ?? [])
 
+type ComponentDeclaration = { component: DefineComponent<{options: GradientDrawerOptions}, any, any, any, any>, cols?: any, props?: any }
 
-const cols = {
-    cols: 12,
-    sm: 6,
-    md: 3,
-    xl: 2
+const formRows = computed(() => {
+    const rows: ({ title: string } | ComponentDeclaration[])[] = [
+        { title: 'Svg Options' },
+        [
+            { component: ColorBuilderSelect },
+            { component: ColorGradientSelect },
+            { component: FullOpacityThresholdInput },
+            { component: RemoveBackgroundCheckbox },
+        ],
+        [
+            { component: FillStyleSelect },
+            { component: StrokeWidthInput },
+            { component: TrimSelect },
+            { component: ScaleInputVue },
+        ],
+        { title: 'Tracer Options' },
+        [
+            { component: LineErrorMarginInput },
+            { component: CurveErrorMarginInput },
+            { component: MinimumShapeOutlineSizeInput, cols: { sm: 12 } },
+        ], [
+            { component: BlurRadiusInput },
+            { component: BlurDeltaInput },
+            { component: SharpenCheckbox },
+            { component: SharpenDeltaInput },
+        ],
+        { title: 'Interpolation Options' },
+        [
+            { component: InterpolatePointsCheckbox },
+            { component: EnhanceRightAnglesCheckbox },
+        ],
+        { title: 'Color Quantization Options' },
+    ]
+
+    if (props.options.colorsampling === CreatePaletteMode.PALETTE) {
+        rows.push([
+            { component: ColorSamplingModeSelect, cols: { md: 6, lg: 3 } },
+            { component: ImageColorPickerVue, cols: { sm: 12, md: 6, lg: 9, xl: 9 }, props: { imageData: props.imageData } },
+        ])
+    } else {
+        rows.push([
+            { component: ColorSamplingModeSelect, cols: { md: 6, lg: 3 } },
+            { component: NumberOfColorsInput },
+            { component: ClusteringCyclesInput },
+            { component: MinimumQuotaInput, cols: { offsetMd: 6, offsetLg: 0 } },
+        ])
+    }
+
+    return rows
+})
+
+
+const FormRows = () => {
+    const componentProps = { options: props.options }
+    const cols = {
+        cols: 12,
+        sm: 6,
+        md: 3,
+        xl: 2
+    }
+    return formRows.value.map(row =>
+        h(VRow, !Array.isArray(row) ?
+            h(VCol, { class: 'text-h6' }, [row.title]) :
+            row.map(col => h(VCol, col.cols ? { ...cols, ...col.cols } : cols, [
+                h(col.component, col.props ? { ...col.props, ...componentProps } : componentProps)
+            ]))
+        )
+    )
 }
 
 </script>
 
 <template>
     <v-form>
-
         <v-container>
-
-            <v-row>
-                <v-col class="text-h6">Svg Options</v-col>
-            </v-row>
-
-            <v-row>
-
-                <v-col v-bind="cols">
-                    <ColorBuilderSelect :options="props.options" />
-                </v-col>
-
-                <v-col v-bind="cols">
-                    <ColorGradientSelect :options="props.options" />
-                </v-col>
-
-                <v-col v-bind="cols">
-                    <FullOpacityThresholdInput :options="props.options" />
-                </v-col>
-
-                <v-col v-bind="cols">
-                    <RemoveBackgroundCheckbox :options="props.options" />
-                </v-col>
-
-            </v-row>
-
-            <v-row>
-
-                <v-col v-bind="cols">
-                    <FillStyleSelect :options="props.options" />
-                </v-col>
-
-                <v-col v-bind="cols">
-                    <StrokeWidthInput :options="props.options" />
-                </v-col>
-
-                <v-col v-bind="cols">
-                    <TrimSelect :options="props.options" />
-                </v-col>
-
-                <v-col v-bind="cols">
-                    <ScaleInputVue :options="props.options" />
-                </v-col>
-
-            </v-row>
-
-            <v-row>
-                <v-col class="text-h6">Tracer Options</v-col>
-            </v-row>
-
-            <v-row>
-                <v-col v-bind="cols">
-                    <LineErrorMarginInput :options="props.options" />
-                </v-col>
-
-                <v-col v-bind="cols">
-                    <CurveErrorMarginInput :options="props.options" />
-                </v-col>
-
-                <v-col
-                    v-bind="cols"
-                    sm="12"
-                >
-                    <MinimumShapeOutlineSizeInput :options="props.options" />
-                </v-col>
-            </v-row>
-
-            <v-row>
-
-                <v-col v-bind="cols">
-                    <BlurRadiusInput :options="props.options" />
-                </v-col>
-
-                <v-col v-bind="cols">
-                    <BlurDeltaInput :options="props.options" />
-                </v-col>
-
-                <v-col v-bind="cols">
-                    <SharpenCheckbox :options="props.options" />
-                </v-col>
-
-                <v-col v-bind="cols">
-                    <SharpenDeltaInput :options="props.options" />
-                </v-col>
-
-            </v-row>
-
-            <v-row>
-                <v-col class="text-h6">Interpolation Options</v-col>
-            </v-row>
-
-            <v-row>
-
-                <v-col v-bind="cols">
-                    <InterpolatePointsCheckbox :options="props.options" />
-                </v-col>
-
-                <v-col v-bind="cols">
-                    <EnhanceRightAnglesCheckbox :options="props.options" />
-                </v-col>
-
-            </v-row>
-
-            <v-row>
-                <v-col class="text-h6">Color Quantization Options</v-col>
-            </v-row>
-
-
-            <v-row>
-                <v-col
-                    v-bind="cols"
-                    md="6"
-                    lg="3"
-                >
-                    <ColorSamplingModeSelect :options="props.options" />
-                </v-col>
-
-                <v-col
-                    v-if="isPaletteMode"
-                    cols="12"
-                    md="6"
-                    lg="9"
-                >
-                    <ImageColorPickerVue
-                        :options="props.options"
-                        :imageData="props.imageData"
-                    />
-                </v-col>
-
-                <template v-if="!isPaletteMode">
-                    <v-col v-bind="cols">
-                        <NumberOfColorsInput :options="props.options" />
-                    </v-col>
-
-                    <v-col v-bind="cols">
-                        <ClusteringCyclesInput :options="props.options" />
-                    </v-col>
-
-                    <v-col
-                        v-bind="cols"
-                        offset-md="6"
-                        offset-lg="0"
-                    >
-                        <MinimumQuotaInput :options="props.options" />
-                    </v-col>
-
-                </template>
-            </v-row>
+            <FormRows />
         </v-container>
     </v-form>
 </template>
