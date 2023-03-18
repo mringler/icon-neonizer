@@ -4,6 +4,7 @@ import type { GradientDrawerOptions } from '@/scripts/background/tracer/svg-draw
 const props = defineProps<{
     options: GradientDrawerOptions,
 }>()
+const description = 'Interpolate traced points. Gives clearer lines, but distorts small images where shifts by a half pixel are noticeable.'
 </script>
 
 <template>

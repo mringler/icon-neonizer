@@ -4,6 +4,7 @@ import type { GradientDrawerOptions } from '@/scripts/background/tracer/svg-draw
 const props = defineProps<{
     options: GradientDrawerOptions,
 }>()
+const description = 'During each cycle, the target colors are adjusted to better match the colors in the image.'
 </script>
 
 <template>

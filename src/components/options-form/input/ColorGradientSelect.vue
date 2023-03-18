@@ -5,6 +5,7 @@ import type { GradientDrawerOptions } from '@/scripts/background/tracer/svg-draw
 const props = defineProps<{
     options: GradientDrawerOptions,
 }>()
+const description = 'Defines the direction of the generated color gradients.'
 const gradientDrawerOptions = [
     { title: 'Random', value: GradientBuilderOption.random, description: 'Pick a random direction for each color gradient.' },
     { title: 'Fixed', value: GradientBuilderOption.fixed, description: 'Use the same direction for each gradient, every element gets full range.' },

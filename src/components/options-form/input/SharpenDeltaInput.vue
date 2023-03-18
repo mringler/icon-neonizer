@@ -4,6 +4,7 @@ import type { GradientDrawerOptions } from '@/scripts/background/tracer/svg-draw
 const props = defineProps<{
     options: GradientDrawerOptions,
 }>()
+const description = 'Maximum allowed change to pixel value through sharpen. Must be between 0 (no change) and 1020 (255 for each channel, any change is fine).'
 </script>
 
 <template>
@@ -15,5 +16,6 @@ const props = defineProps<{
         type="number"
         step="10"
         min="0"
+        max="1020"
     ></v-text-field>
 </template>

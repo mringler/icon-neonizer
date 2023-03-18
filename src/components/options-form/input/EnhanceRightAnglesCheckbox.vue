@@ -4,6 +4,7 @@ import type { GradientDrawerOptions } from '@/scripts/background/tracer/svg-draw
 const props = defineProps<{
     options: GradientDrawerOptions,
 }>()
+const description = 'Preserves right angles during interpolation'
 </script>
 
 <template>

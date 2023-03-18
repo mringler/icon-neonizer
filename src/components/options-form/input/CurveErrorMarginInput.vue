@@ -4,6 +4,7 @@ import type { GradientDrawerOptions } from '@/scripts/background/tracer/svg-draw
 const props = defineProps<{
     options: GradientDrawerOptions,
 }>()
+const description = 'Defines how far (in pixels) a curved line element can deviate from the traced pixel line before it is broken up into multiple line elements.'
 </script>
 
 <template>

@@ -5,6 +5,7 @@ import type { GradientDrawerOptions } from '@/scripts/background/tracer/svg-draw
 const props = defineProps<{
     options: GradientDrawerOptions,
 }>()
+const description = 'Select how color segments are colored.'
 const itemsFillStyle = [
     { title: 'Fill', value: FillStyle.FILL, description: 'Create fully colored shapes.' },
     { title: 'Stroke & Fill', value: FillStyle.STROKE_FILL, description: 'Add additional outline to fully colored shapes.' },

@@ -4,6 +4,7 @@ import type { GradientDrawerOptions } from '@/scripts/background/tracer/svg-draw
 const props = defineProps<{
     options: GradientDrawerOptions,
 }>()
+const description = 'Number of pixels (in each direction) to calculate the blurred pixel value from)'
 </script>
 
 <template>

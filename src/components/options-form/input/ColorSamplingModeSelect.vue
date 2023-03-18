@@ -6,6 +6,7 @@ const props = defineProps<{
     options: GradientDrawerOptions,
 }>()
 
+const description = 'Select how colors in the image are determined.'
 const itemsColorSampling = [
     { title: 'Use generated palette', value: CreatePaletteMode.GENERATE, description: 'Picks equidistant points from the color spectrum. Uses grey if less than 8 colors are requested.' },
     { title: 'Sample image randomly', value: CreatePaletteMode.SAMPLE, description: 'Picks color from a random pixel until number of requested unique colors are found.' },

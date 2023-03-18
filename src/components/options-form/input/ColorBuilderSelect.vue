@@ -6,6 +6,7 @@ const props = defineProps<{
     options: GradientDrawerOptions,
 }>()
 
+const description = `Defines how the gradient's two colors are chosen from the initial color in the image. Modes distinguish between actual colors, whites and blacks, and use different mechanisms for each.`
 const colorDrawerOptions = [
     {
         title: 'Saturate',
@@ -57,16 +58,6 @@ const colorDrawerOptions = [
         blacks: 'Depends on input.'
     },
 ]
-
-const description = `
-Select color transformation mode.
-
-Defines how the gradient's two colors are chosen from the initial color in the image. Modes distinguish between actual colors, whites and blacks, and use different mechanisms for each.
-
-<ul>
-  <li><code></code></li>
-</ul>
-`
 </script>
 
 <template>

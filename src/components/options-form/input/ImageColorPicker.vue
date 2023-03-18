@@ -8,6 +8,7 @@ const props = defineProps<{
     options: GradientDrawerOptions,
     imageData?: ImageData | (() => Promise<ImageData>),
 }>()
+const description = 'Pick target colors from the source image.'
 
 function autoOpenColorPicker(): boolean {
     return !Boolean(props.options.palette?.length)
