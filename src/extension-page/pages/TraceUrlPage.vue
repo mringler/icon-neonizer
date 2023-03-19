@@ -10,7 +10,7 @@ import FaviconStored from '@/components/image-display/FaviconStored.vue';
 import Heading from '@/components/util/Heading.vue';
 import type { GradientDrawerOptions } from '@/scripts/background/tracer/svg-drawer/gradient-drawer-options';
 import { Favicon } from '@/scripts/content/favicon';
-import {useImageData} from '@/composables/imageData'
+import { useImageData } from '@/composables/imageData'
 import { useSrcUrl } from '@/composables/srcUrl';
 
 type Props = {
@@ -144,19 +144,15 @@ const iconCols = {
                     />
                 </v-col>
             </v-row>
+
+            <OptionsForm
+                v-model:options="options"
+                :image-data="imageDataLoader"
+            />
+
         </v-container>
 
-        <OptionsForm
-            v-model:options="options"
-            :image-data="imageDataLoader"
-        />
-
     </section>
-
-    <v-btn
-        variant="flat"
-        @click="storeOptions"
-    >store options</v-btn>
 
     <AlertSnackbar v-model:message="errorMessage" />
 </template>

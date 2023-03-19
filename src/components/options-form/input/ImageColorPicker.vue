@@ -1,36 +1,55 @@
 <script setup  lang="ts">
+import { toRef } from 'vue';
 import type { GradientDrawerOptions } from '@/scripts/background/tracer/svg-drawer/gradient-drawer-options';
-import type { RgbColor } from '@image-tracer/core';
+import { CreatePaletteMode, RgbColor } from '@image-tracer/core';
 import SelectedColorChips from '../color-picker/SelectedColorChips.vue';
 import ImagePixelColorPickerPopup from '../color-picker/ImagePixelColorPickerPopup.vue';
+import { useInputConfig } from '@/composables/inputConfig'
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
     options: GradientDrawerOptions,
+    showHelp: boolean,
     imageData?: ImageData | (() => Promise<ImageData>),
-}>()
+    noAutoOpen?: boolean,
+}>(), {
+    showHelp: false
+})
+
 const description = 'Pick target colors from the source image.'
+const inputConfig = useInputConfig(toRef(props, 'showHelp'), {description})
 
 function autoOpenColorPicker(): boolean {
-    return !Boolean(props.options.palette?.length)
+    return !props.noAutoOpen && !Boolean(props.options.palette?.length)
+}
+
+function updateColorMode(colors: RgbColor[]){
+    if(colors.length > 0){
+        props.options.colorsampling = CreatePaletteMode.PALETTE
+    } else if (props.noAutoOpen){
+        props.options.colorsampling = CreatePaletteMode.SCAN
+    }
+    props.options.palette = colors
 }
 </script>
 
 <template>
     <SelectedColorChips
         :showPicker="autoOpenColorPicker()"
-        v-model:colors="options.palette as RgbColor[]"
+        @update:colors="updateColorMode"
+        :colors="options.palette as RgbColor[]"
         unique
     >
         <template
             v-if="props.imageData"
-            v-slot:color-adder="{ isShow, setShow }"
+            v-slot:color-adder="{ isShow, setShow, colors, updateColors, unique }"
         >
             <ImagePixelColorPickerPopup
                 :model-value="isShow"
                 @update:model-value="setShow"
-                v-model:colors="(options.palette as RgbColor[])"
+                :colors="colors"
+                @update:colors="updateColors"
                 :image-data="props.imageData!"
-                unique
+                :unique="unique ?? false"
             />
         </template>
     </SelectedColorChips>

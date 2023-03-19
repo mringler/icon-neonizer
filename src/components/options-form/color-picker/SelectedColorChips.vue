@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watchEffect } from 'vue'
 import type { RgbColor } from '@image-tracer/core';
 import ColorPickerCard from './ColorPickerCard.vue';
 
@@ -15,29 +15,29 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const isAddOpen = ref(false)
-watch(
-    () => props.showPicker,
-    () => isAddOpen.value = (props.showPicker === undefined) ? isAddOpen.value : props.showPicker,
-    { immediate: true }
-)
+watchEffect(() => (props.showPicker !== undefined) && (isAddOpen.value = props.showPicker) )
 
 const emit = defineEmits(['update:colors', 'doAdd', 'update:showPicker'])
+
+function emitUpdate(colors: RgbColor[]){
+    emit('update:colors', colors)
+}
 
 function addColor(color: RgbColor) {
     if (props.unique && props.colors.some(existing => existing.equals(color))) {
         return
     }
-    emit('update:colors', props.colors.concat([color]))
+    emitUpdate(props.colors.concat([color]))
 }
 
 function removeColor(color: RgbColor, index: number) {
     const colorClone = props.colors.slice()
     colorClone.splice(index, 1)
-    emit('update:colors', colorClone)
+    emitUpdate(colorClone)
 }
 
 function clear() {
-    emit('update:colors', [])
+    emitUpdate([])
 }
 
 function showAdd(value = true) {
@@ -90,6 +90,7 @@ function showAdd(value = true) {
             :removeColor="removeColor"
             :unique="unique"
             :colors="colors.slice()"
+            :updateColors="emitUpdate"
         >
             <v-dialog
                 v-model="isAddOpen"

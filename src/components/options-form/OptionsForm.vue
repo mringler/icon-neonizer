@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import { CreatePaletteMode, RgbColor } from '@image-tracer/core';
-import { watchEffect, computed, h, DefineComponent } from 'vue'
+import { ref, watchEffect, computed, h, DefineComponent } from 'vue'
 import type { GradientDrawerOptions } from '@/scripts/background/tracer/svg-drawer/gradient-drawer-options';
 import ColorBuilderSelect from './input/ColorBuilderSelect.vue'
 import ColorGradientSelect from './input/ColorGradientSelect.vue';
@@ -21,7 +21,7 @@ import SharpenCheckbox from './input/SharpenCheckbox.vue';
 import SharpenDeltaInput from './input/SharpenDeltaInput.vue';
 import InterpolatePointsCheckbox from './input/InterpolatePointsCheckbox.vue';
 import EnhanceRightAnglesCheckbox from './input/EnhanceRightAnglesCheckbox.vue';
-import ImageColorPickerVue from './input/ImageColorPicker.vue';
+import ImageColorPicker from './input/ImageColorPicker.vue';
 import NumberOfColorsInput from './input/NumberOfColorsInput.vue';
 import ClusteringCyclesInput from './input/ClusteringCyclesInput.vue';
 import MinimumQuotaInput from './input/MinimumQuotaInput.vue';
@@ -33,22 +33,30 @@ const props = defineProps<{
     imageData?: ImageData | (() => Promise<ImageData>),
 }>()
 
+const showHelp = ref(true)
+const showOnlyFavorites = ref(true)
+
 watchEffect(() => props.options.palette = props.options.palette?.map(RgbColor.fromRgbColorData) ?? [])
 
-type ComponentDeclaration = { component: DefineComponent<{options: GradientDrawerOptions}, any, any, any, any>, cols?: any, props?: any }
+type ComponentDeclaration = {
+    component: DefineComponent<{ options: GradientDrawerOptions, showHelp: boolean }, any, any, any, any>,
+    cols?: any,
+    props?: any,
+    favorite?: boolean
+}
 
 const formRows = computed(() => {
     const rows: ({ title: string } | ComponentDeclaration[])[] = [
         { title: 'Svg Options' },
         [
-            { component: ColorBuilderSelect },
-            { component: ColorGradientSelect },
+            { component: ColorBuilderSelect, favorite: true },
+            { component: ColorGradientSelect, favorite: true },
             { component: FullOpacityThresholdInput },
-            { component: RemoveBackgroundCheckbox },
+            { component: RemoveBackgroundCheckbox, favorite: true },
         ],
         [
-            { component: FillStyleSelect },
-            { component: StrokeWidthInput },
+            { component: FillStyleSelect, favorite: true },
+            { component: StrokeWidthInput, favorite: true },
             { component: TrimSelect },
             { component: ScaleInputVue },
         ],
@@ -56,7 +64,7 @@ const formRows = computed(() => {
         [
             { component: LineErrorMarginInput },
             { component: CurveErrorMarginInput },
-            { component: MinimumShapeOutlineSizeInput, cols: { sm: 12 } },
+            { component: MinimumShapeOutlineSizeInput, cols: { sm: 12 }, favorite: true },
         ], [
             { component: BlurRadiusInput },
             { component: BlurDeltaInput },
@@ -65,16 +73,16 @@ const formRows = computed(() => {
         ],
         { title: 'Interpolation Options' },
         [
-            { component: InterpolatePointsCheckbox },
+            { component: InterpolatePointsCheckbox, favorite: true },
             { component: EnhanceRightAnglesCheckbox },
         ],
         { title: 'Color Quantization Options' },
     ]
 
-    if (props.options.colorsampling === CreatePaletteMode.PALETTE) {
+    if (props.options.colorsampling === CreatePaletteMode.PALETTE && props.imageData) {
         rows.push([
             { component: ColorSamplingModeSelect, cols: { md: 6, lg: 3 } },
-            { component: ImageColorPickerVue, cols: { sm: 12, md: 6, lg: 9, xl: 9 }, props: { imageData: props.imageData } },
+            { component: ImageColorPicker, cols: { sm: 12, md: 6, lg: 9, xl: 9 }, props: { imageData: props.imageData } },
         ])
     } else {
         rows.push([
@@ -85,12 +93,21 @@ const formRows = computed(() => {
         ])
     }
 
-    return rows
+    if (!showOnlyFavorites.value) {
+        return rows
+    }
+
+    const favorites = rows.flatMap(row => !Array.isArray(row) ? [] : row.filter(col => col.favorite))
+    const favoriteRows = Array.from({ length: Math.ceil(favorites.length / 4) }, (_, i) => favorites.slice(i * 4, i * 4 + 4))
+    favoriteRows.push([
+        { component: ImageColorPicker, cols: { sm: 12, md: 6, lg: 9, xl: 9 }, props: { imageData: props.imageData, noAutoOpen: true } }
+    ])
+    return favoriteRows
 })
 
 
 const FormRows = () => {
-    const componentProps = { options: props.options }
+    const componentProps = { options: props.options, showHelp: showHelp.value }
     const cols = {
         cols: 12,
         sm: 6,
@@ -111,10 +128,31 @@ const FormRows = () => {
 
 <template>
     <v-form>
+        <v-tooltip
+            :text="(showHelp ? 'Hide' : 'Show') + ' help'"
+            v-slot:activator="{ props }"
+        >
+            <v-btn
+                v-bind="props"
+                icon="mdi-help"
+                :color="showHelp ? 'secondary' : 'primary'"
+                @click="showHelp = !showHelp"
+            />
+        </v-tooltip>
+        <v-tooltip
+            :text="showOnlyFavorites ? 'Show all inputs' : 'Hide auxiliary inputs'"
+            v-slot:activator="{ props }"
+        >
+            <v-btn
+                v-bind="props"
+                :icon="showOnlyFavorites ? 'mdi-star-off' : 'mdi-star'"
+                @click="showOnlyFavorites = !showOnlyFavorites"
+            />
+        </v-tooltip>
+
         <v-container>
             <FormRows />
         </v-container>
-    </v-form>
-</template>
+</v-form></template>
 
 <style scoped></style>

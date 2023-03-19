@@ -1,10 +1,18 @@
 <script setup  lang="ts">
+import { toRef } from 'vue';
 import type { GradientDrawerOptions } from '@/scripts/background/tracer/svg-drawer/gradient-drawer-options';
+import { useInputConfig } from '@/composables/inputConfig'
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
     options: GradientDrawerOptions,
-}>()
+    showHelp: boolean,
+}>(), {
+    showHelp: false
+})
+
 const description = 'Preserves right angles during interpolation'
+const inputConfig = useInputConfig(toRef(props, 'showHelp'), { description })
+
 </script>
 
 <template>
@@ -12,6 +20,14 @@ const description = 'Preserves right angles during interpolation'
         label="Enhance Right Angles"
         :disabled="props.options.interpolationMode === 'off'"
         v-model="props.options.rightangleenhance"
-        hideDetails
-    ></v-checkbox>
+        v-bind="inputConfig.attrs"
+    >
+        <template
+            v-for="(InputSlot, slotName) in inputConfig.slots"
+            :key="slotName"
+            v-slot:[slotName]
+        >
+            <Component :is="InputSlot" />
+        </template>
+    </v-checkbox>
 </template>
