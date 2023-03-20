@@ -46,7 +46,7 @@ export namespace SvgColorReplacer {
     }
 
     function insertGradientsIntoSvg(svgDocument: Document, colorMap: ColorMap) {
-        const gradients = Object.values(colorMap).flatMap(colorData => colorData.gradient).flat().map(s => s.trim()).join('')
+        const gradients = Object.values(colorMap).flatMap(colorData => colorData.gradient).join('')
         const svgNode = svgDocument.querySelector('svg')
         if (!gradients || !svgNode) {
             return
@@ -63,7 +63,7 @@ export namespace SvgColorReplacer {
             const path = paths[i]
             const style = getComputedStyle(path)
             for (const prop of colorProps) {
-                const colorString = style[prop]
+                const colorString = path.getAttribute(prop) ?? style[prop]
                 if (colorString === 'none') {
                     continue
                 }
@@ -80,6 +80,7 @@ export namespace SvgColorReplacer {
 
         protected colorPairBuilder: ColorPairBuilder
         protected gradientBuilder: GradientBuilder
+        protected colorStringToColorData: Record<string, ColorData> = {}
 
         public constructor(svgDom: Document, customOptions?: Partial<GradientDrawerOptions>) {
             this.colorPairBuilder = GradientDrawerOptions.getColorPairBuilderFromOption(customOptions?.colorBuilder)
@@ -89,7 +90,7 @@ export namespace SvgColorReplacer {
             this.gradientBuilder.init(traceData, customOptions?.scale ?? 1)
         }
 
-        protected buildMockTraceData(svgDom: Document): TraceData{
+        protected buildMockTraceData(svgDom: Document): TraceData {
             const bBox = svgDom.querySelector('svg')?.getBBox()
 
             return {
@@ -104,15 +105,37 @@ export namespace SvgColorReplacer {
             if (colorString === 'none') {
                 return null
             }
-            const rgb = this.colorStringToRgbColor(colorString)
-            const hash = rgb.toCssColorHex()
-            const [id, gradient] = this.gradientBuilder.generateGradient(rgb, this.colorPairBuilder)
-            return { rgb, hash, id, gradient }
+
+            if (!this.colorStringToColorData[colorString]) {
+                const rgb = this.colorStringToRgbColor(colorString)
+                const hash = rgb.toCssColorHex()
+                const [id, gradient] = this.gradientBuilder.generateGradient(rgb, this.colorPairBuilder)
+                this.colorStringToColorData[colorString] = { rgb, hash, id, gradient }
+            }
+            return this.colorStringToColorData[colorString]
         }
 
-
         protected colorStringToRgbColor(colorString: string): RgbColor {
+            if(colorString.startsWith('#')){
+                return this.hexToRgbA(colorString)
+            }
             const rgba = colorString.split("(")[1].split(")")[0].split(",").map(s => parseInt(s))
+            return new RgbColor(...rgba)
+        }
+
+        protected hexToRgbA(hex: string) {
+            if (!/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
+                throw new Error('Bad Hex');
+            }
+            let chars = hex.substring(1).split('');
+            if (chars.length < 6) {
+                chars = chars.flatMap(c => [c,c])
+            }
+            if (chars.length < 8) {
+                chars.push('ff')
+            }
+            const val = Number('0x' + chars.join(''));
+            const rgba = Array.from({length: 4}, (_,i) => (val >> (8 * (3 - i))) & 255)
             return new RgbColor(...rgba)
         }
     }
