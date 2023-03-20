@@ -65,8 +65,9 @@ const colorDrawerOptions = [
 ]
 
 const inputConfig = useInputConfig(toRef(props, 'showHelp'), {
+    maxWidth: 800,
     description,
-    tableData: { data: colorDrawerOptions, keys: { title: 'Option', description: 'Description', colors: 'Colors', blacks: 'Blacks', whites: 'Whites' } }
+    tableData: {data: colorDrawerOptions, keys: { title: 'Option', description: 'Description', colors: 'Colors', blacks: 'Blacks', whites: 'Whites' } }
 })
 </script>
 

@@ -4,6 +4,7 @@ import { VDataTable } from 'vuetify/labs/components';
 
 
 type HelpProps<D> = {
+    maxWidth?: number,
     description: string | Ref<string>,
     tableData?: { data: D[], keys: Partial<Record<keyof D, string>>}
 }
@@ -33,7 +34,7 @@ export function useInputConfig<D>(
 
 function buildHelpRenderer<D>(helpProps: HelpProps<D>) {
     return () => {
-        const { description, tableData } = helpProps
+        const { description, tableData, maxWidth} = helpProps
         const table = !tableData ? undefined : h(
             VDataTable,
             {
@@ -46,6 +47,6 @@ function buildHelpRenderer<D>(helpProps: HelpProps<D>) {
                 bottom: () => null
             })
         const slot = () => [h('div', unref(description)), table]
-        return h(HelpOverlay, slot)
+        return h(HelpOverlay, {maxWidth: maxWidth ?? 500}, slot)
     }
 }

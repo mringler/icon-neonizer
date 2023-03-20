@@ -52,7 +52,7 @@ async function storeOptions() {
             >
                 <v-btn
                     v-bind="props"
-                    icon="mdi-help"
+                    icon="mdi-help-circle-outline"
                     :color="showHelp ? 'primary' : undefined"
                     @click="showHelp = !showHelp"
                 />
