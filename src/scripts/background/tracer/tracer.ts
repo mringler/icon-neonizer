@@ -51,14 +51,14 @@ export namespace Tracer {
             linefilter: false,
             layering: LayeringMode.SEQUENTIAL,
             strokewidth: 2,
-            fillstyle: FillStyle.STROKE,
-            pathomit: 8,
+            fillstyle: FillStyle.FILL,
+            pathomit: 15,
             colorquantcycles: 3,
             desc: false,
-            //numberofcolors: 32
             trim: TrimMode.KEEP_RATIO,
             verbose: false,
-
+            minOpacityThreshold: 0.15,
+            removeBackground: true,
         };
     }
 }

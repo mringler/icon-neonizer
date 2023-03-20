@@ -29,6 +29,7 @@ export interface GradientDrawerOptions extends Options {
     colorBuilder: ColorBuilderOption,
     gradientBuilder: GradientBuilderOption,
     fullOpacityThreshold?: number,
+    minOpacityThreshold?: number,
     removeBackground?: boolean,
 }
 

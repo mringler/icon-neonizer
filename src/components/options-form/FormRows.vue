@@ -26,6 +26,7 @@ import NumberOfColorsInput from './input/NumberOfColorsInput.vue';
 import ClusteringCyclesInput from './input/ClusteringCyclesInput.vue';
 import MinimumQuotaInput from './input/MinimumQuotaInput.vue';
 import { VRow, VCol } from 'vuetify/components';
+import MinOpacityThresholdInput from './input/MinOpacityThresholdInput.vue';
 
 const props = defineProps<{
     options: GradientDrawerOptions,
@@ -48,14 +49,17 @@ const fixedRows: Row[] = [
     [
         { component: ColorBuilderSelect, favorite: true },
         { component: ColorGradientSelect, favorite: true },
+        { component: MinOpacityThresholdInput, favorite: true },
         { component: FullOpacityThresholdInput },
-        { component: RemoveBackgroundCheckbox, favorite: true },
     ],
     [
         { component: FillStyleSelect, favorite: true },
         { component: StrokeWidthInput, favorite: true },
         { component: TrimSelect },
         { component: ScaleInputVue },
+    ],
+    [
+        { component: RemoveBackgroundCheckbox, favorite: true },
     ],
     { title: 'Tracer Options' },
     [
