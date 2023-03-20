@@ -17,7 +17,7 @@ const itemsTrim = [
     { title: 'Keep aspect ratio', value: TrimMode.KEEP_RATIO, description: 'Remove empty space while preserving aspect ratio.' },
     { title: 'All', value: TrimMode.ALL, description: 'Remove all empty space.' },
 ]
-const inputConfig = useInputConfig(toRef(props, 'showHelp'), { description, tableData: { data: itemsTrim, keys: ['title', 'description'] }})
+const inputConfig = useInputConfig(toRef(props, 'showHelp'), { description, tableData: { data: itemsTrim, keys:  {title: 'Option', description: 'Description'} }})
 </script>
 
 <template>

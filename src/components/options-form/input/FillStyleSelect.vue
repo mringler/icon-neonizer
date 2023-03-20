@@ -17,7 +17,7 @@ const itemsFillStyle = [
     { title: 'Stroke & Fill', value: FillStyle.STROKE_FILL, description: 'Add additional outline to fully colored shapes.' },
     { title: 'Stroke', value: FillStyle.STROKE, description: 'Outline transparent shapes.' },
 ]
-const inputConfig = useInputConfig(toRef(props, 'showHelp'), { description, tableData: { data: itemsFillStyle, keys: ['title', 'description'] }})
+const inputConfig = useInputConfig(toRef(props, 'showHelp'), { description, tableData: { data: itemsFillStyle, keys:  {title: 'Option', description: 'Description'} }})
 </script>
 
 <template>

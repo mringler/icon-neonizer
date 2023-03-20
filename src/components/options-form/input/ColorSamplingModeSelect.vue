@@ -18,7 +18,7 @@ const itemsColorSampling = [
     { title: 'Sample image along grid', value: CreatePaletteMode.SCAN, description: 'Puts a grid on the image and pick colors from the intersections. Add random colors if not enough unique colors are found.' },
     { title: 'Choose colors', value: CreatePaletteMode.PALETTE, description: 'Use only provided colors.' },
 ]
-const inputConfig = useInputConfig(toRef(props, 'showHelp'), { description, tableData: { data: itemsColorSampling, keys: ['title', 'description'] }})
+const inputConfig = useInputConfig(toRef(props, 'showHelp'), { description, tableData: { data: itemsColorSampling, keys:  {title: 'Option', description: 'Description'} }})
 </script>
 
 <template>

@@ -64,7 +64,10 @@ const colorDrawerOptions = [
     },
 ]
 
-const inputConfig = useInputConfig(toRef(props, 'showHelp'), {description,  tableData: {data: colorDrawerOptions, keys: ['title', 'description', 'colors', 'blacks', 'whites']}})
+const inputConfig = useInputConfig(toRef(props, 'showHelp'), {
+    description,
+    tableData: { data: colorDrawerOptions, keys: { title: 'Option', description: 'Description', colors: 'Colors', blacks: 'Blacks', whites: 'Whites' } }
+})
 </script>
 
 <template>

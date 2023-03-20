@@ -2,9 +2,10 @@ import { h, ref, Ref, unref, watchEffect } from 'vue'
 import HelpOverlay from '@/components/util/HelpOverlay.vue';
 import { VDataTable } from 'vuetify/labs/components';
 
+
 type HelpProps<D> = {
     description: string | Ref<string>,
-    tableData?: { data: D[], keys: (keyof D)[] }
+    tableData?: { data: D[], keys: Partial<Record<keyof D, string>>}
 }
 
 type InputConfig = {
@@ -36,8 +37,10 @@ function buildHelpRenderer<D>(helpProps: HelpProps<D>) {
         const table = !tableData ? undefined : h(
             VDataTable,
             {
+                theme: 'light',
+                density: 'compact',
                 items: tableData.data,
-                headers: tableData.keys.map(key => ({ key, title: key })) as VDataTable['headers'],
+                headers: Object.entries(tableData.keys).map(([key, title]) => ({ key, title })) as VDataTable['headers'],
             },
             {
                 bottom: () => null

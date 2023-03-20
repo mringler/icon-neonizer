@@ -17,7 +17,7 @@ const gradientDrawerOptions = [
     { title: 'Fixed', value: GradientBuilderOption.fixed, description: 'Use the same direction for each gradient, every element gets full range.' },
     { title: 'Flat', value: GradientBuilderOption.flat, description: 'Use the same direction for each gradient, gradient spans the image rather then element so element coloring depends on position.' },
 ]
-const inputConfig = useInputConfig(toRef(props, 'showHelp'), { description, tableData: { data: gradientDrawerOptions, keys: ['title', 'description'] }})
+const inputConfig = useInputConfig(toRef(props, 'showHelp'), { description, tableData: { data: gradientDrawerOptions, keys: {title: 'Option', description: 'Description'} }})
 </script>
 
 <template>
