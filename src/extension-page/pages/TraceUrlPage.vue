@@ -45,7 +45,7 @@ const retrace = async () => {
     }
 }
 
-const { svg: storedSvg } = useTracedSvg(toRef(props, 'url'))
+const { svg: storedSvg, reload: reloadStored} = useTracedSvg(toRef(props, 'url'))
 
 const imageDataLoader: ComputedRef<() => Promise<ImageData>> = computed(() => async () => useImageData(url.value).value)
 
@@ -57,6 +57,7 @@ const save = async () => {
     await IconStorage.storeIcon(props.url, tracedSvg.value)
     errorMessage.value = 'Icon updated';
     saveCount.value++
+    reloadStored()
     emit('update:svg', tracedSvg.value)
 }
 

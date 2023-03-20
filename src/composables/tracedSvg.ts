@@ -31,7 +31,7 @@ export function useTracedSvg(url: string | null | undefined | Ref<string | null 
         loadValues()
     }
 
-    return { svg, blacklistEntry, svgPromise }
+    return { svg, blacklistEntry, svgPromise, reload: loadValues }
 }
 
 export function useTracedSvgInfo(tracedSvg: string | null | undefined | Ref<string | null | undefined>) {
