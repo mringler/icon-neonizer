@@ -13,7 +13,7 @@ const props = defineProps<{
     imageData?: ImageData | (() => Promise<ImageData>),
 }>()
 
-const showHelp = ref(true)
+const showHelp = ref(false)
 const showOnlyFavorites = ref(true)
 
 watchEffect(() => props.options.palette = props.options.palette?.map(RgbColor.fromRgbColorData) ?? [])
