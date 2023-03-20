@@ -34,7 +34,6 @@ async function updatePage(ix: number, blacklistPage: BlacklistedPage) {
 </script>
 
 <template>
-
     <Heading>Edit Blacklist</Heading>
 
     <p>If a favicon url matches the beginning of an entry in the blacklist, it will not be processed automatically.</p>
@@ -92,20 +91,31 @@ async function updatePage(ix: number, blacklistPage: BlacklistedPage) {
                     <BlacklistEntryDialog
                         :page="blacklistPage"
                         @update:page="page => updatePage(ix, page)"
+                        v-slot:activator="{ props: modalProps }"
+                    >
+                        <v-tooltip
+                            text="Edit"
+                            v-slot:activator="{ props: tooltipProps }"
+                        >
+                            <v-btn
+                                v-bind="{...tooltipProps, ...modalProps}"
+                                variant="flat"
+                                icon="mdi-pen"
+                            />
+                        </v-tooltip>
+                    </BlacklistEntryDialog>
+
+                    <v-tooltip
+                        text="Delete"
                         v-slot:activator="{ props }"
                     >
                         <v-btn
-                            icon
-                            variant="flat"
                             v-bind="props"
-                        ><v-icon>mdi-pen</v-icon></v-btn>
-                    </BlacklistEntryDialog>
-
-                    <v-btn
-                        icon
-                        variant="flat"
-                        @click="removePage(blacklistPage)"
-                    ><v-icon>mdi-delete</v-icon></v-btn>
+                            icon="mdi-delete"
+                            variant="flat"
+                            @click="removePage(blacklistPage)"
+                        />
+                    </v-tooltip>
                 </td>
             </tr>
             <tr v-if="blacklist?.length === 0">
@@ -117,7 +127,6 @@ async function updatePage(ix: number, blacklistPage: BlacklistedPage) {
             </tr>
         </tbody>
     </v-table>
-
 </template>
 <style scoped>
 .blacklist-table {
