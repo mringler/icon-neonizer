@@ -20,6 +20,7 @@ const lowerColors: RgbColorData[] = [
     {r: 20, g: 209, b: 120}, // oozing green
     {r: 120, g: 20, b: 209}, // purple
     {r: 20, g: 120, b: 255}, // tropical blue
+    {r: 0, g: 145, b: 145}, // dark cyan
 ]
 
 export class PreSelectedColorPairBuilder extends SaturatedColorPairBuilder {
