@@ -48,7 +48,7 @@ const faviconDisplayProps = {
     <v-card>
         <v-card-title>
             <div class="d-flex">
-                <slot name="header"/>
+                <slot name="header" />
 
                 <v-text-field
                     v-model="search"
@@ -102,39 +102,61 @@ const faviconDisplayProps = {
             </template>
             <template v-slot:item.actions="{ item }">
                 <div style="min-width: 134px;">
-                <v-btn
-                    variant="plain"
-                    icon="mdi-draw"
-                    :to="{ name: 'trace-by-url', params: { url: item.columns.url } }"
-                />
-                <v-btn
-                    variant="plain"
-                    icon="mdi-pen"
-                    :to="{ name: 'edit-by-url', params: { url: item.columns.url }, query: { isLocked: item.columns.noAutomaticOverride ? 1 : 0 } }"
-                />
-                <DownloadSvgButton
-                    variant="plain"
-                    :url="item.columns.url"
-                    :svg="item.columns.icon"
-                />
-                <v-btn
-                    variant="plain"
-                    icon="mdi-delete"
-                    @click.stop="emit('removeRecord', item.raw)"
-                />
-            </div>
+                    <v-tooltip
+                        text="Trace again"
+                        v-slot:activator="{ props }"
+                    >
+                        <v-btn
+                            v-bind="props"
+                            variant="plain"
+                            icon="mdi-draw"
+                            :to="{ name: 'trace-by-url', params: { url: item.columns.url } }"
+                        />
+                    </v-tooltip>
+                    <v-tooltip
+                        text="Edit"
+                        v-slot:activator="{ props }"
+                    >
+                        <v-btn
+                            v-bind="props"
+                            variant="plain"
+                            icon="mdi-pen"
+                            :to="{ name: 'edit-by-url', params: { url: item.columns.url }, query: { isLocked: item.columns.noAutomaticOverride ? 1 : 0 } }"
+                        />
+                    </v-tooltip>
+                    <v-tooltip
+                        text="Download"
+                        v-slot:activator="{ props }"
+                    >
+                        <DownloadSvgButton
+                            v-bind="props"
+                            variant="plain"
+                            :url="item.columns.url"
+                            :svg="item.columns.icon"
+                        />
+                    </v-tooltip>
+                    <v-tooltip
+                        text="Delete"
+                        v-slot:activator="{ props }"
+                    >
+                        <v-btn
+                            v-bind="props"
+                            variant="plain"
+                            icon="mdi-delete"
+                            @click.stop="emit('removeRecord', item.raw)"
+                        />
+                    </v-tooltip>
+                </div>
             </template>
 
         </v-data-table>
     </v-card>
 </template>
 
-<style scoped>
-*:deep(.image-record-table .v-table__wrapper) {
+<style scoped>*:deep(.image-record-table .v-table__wrapper) {
     overflow: unset;
 }
 
 .url-display {
     word-wrap: anywhere;
-}
-</style>
+}</style>

@@ -35,6 +35,7 @@ function setHref(e : MouseEvent){
 <template>
 
     <v-btn
+        class="download-svg"
         tag="a"
         icon="mdi-download"
         :href="href!"
@@ -44,5 +45,7 @@ function setHref(e : MouseEvent){
 
 </template>
 <style scoped>
-
+    .download-svg{
+        cursor:pointer;
+    }
 </style>
