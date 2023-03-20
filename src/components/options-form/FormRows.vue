@@ -1,8 +1,8 @@
 <script setup lang="ts">
-
-import { CreatePaletteMode, RgbColor } from '@image-tracer/core';
-import { ref, watchEffect, computed, h, DefineComponent } from 'vue'
+import { CreatePaletteMode, } from '@image-tracer/core';
+import { computed, h, DefineComponent } from 'vue'
 import type { GradientDrawerOptions } from '@/scripts/background/tracer/svg-drawer/gradient-drawer-options';
+
 import ColorBuilderSelect from './input/ColorBuilderSelect.vue'
 import ColorGradientSelect from './input/ColorGradientSelect.vue';
 import FullOpacityThresholdInput from './input/FullOpacityThresholdInput.vue';
@@ -27,16 +27,12 @@ import ClusteringCyclesInput from './input/ClusteringCyclesInput.vue';
 import MinimumQuotaInput from './input/MinimumQuotaInput.vue';
 import { VRow, VCol } from 'vuetify/components';
 
-
 const props = defineProps<{
     options: GradientDrawerOptions,
     imageData?: ImageData | (() => Promise<ImageData>),
+    showOnlyFavorites: boolean,
+    showHelp: boolean
 }>()
-
-const showHelp = ref(true)
-const showOnlyFavorites = ref(true)
-
-watchEffect(() => props.options.palette = props.options.palette?.map(RgbColor.fromRgbColorData) ?? [])
 
 type ComponentDeclaration = {
     component: DefineComponent<{ options: GradientDrawerOptions, showHelp: boolean }, any, any, any, any>,
@@ -45,40 +41,44 @@ type ComponentDeclaration = {
     favorite?: boolean
 }
 
-const formRows = computed(() => {
-    const rows: ({ title: string } | ComponentDeclaration[])[] = [
-        { title: 'Svg Options' },
-        [
-            { component: ColorBuilderSelect, favorite: true },
-            { component: ColorGradientSelect, favorite: true },
-            { component: FullOpacityThresholdInput },
-            { component: RemoveBackgroundCheckbox, favorite: true },
-        ],
-        [
-            { component: FillStyleSelect, favorite: true },
-            { component: StrokeWidthInput, favorite: true },
-            { component: TrimSelect },
-            { component: ScaleInputVue },
-        ],
-        { title: 'Tracer Options' },
-        [
-            { component: LineErrorMarginInput },
-            { component: CurveErrorMarginInput },
-            { component: MinimumShapeOutlineSizeInput, cols: { sm: 12 }, favorite: true },
-        ], [
-            { component: BlurRadiusInput },
-            { component: BlurDeltaInput },
-            { component: SharpenCheckbox },
-            { component: SharpenDeltaInput },
-        ],
-        { title: 'Interpolation Options' },
-        [
-            { component: InterpolatePointsCheckbox, favorite: true },
-            { component: EnhanceRightAnglesCheckbox },
-        ],
-        { title: 'Color Quantization Options' },
-    ]
+type Row = ({ title: string } | ComponentDeclaration[])
 
+const fixedRows: Row[] = [
+    { title: 'Svg Options' },
+    [
+        { component: ColorBuilderSelect, favorite: true },
+        { component: ColorGradientSelect, favorite: true },
+        { component: FullOpacityThresholdInput },
+        { component: RemoveBackgroundCheckbox, favorite: true },
+    ],
+    [
+        { component: FillStyleSelect, favorite: true },
+        { component: StrokeWidthInput, favorite: true },
+        { component: TrimSelect },
+        { component: ScaleInputVue },
+    ],
+    { title: 'Tracer Options' },
+    [
+        { component: LineErrorMarginInput },
+        { component: CurveErrorMarginInput },
+        { component: MinimumShapeOutlineSizeInput, cols: { sm: 12 }, favorite: true },
+    ], [
+        { component: BlurRadiusInput },
+        { component: BlurDeltaInput },
+        { component: SharpenCheckbox },
+        { component: SharpenDeltaInput },
+    ],
+    { title: 'Interpolation Options' },
+    [
+        { component: InterpolatePointsCheckbox, favorite: true },
+        { component: EnhanceRightAnglesCheckbox },
+    ],
+    { title: 'Color Quantization Options' },
+]
+
+const formRows = computed(() => {
+
+    const rows: Row[] = [...fixedRows]
     if (props.options.colorsampling === CreatePaletteMode.PALETTE && props.imageData) {
         rows.push([
             { component: ColorSamplingModeSelect, cols: { md: 6, lg: 3 } },
@@ -93,7 +93,7 @@ const formRows = computed(() => {
         ])
     }
 
-    if (!showOnlyFavorites.value) {
+    if (!props.showOnlyFavorites) {
         return rows
     }
 
@@ -105,15 +105,16 @@ const formRows = computed(() => {
     return favoriteRows
 })
 
+const cols = {
+    cols: 12,
+    sm: 6,
+    md: 3,
+    xl: 3
+}
 
 const FormRows = () => {
-    const componentProps = { options: props.options, showHelp: showHelp.value }
-    const cols = {
-        cols: 12,
-        sm: 6,
-        md: 3,
-        xl: 2
-    }
+    const componentProps = { options: props.options, showHelp: props.showHelp }
+
     return formRows.value.map(row =>
         h(VRow, !Array.isArray(row) ?
             h(VCol, { class: 'text-h6' }, [row.title]) :
@@ -123,36 +124,7 @@ const FormRows = () => {
         )
     )
 }
-
 </script>
-
 <template>
-    <v-form>
-        <v-tooltip
-            :text="(showHelp ? 'Hide' : 'Show') + ' help'"
-            v-slot:activator="{ props }"
-        >
-            <v-btn
-                v-bind="props"
-                icon="mdi-help"
-                :color="showHelp ? 'secondary' : 'primary'"
-                @click="showHelp = !showHelp"
-            />
-        </v-tooltip>
-        <v-tooltip
-            :text="showOnlyFavorites ? 'Show all inputs' : 'Hide auxiliary inputs'"
-            v-slot:activator="{ props }"
-        >
-            <v-btn
-                v-bind="props"
-                :icon="showOnlyFavorites ? 'mdi-star-off' : 'mdi-star'"
-                @click="showOnlyFavorites = !showOnlyFavorites"
-            />
-        </v-tooltip>
-
-        <v-container>
-            <FormRows />
-        </v-container>
-</v-form></template>
-
-<style scoped></style>
+    <FormRows />
+</template>

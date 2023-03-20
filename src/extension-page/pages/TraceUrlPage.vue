@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, Ref, onBeforeMount, toRaw, computed, ComputedRef } from 'vue'
-import OptionsForm from '@/components/options-form/OptionsForm.vue'
+import { ref, Ref, toRef, onBeforeMount, toRaw, computed, ComputedRef } from 'vue'
+import OptionsFormCard from '@/components/options-form/OptionsFormCard.vue'
 import { callBackgroundApi } from '@/util/background-api-caller';
 import AlertSnackbar from '@/components/util/AlertSnackbar.vue';
 import { IconStorage } from '@/scripts/background/storage/icon-storage';
@@ -12,6 +12,8 @@ import type { GradientDrawerOptions } from '@/scripts/background/tracer/svg-draw
 import { Favicon } from '@/scripts/content/favicon';
 import { useImageData } from '@/composables/imageData'
 import { useSrcUrl } from '@/composables/srcUrl';
+import TracedImageInfo from '@/components/image-display/TracedImageInfo.vue';
+import { useTracedSvg } from '@/composables/tracedSvg';
 
 type Props = {
     url: string
@@ -19,7 +21,7 @@ type Props = {
 const props = defineProps<Props>()
 
 const options: Ref<GradientDrawerOptions> = ref({} as GradientDrawerOptions)
-const tracedSvg: Ref<string | null> = ref(null)
+const tracedSvg: Ref<string | undefined> = ref()
 const errorMessage: Ref<string | null> = ref(null)
 const saveCount = ref(0)
 
@@ -28,6 +30,8 @@ const emit = defineEmits(['update:svg'])
 onBeforeMount(async () => {
     options.value = await callBackgroundApi('getOptions', []);
 })
+
+const useFallback = ref(false)
 
 const url = computed(() => useFallback.value ? Favicon.getGoogleApiUrl(new URL(props.url).host) + '&passFilter=1' : props.url)
 
@@ -41,9 +45,9 @@ const retrace = async () => {
     }
 }
 
-const imageDataLoader: ComputedRef<() => Promise<ImageData>> = computed(() => async () => {
-    return useImageData(url.value).value
-})
+const { svg: storedSvg } = useTracedSvg(toRef(props, 'url'))
+
+const imageDataLoader: ComputedRef<() => Promise<ImageData>> = computed(() => async () => useImageData(url.value).value)
 
 const save = async () => {
     if (!url || !tracedSvg.value) {
@@ -56,11 +60,6 @@ const save = async () => {
     emit('update:svg', tracedSvg.value)
 }
 
-async function storeOptions() {
-    IconStorage.storeOptions(toRaw(options.value))
-}
-
-const useFallback = ref(false)
 
 const iconCols = {
     cols: 4,
@@ -73,82 +72,83 @@ const iconCols = {
 <template>
     <section tag="section">
         <Heading>Trace Icon</Heading>
+        <div class="text-subtitle-1">Trace source icon with custom parameters.</div>
 
         <v-container>
             <v-row class="icon-row">
 
                 <v-col v-bind="iconCols">
 
-                    <FaviconSvg :svg="tracedSvg">
-                        <template v-slot:no-content>trace image output</template>
-                    </FaviconSvg>
-                    <FaviconSvg
-                        :svg="tracedSvg"
-                        width="27px"
-                        height="27px"
-                        noFrame
-                    />
+                    <div class="text-subtitle-1">Source Icon</div>
 
-                    <div class="mt-3">
-                        <v-btn
-                            variant="flat"
-                            color="primary"
-                            @click="retrace"
-                        >trace</v-btn>
+                    <FaviconImg :src="url" />
+                    <div class="d-flex align-center">
+                        <FaviconImg
+                            :src="url"
+                            width="27px"
+                            height="27px"
+                            noFrame
+                        />
 
-                        <v-btn
-                            :disabled="!tracedSvg"
-                            variant="flat"
-                            @click="save"
-                        >save</v-btn>
-
-                        <v-btn
-                            :disabled="!tracedSvg"
-                            variant="flat"
-                            :to="tracedSvg ? { name: 'edit-svg', params: { svg: tracedSvg, url: props.url } } : {}"
-                        >edit</v-btn>
-
+                        <v-checkbox
+                            label="use fallback url"
+                            v-model="useFallback"
+                            hideDetails
+                        />
                     </div>
                 </v-col>
 
                 <v-col v-bind="iconCols">
 
-                    <FaviconImg :src="url" />
-                    <FaviconImg
-                        :src="url"
-                        width="27px"
-                        height="27px"
-                        noFrame
-                    />
-
-                    <v-checkbox
-                        label="use fallback"
-                        v-model="useFallback"
-                        hideDetails
-                    />
-                </v-col>
-                <v-col v-bind="iconCols">
+                    <div class="text-subtitle-1">Stored Icon</div>
 
                     <FaviconStored
                         :url="props.url"
                         :key="saveCount"
                         changeAfterLoad
                     />
-                    <FaviconStored
-                        :url="props.url"
+                    <TracedImageInfo
+                        :tracedSvg="storedSvg"
                         :key="saveCount"
-                        width="27px"
-                        height="27px"
-                        noFrame
-                        showIconOnMissing
                     />
+                </v-col>
+
+                <v-col v-bind="iconCols">
+
+                    <div class="text-subtitle-1">Re-Traced Icon</div>
+
+                    <FaviconSvg :svg="tracedSvg">
+                        <template v-slot:no-content>Press "trace" to generate</template>
+                    </FaviconSvg>
+
+                    <TracedImageInfo :tracedSvg="tracedSvg" />
+
                 </v-col>
             </v-row>
 
-            <OptionsForm
+            <OptionsFormCard
                 v-model:options="options"
                 :image-data="imageDataLoader"
-            />
+            >
+                <template v-slot:toolbar-center>
+                    <v-btn
+                        variant="flat"
+                        color="primary"
+                        @click="retrace"
+                    >trace</v-btn>
+
+                    <v-btn
+                        :disabled="!tracedSvg"
+                        @click="save"
+                    >save</v-btn>
+
+                    <v-btn
+                        :disabled="!tracedSvg"
+                        :to="tracedSvg ? { name: 'edit-svg', params: { svg: tracedSvg, url: props.url } } : {}"
+                    >edit</v-btn>
+                </template>
+            </OptionsFormCard>
+
 
         </v-container>
 

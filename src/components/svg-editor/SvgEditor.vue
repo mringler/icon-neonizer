@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, Ref, watch, computed } from 'vue'
+import { ref, Ref, watch, computed, watchEffect } from 'vue'
 import AlertSnackbar from '../util/AlertSnackbar.vue';
 import { IconStorage } from '@/scripts/background/storage/icon-storage';
 import FaviconSvg from '../image-display/FaviconSvg.vue';
@@ -31,11 +31,7 @@ watch(
     { immediate: true }
 )
 
-watch(
-    () => props.isLocked,
-    () => lock.value = Boolean(props.isLocked),
-    { immediate: true }
-)
+watchEffect(() => lock.value = Boolean(props.isLocked))
 
 const svgHasChanged = computed(() => originalSvg.value !== editedSvg.value)
 
@@ -76,7 +72,7 @@ const store = async () => {
 
                 <v-text-field
                     :value="url"
-                    :readonly="true"
+                    readonly
                 />
                 <v-textarea
                     variant="filled"

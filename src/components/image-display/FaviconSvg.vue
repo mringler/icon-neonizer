@@ -4,7 +4,7 @@ import { watch, ref, Ref } from 'vue'
 
 
 type Props = {
-    svg: string | null | Promise<string | null>
+    svg: string | null | undefined | Promise<string | null>
 }
 const props = defineProps<Props>()
 

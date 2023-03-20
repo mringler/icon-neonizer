@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import { watch, ref, Ref } from 'vue'
-import { IconStorage } from '@/scripts/background/storage/icon-storage';
+import { toRef } from 'vue'
 import FaviconSvg from './FaviconSvg.vue';
-import { Blacklist } from '@/scripts/background/storage/blacklist';
-
+import { useTracedSvg } from '@/composables/tracedSvg';
 
 type Props = {
     url: string,
@@ -12,23 +10,7 @@ type Props = {
 }
 const props = defineProps<Props>()
 
-const svgPromise: Ref<Promise<string | null> | string | null> = ref(null)
-const isBlacklisted = ref(false)
-
-watch(
-    () => props.url,
-    async () => {
-        if (!props.url) {
-            svgPromise.value = null;
-            return
-        }
-        const promise = IconStorage.loadIcon(props.url)
-        svgPromise.value = (props.changeAfterLoad) ? await promise : promise
-        isBlacklisted.value = await Blacklist.isBlacklisted(props.url)
-    },
-    { immediate: true }
-)
-
+const {svgPromise, blacklistEntry } = useTracedSvg(toRef(props, 'url'))
 
 </script>
 
@@ -51,13 +33,11 @@ watch(
                         color="secondary"
                     >url</v-btn>
 
-                    <div v-if="isBlacklisted">(Blacklisted)</div>
+                    <div v-if="Boolean(blacklistEntry)">(Blacklisted)</div>
                 </v-tooltip>
             </div>
         </template>
     </FaviconSvg>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -36,7 +36,7 @@ export namespace SvgColorReplacer {
         svgNode.querySelectorAll('style').forEach(style => style.remove())
     }
 
-    function parseSvg(svgString: string): Document {
+    export function parseSvg(svgString: string): Document {
         const svgDocument = new DOMParser().parseFromString(svgString, 'image/svg+xml')
         const errorNode = svgDocument.querySelector('parsererror');
         if (errorNode) {

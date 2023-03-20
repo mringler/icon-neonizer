@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, Ref, watch } from 'vue'
+import { ref, Ref, watch, watchEffect } from 'vue'
 import Heading from '@/components/util/Heading.vue';
 import { IconStorage } from '@/scripts/background/storage/icon-storage';
 import SvgEditor from './SvgEditor.vue';
@@ -13,14 +13,11 @@ const props = defineProps<Props>()
 const svg: Ref<string | null> = ref(null)
 const loading = ref(true)
 
-watch(
-    () => props.url,
-    async () => {
-        loading.value = true
-        svg.value = await IconStorage.loadIcon(props.url)
-        loading.value = false
-    },
-    { immediate: true })
+watchEffect(async () => {
+    loading.value = true
+    svg.value = await IconStorage.loadIcon(props.url)
+    loading.value = false
+})
 
 </script>
 
@@ -32,8 +29,8 @@ watch(
     >
         <Heading>Edit SVG</Heading>
 
-        <p>Manually edit the replacement icon SVG.</p>
-        
+        <div class="text-subtitle-1">Manually edit the replacement icon SVG.</div>
+
         <SvgEditor
             :url="props.url"
             :is-locked="props.isLocked"
@@ -41,8 +38,5 @@ watch(
             v-bind="$attrs"
         />
     </section>
-
 </template>
-<style scoped>
-
-</style>
+<style scoped></style>
