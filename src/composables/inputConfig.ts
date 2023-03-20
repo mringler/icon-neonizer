@@ -42,10 +42,12 @@ function buildHelpRenderer<D>(helpProps: HelpProps<D>) {
                 density: 'compact',
                 items: tableData.data,
                 headers: Object.entries(tableData.keys).map(([key, title]) => ({ key, title })) as VDataTable['headers'],
+                class: 'border mt-3'
             },
             {
                 bottom: () => null
             })
+        
         const slot = () => [h('div', unref(description)), table]
         return h(HelpOverlay, {maxWidth: maxWidth ?? 500}, slot)
     }

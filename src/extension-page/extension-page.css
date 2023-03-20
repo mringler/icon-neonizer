@@ -20,3 +20,11 @@ body {
 .v-overlay-container .v-tooltip .v-overlay__content {
     background: rgb(var(--v-theme-surface-variant));
 }
+
+.v-overlay-container .v-tooltip .v-table,
+.v-overlay-container .v-tooltip .v-table .v-table__wrapper > table > thead > tr > td, 
+.v-overlay-container .v-tooltip .v-table .v-table__wrapper > table > thead > tr th, 
+.v-overlay-container .v-tooltip .v-table .v-table__wrapper > table tbody > tr > td, 
+.v-overlay-container .v-tooltip .v-table .v-table__wrapper > table tbody > tr th {
+    background: transparent;
+}
