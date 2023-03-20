@@ -4,7 +4,7 @@ import {
     FillStyle, TrimMode, ImageLoader
 } from '@image-tracer/browser';
 import { IconStorage } from '../storage/icon-storage';
-import { GradientDrawerOptions } from './svg-drawer/gradient-drawer-options';
+import { ColorBuilderOption, GradientDrawerOptions } from './svg-drawer/gradient-drawer-options';
 import { SvgDrawerGradient } from './svg-drawer/svg-drawer-gradient';
 
 export namespace Tracer {
@@ -47,18 +47,20 @@ export namespace Tracer {
     function getTracerOptions(): Partial<GradientDrawerOptions> {
         return {
             numberofcolors: 32,
+            colorquantcycles: 3,
             colorsampling: CreatePaletteMode.SCAN,
             linefilter: false,
             layering: LayeringMode.SEQUENTIAL,
             strokewidth: 2,
             fillstyle: FillStyle.FILL,
             pathomit: 15,
-            colorquantcycles: 3,
             desc: false,
             trim: TrimMode.KEEP_RATIO,
             verbose: false,
-            minOpacityThreshold: 0.15,
+            minOpacityThreshold: 0.2,
+            fullOpacityThreshold: 0.7,
             removeBackground: true,
+            colorBuilder: ColorBuilderOption.adaptive,
         };
     }
 }
