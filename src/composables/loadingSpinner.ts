@@ -1,21 +1,23 @@
 import { ref, inject, provide } from 'vue'
 import type { InjectionKey, Ref } from 'vue'
 
-const LoadingSpinnerSymbol: InjectionKey<{
+type LoadingSpinnerData = {
     setLoading: (value: boolean) => void,
-    withLoading: <T>(promise: Promise<T>) => Promise<T>,
+    withLoading: <T>(loader: () => Promise<T>) => Promise<T>,
     loadingItems: Ref<number>,
-}> = Symbol.for('inp:loading-spinner')
+}
+
+const LoadingSpinnerSymbol: InjectionKey<LoadingSpinnerData> = Symbol.for('inp:loading-spinner')
 
 export function createLoadingSpinner() {
     const loadingItems = ref(0)
-    const data = {
-        setLoading(value: boolean){
+    const data: LoadingSpinnerData = {
+        setLoading(value: boolean) {
             loadingItems.value += value ? 1 : -1
         },
-        async withLoading(promise: Promise<any>){
+        async withLoading(loader) {
             loadingItems.value++
-            const res = await promise
+            const res = await loader()
             loadingItems.value--
             return res
         },
@@ -26,13 +28,11 @@ export function createLoadingSpinner() {
 }
 
 export function useLoadingSpinner() {
-    const showDialog = inject(LoadingSpinnerSymbol)
+    const loadingSpinnerData = inject(LoadingSpinnerSymbol)
 
-    if (!showDialog) throw new Error('Failed to inject LoadingSpinner!')
+    if (!loadingSpinnerData) throw new Error('Failed to inject LoadingSpinner!')
 
-    return showDialog
+    return loadingSpinnerData
 }
-
-/////////
 
 
