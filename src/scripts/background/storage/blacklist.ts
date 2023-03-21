@@ -1,6 +1,6 @@
 import { IconStorage } from './icon-storage'
 
-export type BlacklistedPage = {url: string, replacementUrl: string, comment: string}
+export type BlacklistedPage = { url: string, replacementUrl: string, comment: string }
 
 
 export namespace Blacklist {
@@ -14,7 +14,7 @@ export namespace Blacklist {
             return
         }
         blacklist.push(page)
-        blacklist.sort( (p1, p2) => p1.url.localeCompare(p2.url))
+        blacklist.sort((p1, p2) => p1.url.localeCompare(p2.url))
 
         return Promise.all([
             storeBlacklist(blacklist),
@@ -37,8 +37,8 @@ export namespace Blacklist {
         return Boolean(entry)
     }
 
-    export async function getBlacklistEntry(url: string): Promise<BlacklistedPage|undefined> {
+    export async function getBlacklistEntry(url: string): Promise<BlacklistedPage | undefined> {
         const ulrBlacklist = await IconStorage.loadBlacklist()
-        return ulrBlacklist.find(blacklistedPage => url.startsWith(blacklistedPage.url) && url !== blacklistedPage.url)
+        return ulrBlacklist.find(blacklistedPage => url.startsWith(blacklistedPage.url) && url !== blacklistedPage.replacementUrl)
     }
 }

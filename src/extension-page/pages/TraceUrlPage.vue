@@ -19,21 +19,22 @@ type Props = {
     url: string
 }
 const props = defineProps<Props>()
+const emit = defineEmits(['update:svg'])
 
 const options: Ref<GradientDrawerOptions> = ref({} as GradientDrawerOptions)
 const tracedSvg: Ref<string | undefined> = ref()
 const errorMessage: Ref<string | null> = ref(null)
 const saveCount = ref(0)
+const useFallback = ref(false)
+const imageDataLoader: ComputedRef<() => Promise<ImageData>> = computed(() => async () => useImageData(url.value).value!)
+const url = computed(() => useFallback.value ? Favicon.getGoogleApiUrl(new URL(props.url).host) + '&passFilter=1' : props.url)
 
-const emit = defineEmits(['update:svg'])
+const { svg: storedSvg, reload: reloadStored, blacklistEntry} = useTracedSvg(toRef(props, 'url'))
+
 
 onBeforeMount(async () => {
     options.value = await callBackgroundApi('getOptions', []);
 })
-
-const useFallback = ref(false)
-
-const url = computed(() => useFallback.value ? Favicon.getGoogleApiUrl(new URL(props.url).host) + '&passFilter=1' : props.url)
 
 const retrace = async () => {
     try {
@@ -44,10 +45,6 @@ const retrace = async () => {
         throw e
     }
 }
-
-const { svg: storedSvg, reload: reloadStored} = useTracedSvg(toRef(props, 'url'))
-
-const imageDataLoader: ComputedRef<() => Promise<ImageData>> = computed(() => async () => useImageData(url.value).value!)
 
 const save = async () => {
     if (!url || !tracedSvg.value) {
@@ -74,6 +71,20 @@ const iconCols = {
     <section tag="section">
         <Heading>Trace Icon</Heading>
         <div class="text-subtitle-1">Trace source icon with custom parameters.</div>
+
+        <v-alert v-if="blacklistEntry"
+            class="my-3"
+            icon="mdi-alert-circle"
+            :title="blacklistEntry.replacementUrl ? 'Redirected URL' : 'Blacklisted URL'"
+            type="warning"
+            variant="outlined"
+        >
+            <template v-if="blacklistEntry.replacementUrl">
+                Icon is blacklisted and replaced by another URL. 
+                <router-link :to="{ name: 'trace-by-url', params: { url: blacklistEntry.replacementUrl } }">Trace replacement icon instead.</router-link> 
+            </template>
+            <template v-else>Icon is blacklisted and will not be replaced.</template>
+        </v-alert>
 
         <v-container>
             <v-row class="icon-row">
