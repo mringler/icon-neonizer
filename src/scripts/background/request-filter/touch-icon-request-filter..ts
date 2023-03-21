@@ -1,3 +1,4 @@
+import { InlineImageLoader } from "../inline-image-loader";
 import { Blacklist } from "../storage/blacklist";
 import { IconStorage } from "../storage/icon-storage";
 
@@ -19,11 +20,6 @@ export namespace TouchIconRequestFilter {
         );
     }
 
-    async function getFaviconUrl(tabId: number): Promise<string|undefined>{
-        const tab = await browser.tabs.get(tabId)
-        return tab.favIconUrl
-    }
-
     async function updateHeaderContentType(headerDetails: browser.webRequest._OnHeadersReceivedDetails): Promise<browser.webRequest.BlockingResponse> {
 
         const headers = headerDetails.responseHeaders
@@ -31,13 +27,13 @@ export namespace TouchIconRequestFilter {
             return {}
         }
 
-        const faviconUrl = await isTouchIconUrlInTab(headerDetails.tabId, headerDetails.url)
-        const storedIcon = faviconUrl && await IconStorage.loadIcon(faviconUrl);
+        const {faviconUrl, isInline} = await getReplacementUrlForTouchIconInTab(headerDetails.tabId, headerDetails.url)
+        const storedIcon = isInline ? faviconUrl : (faviconUrl && await IconStorage.loadIcon(faviconUrl));
         if (!storedIcon) {
-            console.log('AT - no icon for', headerDetails.url, faviconUrl, storedIcon)
+            console.log('AT - no icon for', headerDetails.url, faviconUrl?.substring(0,30), storedIcon)
             return {}
         }
-        console.log('AT - replacing with', faviconUrl)
+        console.log('AT - replacing with', headerDetails.url, storedIcon?.substring(0,30))
 
         const contentType = headers.find(header => header.name === 'content-type');
         if (contentType) {
@@ -52,8 +48,21 @@ export namespace TouchIconRequestFilter {
 
     async function replaceIconFilter(requestDetails: browser.webRequest._OnBeforeRequestDetails): Promise<browser.webRequest.BlockingResponse> {
 
-        let faviconUrl = await isTouchIconUrlInTab(requestDetails.tabId, requestDetails.url)
+        let {faviconUrl, isInline} = await getReplacementUrlForTouchIconInTab(requestDetails.tabId, requestDetails.url)
         if(!faviconUrl){
+            return {}
+        }
+
+        const filter = browser.webRequest.filterResponseData(requestDetails.requestId);
+        const writeSvg = (svg: string) => {
+            const encoder = new TextEncoder();
+            filter.write(encoder.encode(svg));
+            filter.close();
+        }
+
+        if(isInline){
+            const [, iconData] = InlineImageLoader.parseIcon(faviconUrl)
+            writeSvg(iconData!)
             return {}
         }
 
@@ -62,13 +71,8 @@ export namespace TouchIconRequestFilter {
             faviconUrl = blacklistEntry.replacementUrl
         }
 
-        const filter = browser.webRequest.filterResponseData(requestDetails.requestId);
         const storedIconPromise = IconStorage.loadIcon(faviconUrl);
 
-        const writeSvg = (svg: string) => {
-            const encoder = new TextEncoder();
-            filter.write(encoder.encode(svg));
-        }
 
         filter.onstart = async () => {
             const svg = await storedIconPromise
@@ -78,14 +82,13 @@ export namespace TouchIconRequestFilter {
                 return
             }
             writeSvg(svg);
-            filter.close();
         }
         return {};
     }
 
-    async function isTouchIconUrlInTab(tabId: number, url: string): Promise<string | null> {
+    async function getReplacementUrlForTouchIconInTab(tabId: number, url: string): Promise<{faviconUrl: string|null, isInline: boolean}> {
         const urlEnd = url.replace(/https?:\/\/[^\/]+\//, '/')
-        const [hasLink] = await browser.tabs.executeScript(tabId, {
+        const [faviconUrl] = await browser.tabs.executeScript(tabId, {
             code: `
             (function(){
                 const touchIconLink = document.querySelector('link[rel~="apple-touch-icon"][href$="${urlEnd}"]');
@@ -99,7 +102,9 @@ export namespace TouchIconRequestFilter {
             `,
             runAt: 'document_start',
         })
-        return hasLink
+        const isInline = faviconUrl?.startsWith('data:image/svg+xml') ?? false
+
+        return {faviconUrl, isInline}
     }
 
 }
