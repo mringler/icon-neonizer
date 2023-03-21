@@ -34,7 +34,7 @@ export namespace InlineImageLoader {
         const type = inlineData.substring(0, colonPos)
         const imageData = inlineData.substring(colonPos + 1).trim()
         const [contentType, encoding] = type.split(';').map(s => s.trim())
-        const data = encoding.toLowerCase() === 'base64' ?
+        const data = encoding?.toLowerCase() === 'base64' ?
             atob(imageData) :
             decodeURIComponent(imageData)
 

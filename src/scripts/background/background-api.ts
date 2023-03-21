@@ -40,7 +40,7 @@ async function traceWithOptions(iconUrl: string, customOptions?: Partial<Gradien
 async function inlineIconLoader(inlineData: string, customOptions?: Partial<GradientDrawerOptions>) {
     const [contentType, data] = InlineImageLoader.parseIcon(inlineData)
     if (!data) {
-        return ''
+        throw new Error('No data from inlineData'+ inlineData)
     }
     return (contentType === 'data:image/svg+xml') ?
         SvgColorReplacer.replaceColorsInSvg(data, customOptions) :
