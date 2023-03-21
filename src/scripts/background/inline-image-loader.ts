@@ -11,6 +11,9 @@ export namespace InlineImageLoader {
         return !inlineIcon ? [] : InlineImageLoader.parseIcon(inlineIcon)
     }
 
+    /**
+     * Load the given page and get the favicon href. 
+     */
     export async function fetchHref(pageUrl: string): Promise<string | undefined> {
         if (pageUrl.startsWith(INLINE_ICON_DUMMY_URL)) {
             pageUrl = decodeURIComponent(pageUrl.split('=')[1])

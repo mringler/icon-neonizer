@@ -47,7 +47,7 @@ const retrace = async () => {
 
 const { svg: storedSvg, reload: reloadStored} = useTracedSvg(toRef(props, 'url'))
 
-const imageDataLoader: ComputedRef<() => Promise<ImageData>> = computed(() => async () => useImageData(url.value).value)
+const imageDataLoader: ComputedRef<() => Promise<ImageData>> = computed(() => async () => useImageData(url.value).value!)
 
 const save = async () => {
     if (!url || !tracedSvg.value) {

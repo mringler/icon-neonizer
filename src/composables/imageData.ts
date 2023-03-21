@@ -3,7 +3,7 @@ import { ImageLoader } from '@image-tracer/browser'
 import { ref, Ref, isRef, unref, watchEffect } from 'vue'
 import { useSrcUrl } from './srcUrl'
 
-export function useImageData(url: string | Ref<string>): Ref<Promise<ImageData>> {
+export function useImageData(url: string | Ref<string>): Ref<Promise<ImageData> | null> {
     
     const urlPromise = useSrcUrl(url)
 
