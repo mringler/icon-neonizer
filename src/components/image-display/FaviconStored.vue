@@ -3,12 +3,11 @@ import { toRef } from 'vue'
 import FaviconSvg from './FaviconSvg.vue';
 import { useTracedSvg } from '@/composables/tracedSvg';
 
-type Props = {
+const props = defineProps<{
     url: string,
     changeAfterLoad?: boolean,
     showIconOnMissing?: boolean,
-}
-const props = defineProps<Props>()
+}>()
 
 const {svgPromise, blacklistEntry } = useTracedSvg(toRef(props, 'url'))
 

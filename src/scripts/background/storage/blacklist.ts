@@ -39,6 +39,6 @@ export namespace Blacklist {
 
     export async function getBlacklistEntry(url: string): Promise<BlacklistedPage|undefined> {
         const ulrBlacklist = await IconStorage.loadBlacklist()
-        return ulrBlacklist.find(blacklistedPage => url.startsWith(blacklistedPage.url))
+        return ulrBlacklist.find(blacklistedPage => url.startsWith(blacklistedPage.url) && url !== blacklistedPage.url)
     }
 }

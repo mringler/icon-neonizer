@@ -14,7 +14,7 @@ export function useTracedSvg(url: string | null | undefined | Ref<string | null 
         return iconUrl ? await IconStorage.loadIcon(iconUrl) : null
     }
 
-    const loadReplacementUrl = async () => {
+    const loadBlacklistPage = async () => {
         const iconUrl = unref(url)
         return iconUrl ? await Blacklist.getBlacklistEntry(iconUrl) : undefined
     }
@@ -22,7 +22,7 @@ export function useTracedSvg(url: string | null | undefined | Ref<string | null 
     const loadValues = async () => {
         [svg.value, blacklistEntry.value] = [null, undefined];
         svgPromise.value = loadSvg();
-        [svg.value, blacklistEntry.value] = await Promise.all([svgPromise.value, loadReplacementUrl()] as const)
+        [svg.value, blacklistEntry.value] = await Promise.all([svgPromise.value, loadBlacklistPage()] as const)
     }
 
     if (isRef(url)) {
