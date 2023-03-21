@@ -3,14 +3,6 @@ type ApiArgs<T, P extends keyof T = keyof T> = { [K in P]: T[K] extends (...args
 type Ret<T, P extends keyof T = keyof T> = { [K in P]: T[K] extends (...args: any) => infer R ? R : never }[P]
 export type ScriptsApi<T> = { [K in keyof T]: (...args: ApiArgs<T, K>) => Ret<T, K> }
 
-export type ScriptsApit<T extends Record<keyof T, (...args: any[]) => any>> =
-    { [K in keyof T]: (...args: Parameters<T[K]>) => ReturnType<T[K]> }
-
-type Fun = (...args: any[]) => any
-export type ScriptsApiz<T extends object = any> = {
-    [K in keyof T as T[K] extends Fun ? K : never]: T[K]
-}
-
 export type ApiCaller<ApiInterface extends ScriptsApi<ApiInterface>> = <CommandName extends keyof ApiInterface>(
     commandName: CommandName,
     commandArgs: Parameters<ApiInterface[CommandName]>,
