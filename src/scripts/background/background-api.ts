@@ -24,20 +24,20 @@ const backgroundApi = {
 }
 
 async function processIconUrl(iconUrl: string, force = false, store = true): Promise<string | null> {
-    return processIconData(iconUrl, () => iconLoader(iconUrl), force, store)
+    return processIconData(iconUrl, () => traceByUrl(iconUrl), force, store)
 }
 
 async function processInlineData(inlineData: string, url: string, force = false, store = true) {
-    return processIconData(url, () => inlineIconLoader(inlineData), force, store)
+    return processIconData(url, () => traceInlineData(inlineData), force, store)
 }
 
 async function traceWithOptions(iconUrl: string, customOptions?: Partial<GradientDrawerOptions>) {
     return (iconUrl.startsWith('data:image')) ?
-        inlineIconLoader(iconUrl, customOptions):
-        iconLoader(iconUrl, customOptions)
+        traceInlineData(iconUrl, customOptions):
+        traceByUrl(iconUrl, customOptions)
 }
 
-async function inlineIconLoader(inlineData: string, customOptions?: Partial<GradientDrawerOptions>) {
+async function traceInlineData(inlineData: string, customOptions?: Partial<GradientDrawerOptions>) {
     const [contentType, data] = InlineImageLoader.parseIcon(inlineData)
     if (!data) {
         throw new Error('No data from inlineData'+ inlineData)
@@ -47,7 +47,7 @@ async function inlineIconLoader(inlineData: string, customOptions?: Partial<Grad
         Tracer.traceBuffer(new TextEncoder().encode(data), customOptions)
 }
 
-async function iconLoader(iconUrl: string, customOptions?: Partial<GradientDrawerOptions>) {
+async function traceByUrl(iconUrl: string, customOptions?: Partial<GradientDrawerOptions>) {
     const response = await fetch(iconUrl)
     if (!response.ok) {
         throw new Error('Failed to load image from url ' + iconUrl);
