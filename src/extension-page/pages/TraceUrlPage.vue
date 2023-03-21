@@ -116,10 +116,10 @@ const iconCols = {
 
                 <v-col v-bind="iconCols">
 
-                    <div class="text-subtitle-1">Re-Traced Icon</div>
+                    <div class="text-subtitle-1">Traced Icon</div>
 
                     <FaviconSvg :svg="tracedSvg">
-                        <template v-slot:no-content>Press "trace" to generate</template>
+                        <template v-slot:no-content>Press trace button</template>
                     </FaviconSvg>
 
                     <TracedImageInfo :tracedSvg="tracedSvg" />
