@@ -26,7 +26,7 @@ const callBackgroundApi: ApiCaller<BackgroundApiInterface> = (command, args) => 
 }
 
 export async function replaceFavicon(iconUrl: string, force = false, inlineData? :string) {
-    if (isHandledByFilter(iconUrl)) {
+    if (isHandledByFilter(iconUrl) || Favicon.urlIsReplaced()) {
         return
     }
     const loader = inlineData ? 

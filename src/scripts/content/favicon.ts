@@ -2,16 +2,16 @@ export namespace Favicon {
 
     export function getPageFaviconHref(dom?: Document): string | undefined {
         const element = getLargestFaviconHtmlElement(dom)
-        if(!element){
+        if (!element) {
             return undefined
         }
-        if(element.dataset.oldHref){
+        if (element.dataset.oldHref) {
             return element.dataset.oldHref
         }
         return element.href?.trim();
     }
 
-    export function getGoogleApiUrl(domain: string|undefined): string {
+    export function getGoogleApiUrl(domain: string | undefined): string {
         domain ??= window.location.hostname
         return `https://www.google.com/s2/favicons?domain=${domain}&sz=256`
     }
@@ -29,7 +29,7 @@ export namespace Favicon {
         return Boolean(document.querySelector<HTMLLinkElement>(`link[rel~='icon'][href$="${urlEnd}"]`));
     }
 
-    export function fixupForFilteredUrl(url: string){
+    export function fixupForFilteredUrl(url: string) {
         const urlEnd = url.replace(/https?:\/\/[^\/]+\//, '/')
         const nodes = document.querySelectorAll<HTMLLinkElement>(`link[rel~='icon'][href$="${urlEnd}"]`)
         nodes.forEach(node => {
@@ -38,9 +38,21 @@ export namespace Favicon {
         })
     }
 
-    export function urlIsHandledByFilter(url: string): boolean{
-        const urlEnd = url.replace(/https?:\/\/[^\/]+\//, '/')
-        return document.querySelector<HTMLLinkElement>(`link[rel~='icon'][href$="${urlEnd}"]`)?.dataset.neFilter === "1";
+    export function urlIsHandledByFilter(url: string): boolean {
+        const links = document.querySelectorAll<HTMLLinkElement>(`link[rel~='icon']`)
+        if (links.length === 0) {
+            return true
+        }
+        for(let i = 0; i < links.length; i++){
+            if(links[i].dataset.neFilter){
+                return true
+            }
+        }
+        return false
+    }
+
+    export function urlIsReplaced(): boolean {
+        return Boolean(document.querySelector<HTMLLinkElement>(`link[rel~='icon'][data-old-href]`));
     }
 
     function getLargestFaviconHtmlElement(dom?: Document): HTMLLinkElement | null {
@@ -84,7 +96,7 @@ export namespace Favicon {
         updateLinkElements(svgString)
     }
 
-    export function svgToHref(svgString: string): string{
+    export function svgToHref(svgString: string): string {
         return 'data:image/svg+xml,' + encodeURIComponent(svgString);
     }
 
@@ -100,6 +112,7 @@ export namespace Favicon {
             linkElement.rel = 'icon';
             fixupLinkElement(linkElement, href);
             document.head.appendChild(linkElement);
+            linkElement.dataset.oldHref = "none"
             return;
         }
         for (let i = 0; i < elements.length; i++) {

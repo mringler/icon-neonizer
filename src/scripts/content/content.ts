@@ -10,7 +10,6 @@ import { Favicon } from "./favicon";
 })();
 
 function resolveIconUrl(): [string, string?] {
-
     const iconUrl = Favicon.getPageFaviconHref()
     const isInline = iconUrl?.startsWith('data:image') ?? false
     if (isInline) {
