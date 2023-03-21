@@ -8,6 +8,7 @@ import ImageRecordTable from '@/components/image-record-table/ImageRecordDataTab
 import DataCard from '@/components/util/DataCard.vue';
 import LoadingContent from '@/components/util/LoadingContent.vue';
 import { useConfirmationDialog } from '@/composables/confirmDialog';
+import Heading from '@/components/util/Heading.vue';
 
 const showConfirm = useConfirmationDialog()
 
@@ -22,7 +23,7 @@ onBeforeMount(async () => {
 })
 
 const remove = async (record: ImageDataRecord, deleteLocked = false) => {
-    if(record.noAutomaticOverride && !deleteLocked){
+    if (record.noAutomaticOverride && !deleteLocked) {
         return showConfirm({
             title: 'Item is locked.',
             message: 'Delete anyway?',
@@ -56,6 +57,10 @@ const totalSizeKb = computed(() => {
         v-model:message="snackbarInput.message"
         :color="snackbarInput.color"
     />
+
+
+    <Heading>Icons in storage</Heading>
+    <div class="text-subtitle-1 mb-3">View and organize stored icons.</div>
 
     <LoadingContent :is-loading="isLoading">
 
