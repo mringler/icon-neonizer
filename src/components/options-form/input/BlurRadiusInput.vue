@@ -16,7 +16,7 @@ const inputConfig = useInputConfig(toRef(props, 'showHelp'), { description })
 <template>
     <v-text-field
         label="Blur Radius"
-        v-model="props.options.blurradius"
+        v-model="props.options.blurRadius"
         required
         type="number"
         step="1"

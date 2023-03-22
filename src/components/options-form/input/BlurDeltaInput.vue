@@ -18,7 +18,7 @@ const inputConfig = useInputConfig(toRef(props, 'showHelp'), { description })
 <template>
     <v-text-field
         label="Blur Delta"
-        v-model="props.options.blurdelta"
+        v-model="props.options.blurDelta"
         type="number"
         step="10"
         min="0"

@@ -17,7 +17,7 @@ const inputConfig = useInputConfig(toRef(props, 'showHelp'), { description })
 <template>
     <v-text-field
         label="Number of Colors"
-        v-model="props.options.numberofcolors"
+        v-model="props.options.numberOfColors"
         required
         type="number"
         min="1"
@@ -25,7 +25,6 @@ const inputConfig = useInputConfig(toRef(props, 'showHelp'), { description })
     >
         <template
             v-for="(InputSlot, slotName) in inputConfig.slots"
-            :key="slotName"
             v-slot:[slotName]
         >
             <Component :is="InputSlot" />

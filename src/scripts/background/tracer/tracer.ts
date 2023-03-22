@@ -31,10 +31,10 @@ export namespace Tracer {
         customOptions: Partial<GradientDrawerOptions> | null = null
     ): Promise<string> {
         const options = await getOptions(customOptions);
-        if (!customOptions?.strokewidth) {
-            options.strokewidth = imageData.width > 100 ? 6 : 2;
+        if (!customOptions?.strokeWidth) {
+            options.strokeWidth = imageData.width > 100 ? 6 : 2;
         }
-        const drawer = new SvgDrawerGradient(options, '');
+        const drawer = new SvgDrawerGradient(options);
         return ImageTracerBrowser.fromImageData(imageData, options, drawer);
     }
 
@@ -46,14 +46,14 @@ export namespace Tracer {
 
     function getTracerOptions(): Partial<GradientDrawerOptions> {
         return {
-            numberofcolors: 32,
-            colorquantcycles: 3,
-            colorsampling: CreatePaletteMode.SCAN,
-            linefilter: false,
-            layering: LayeringMode.SEQUENTIAL,
-            strokewidth: 2,
-            fillstyle: FillStyle.FILL,
-            pathomit: 15,
+            numberOfColors: 32,
+            colorClusteringCycles: 3,
+            colorSamplingMode: CreatePaletteMode.SCAN,
+            lineFilter: false,
+            layeringMode: LayeringMode.SEQUENTIAL,
+            strokeWidth: 2,
+            fillStyle: FillStyle.FILL,
+            minShapeOutline: 15,
             desc: false,
             trim: TrimMode.KEEP_RATIO,
             verbose: false,

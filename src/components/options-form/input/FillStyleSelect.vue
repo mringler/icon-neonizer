@@ -23,7 +23,7 @@ const inputConfig = useInputConfig(toRef(props, 'showHelp'), { description, tabl
 <template>
     <v-select
         label="Fill Style"
-        v-model="props.options.fillstyle"
+        v-model="props.options.fillStyle"
         :items="itemsFillStyle"
         required
         v-bind="inputConfig.attrs"

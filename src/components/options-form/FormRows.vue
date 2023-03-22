@@ -83,7 +83,7 @@ const fixedRows: Row[] = [
 const formRows = computed(() => {
 
     const rows: Row[] = [...fixedRows]
-    if (props.options.colorsampling === CreatePaletteMode.PALETTE && props.imageData) {
+    if (props.options.colorSamplingMode === CreatePaletteMode.PALETTE && props.imageData) {
         rows.push([
             { component: ColorSamplingModeSelect, cols: { md: 6, lg: 3 } },
             { component: ImageColorPicker, cols: { sm: 12, md: 6, lg: 9, xl: 9 }, props: { imageData: props.imageData } },

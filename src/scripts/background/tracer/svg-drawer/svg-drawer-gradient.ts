@@ -1,4 +1,4 @@
-import { TraceData, RgbColor, SvgDrawerOptions, SvgDrawer } from "@image-tracer/core";
+import { TraceData, RgbColor, SvgDrawer } from "@image-tracer/core";
 import type { ColorPairBuilder } from "./color-pair-builder/color-pair-builder";
 import type { GradientBuilder, GradientTags } from "./gradient-builder/gradient-builder";
 import { GradientDrawerOptions } from "./gradient-drawer-options";
@@ -19,14 +19,11 @@ export class SvgDrawerGradient extends SvgDrawer {
     protected minOpacityThreshold: number
     protected removeBackground: boolean
 
-    public constructor(
-        options: Partial<GradientDrawerOptions>,
-        version: string,
-    ) {
-        super(options, version);
+    public constructor(options: Partial<GradientDrawerOptions>) {
+        super(options);
         this.colorPairBuilder = GradientDrawerOptions.getColorPairBuilderFromOption(options.colorBuilder)
         this.gradientBuilder = GradientDrawerOptions.getGradientBuilderFromOption(options.gradientBuilder)
-        const getBoundVal = (val:number|undefined) => !val && val !== 0 ? 1 : Math.max(0, Math.min(Number(val), 1))
+        const getBoundVal = (val: number | undefined) => !val && val !== 0 ? 1 : Math.max(0, Math.min(Number(val), 1))
         this.fullOpacityThreshold = getBoundVal(options.fullOpacityThreshold)
         this.minOpacityThreshold = getBoundVal(options.minOpacityThreshold)
         this.removeBackground = Boolean(options.removeBackground)
@@ -44,7 +41,7 @@ export class SvgDrawerGradient extends SvgDrawer {
 
     protected removeTransparentShapes(traceData: TraceData) {
         const minValue = 255 * this.minOpacityThreshold
-        traceData.colors.forEach( (color, ix) => color.a <= minValue && (traceData.areasByColor[ix] = []))
+        traceData.colors.forEach((color, ix) => color.a <= minValue && (traceData.areasByColor[ix] = []))
     }
 
     protected removeBackgroundArea(traceData: TraceData) {

@@ -17,7 +17,7 @@ const inputConfig = useInputConfig(toRef(props, 'showHelp'), { description })
 <template>
     <v-text-field
         label="Clustering Cycles"
-        v-model="props.options.colorquantcycles"
+        v-model="props.options.colorClusteringCycles"
         type="number"
         min="1"
         required

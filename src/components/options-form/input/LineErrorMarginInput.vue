@@ -17,7 +17,7 @@ const inputConfig = useInputConfig(toRef(props, 'showHelp'), { description })
 <template>
     <v-text-field
         label="Line Error Margin"
-        v-model="props.options.ltres"
+        v-model="props.options.lineErrorMargin"
         required
         type="number"
         step="0.1"

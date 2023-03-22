@@ -17,7 +17,7 @@ const inputConfig = useInputConfig(toRef(props, 'showHelp'), { description })
 <template>
     <v-text-field
         label="Curve Error Margin"
-        v-model="props.options.qtres"
+        v-model="props.options.curveErrorMargin"
         required
         type="number"
         step="0.1"

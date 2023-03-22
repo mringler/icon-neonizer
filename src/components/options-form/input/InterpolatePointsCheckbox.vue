@@ -17,7 +17,7 @@ const inputConfig = useInputConfig(toRef(props, 'showHelp'), { description })
 <template>
     <v-checkbox
         label="Interpolate Points"
-        v-model="props.options.interpolationMode"
+        v-model="props.options.interpolation"
         false-value="off"
         true-value="interpolate"
         hideDetails

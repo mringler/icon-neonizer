@@ -24,7 +24,7 @@ const inputConfig = useInputConfig(toRef(props, 'showHelp'), { description, tabl
 <template>
     <v-select
         label="Sampling Mode"
-        v-model="props.options.colorsampling"
+        v-model="props.options.colorSamplingMode"
         :items="itemsColorSampling"
         required
         v-bind="inputConfig.attrs"

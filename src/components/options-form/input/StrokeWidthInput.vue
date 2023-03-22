@@ -18,8 +18,8 @@ const inputConfig = useInputConfig(toRef(props, 'showHelp'), { description })
 <template>
     <v-text-field
         label="Stroke Width"
-        v-model="props.options.strokewidth"
-        :disabled="props.options.fillstyle === FillStyle.FILL"
+        v-model="props.options.strokeWidth"
+        :disabled="props.options.fillStyle === FillStyle.FILL"
         required
         type="number"
         min="1"

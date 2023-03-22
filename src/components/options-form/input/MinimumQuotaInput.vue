@@ -17,7 +17,7 @@ const inputConfig = useInputConfig(toRef(props, 'showHelp'), { description })
 <template>
     <v-text-field
         label="Minimum Quota"
-        v-model="props.options.mincolorratio"
+        v-model="props.options.minColorQuota"
         type="number"
         min="0"
         step="0.05"

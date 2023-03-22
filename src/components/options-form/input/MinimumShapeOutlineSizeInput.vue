@@ -17,7 +17,7 @@ const inputConfig = useInputConfig(toRef(props, 'showHelp'), { description })
 <template>
     <v-text-field
         label="Minimum shape outline pixel size"
-        v-model="props.options.pathomit"
+        v-model="props.options.minShapeOutline"
         required
         type="number"
         min="0"

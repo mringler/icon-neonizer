@@ -18,8 +18,8 @@ const inputConfig = useInputConfig(toRef(props, 'showHelp'), { description })
 <template>
     <v-checkbox
         label="Enhance Right Angles"
-        :disabled="props.options.interpolationMode === 'off'"
-        v-model="props.options.rightangleenhance"
+        :disabled="props.options.interpolation === 'off'"
+        v-model="props.options.enhanceRightAngles"
         v-bind="inputConfig.attrs"
     >
         <template
