@@ -49,11 +49,11 @@ export class SvgDrawerGradient extends SvgDrawer {
             return
         }
         const areas = traceData.areasByColor[colorIx]
-        const removeIds = [areaIx, ...areas[areaIx].childHoles].sort()
-        removeIds.reverse().forEach((ix) => areas.splice(ix, 1))
+        const removeIds = new Uint16Array([areaIx, ...areas[areaIx].childHoles]).sort()
+        removeIds.reduceRight((_, ix) => areas.splice(ix, 1), [] as typeof areas)
         for (const area of areas) {
-            area.childHoles = area.childHoles.map((ix) => {
-                const shift = removeIds.findIndex((removedId) => ix < removedId)
+            area.childHoles = area.childHoles.map(ix => {
+                const shift = removeIds.findIndex(removedId => ix < removedId)
                 return ix - (shift === -1 ? removeIds.length : shift)
             })
         }
