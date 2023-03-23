@@ -1,17 +1,15 @@
 <script setup lang="ts">
-
 type Props = {
-    width?: string,
-    height?: string,
-    isEmpty?: boolean,
-    isLoading?: boolean,
-    noFrame?: boolean,
+    width?: string
+    height?: string
+    isEmpty?: boolean
+    isLoading?: boolean
+    noFrame?: boolean
 }
 const props = withDefaults(defineProps<Props>(), {
     width: '200px',
     height: '200px',
 })
-
 </script>
 
 <template>
@@ -40,7 +38,6 @@ const props = withDefaults(defineProps<Props>(), {
 
         <slot v-else></slot>
     </div>
-
 </template>
 
 <style scoped>

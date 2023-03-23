@@ -1,16 +1,15 @@
-import { RgbColor, RgbColorData, TraceData } from "@image-tracer/core";
-import rgb2hsv, { HSV } from 'color-functions/dist/rgb2hsv';
-import hsv2rgb from 'color-functions/dist/hsv2rgb';
+import { RgbColor, RgbColorData, TraceData } from '@image-tracer/core'
+import rgb2hsv, { HSV } from 'color-functions/dist/rgb2hsv'
+import hsv2rgb from 'color-functions/dist/hsv2rgb'
 
-export abstract class ColorPairBuilder{
+export abstract class ColorPairBuilder {
+    protected abstract generateWhitePair(hsvColor: HSV): [RgbColor, RgbColor]
+    protected abstract generateBlackPair(hsvColor: HSV, alpha: number): [RgbColor, RgbColor]
+    protected abstract generateSaturatedPair(hsvColor: HSV): [RgbColor, RgbColor]
 
-    protected abstract generateWhitePair(hsvColor: HSV): [RgbColor, RgbColor];
-    protected abstract generateBlackPair(hsvColor: HSV, alpha: number): [RgbColor, RgbColor];
-    protected abstract generateSaturatedPair(hsvColor: HSV): [RgbColor, RgbColor];
+    public init(traceData: TraceData) {}
 
-    public init(traceData: TraceData){}
-
-    public isTooDark(color: RgbColor): boolean{
+    public isTooDark(color: RgbColor): boolean {
         return color.a < 100 || Math.max(color.r, color.g, color.b) < 20
     }
 

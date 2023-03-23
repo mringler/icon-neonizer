@@ -1,16 +1,15 @@
 <script setup lang="ts">
 import { toRef } from 'vue'
-import FaviconSvg from './FaviconSvg.vue';
-import { useTracedSvg } from '@/composables/tracedSvg';
+import FaviconSvg from './FaviconSvg.vue'
+import { useTracedSvg } from '@/composables/tracedSvg'
 
 const props = defineProps<{
-    url: string,
-    changeAfterLoad?: boolean,
-    showIconOnMissing?: boolean,
+    url: string
+    changeAfterLoad?: boolean
+    showIconOnMissing?: boolean
 }>()
 
-const {svgPromise, blacklistEntry } = useTracedSvg(toRef(props, 'url'))
-
+const { svgPromise, blacklistEntry } = useTracedSvg(toRef(props, 'url'))
 </script>
 
 <template>
@@ -24,13 +23,14 @@ const {svgPromise, blacklistEntry } = useTracedSvg(toRef(props, 'url'))
                 <v-tooltip
                     :text="url"
                     location="bottom"
-                    v-slot:activator="{ props }"
                 >
-                    <v-btn
-                        v-bind="props"
-                        variant="text"
-                        color="secondary"
-                    >url</v-btn>
+                    <template v-slot:activator="{ props }">
+                        <v-btn
+                            v-bind="props"
+                            variant="text"
+                            color="secondary"
+                        >url</v-btn>
+                    </template>
 
                     <div v-if="Boolean(blacklistEntry)">(Blacklisted)</div>
                 </v-tooltip>

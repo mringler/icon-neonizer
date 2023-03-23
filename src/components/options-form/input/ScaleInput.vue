@@ -1,16 +1,20 @@
-<script setup  lang="ts">
-import { toRef } from 'vue';
-import type { GradientDrawerOptions } from '@/scripts/background/tracer/svg-drawer/gradient-drawer-options';
+<script setup lang="ts">
+import { toRef } from 'vue'
+import type { GradientDrawerOptions } from '@/scripts/background/tracer/svg-drawer/gradient-drawer-options'
 import { useInputConfig } from '@/composables/inputConfig'
 
-const props = withDefaults(defineProps<{
-    options: GradientDrawerOptions,
-    showHelp: boolean,
-}>(), {
-    showHelp: false
-})
+const props = withDefaults(
+    defineProps<{
+        options: GradientDrawerOptions
+        showHelp: boolean
+    }>(),
+    {
+        showHelp: false,
+    }
+)
 
-const description = "SVG coordinates are multiplied by this number and the viewport is adjusted accordingly. Particularly useful when strokes appear too thick."
+const description =
+    'SVG coordinates are multiplied by this number and the viewport is adjusted accordingly. Particularly useful when strokes appear too thick.'
 const inputConfig = useInputConfig(toRef(props, 'showHelp'), { description })
 </script>
 

@@ -8,13 +8,14 @@ export function useSrcUrl(url: string | Ref<string>) {
     async function buildUrl() {
         const urlString = unref(url)
         const isInline = urlString.startsWith(InlineImageLoader.INLINE_ICON_DUMMY_URL)
-        srcUrl.value = isInline ? loadInlineUrl(urlString) : 
-            Promise.resolve(toFaviconDownloadUrl(urlString))
+        srcUrl.value = isInline
+            ? loadInlineUrl(urlString)
+            : Promise.resolve(toFaviconDownloadUrl(urlString))
     }
 
-    async function loadInlineUrl(urlString: string){
+    async function loadInlineUrl(urlString: string) {
         let inlineUrl = await InlineImageLoader.fetchHref(urlString)
-        if (inlineUrl?.startsWith('/')){
+        if (inlineUrl?.startsWith('/')) {
             inlineUrl = urlString + inlineUrl
         }
         return inlineUrl ?? Promise.reject()

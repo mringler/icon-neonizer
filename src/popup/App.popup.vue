@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import { loadActiveTab } from '@/util/active-tab';
+import { loadActiveTab } from '@/util/active-tab'
 import { onBeforeMount, ref, Ref, computed } from 'vue'
-import { loadOriginalUrl as loadOriginalFaviconUrl } from '../util/content-api-caller';
-import { Blacklist, BlacklistedPage } from '@/scripts/background/storage/blacklist';
-import { IconStorage } from '@/scripts/background/storage/icon-storage';
-import FaviconImg from '@/components/image-display/FaviconImg.vue';
-import FaviconStored from '@/components/image-display/FaviconStored.vue';
+import { loadOriginalUrl as loadOriginalFaviconUrl } from '../util/content-api-caller'
+import { Blacklist, BlacklistedPage } from '@/scripts/background/storage/blacklist'
+import { IconStorage } from '@/scripts/background/storage/icon-storage'
+import FaviconImg from '@/components/image-display/FaviconImg.vue'
+import FaviconStored from '@/components/image-display/FaviconStored.vue'
 
 const url: Ref<string | null> = ref(null)
 const blacklistEntry: Ref<BlacklistedPage | undefined> = ref()
 const newImage: Ref<string | null> = ref(null)
 
 async function loadUrl() {
-    const tabUrl = await loadActiveTab().then(tab => tab && loadOriginalFaviconUrl(tab.id))
+    const tabUrl = await loadActiveTab().then((tab) => tab && loadOriginalFaviconUrl(tab.id))
     if (!tabUrl) {
         return
     }
@@ -22,21 +22,21 @@ async function loadUrl() {
 }
 onBeforeMount(loadUrl)
 
-const blackListNotification = computed(() => blacklistEntry.value?.replacementUrl ?
-    { icon: 'mdi-file-replace', text: 'URL was replaced through blacklist' } :
-    { icon: '', text: 'No automatic processing: source is blacklisted.' }
+const blackListNotification = computed(() =>
+    blacklistEntry.value?.replacementUrl
+        ? { icon: 'mdi-file-replace', text: 'URL was replaced through blacklist' }
+        : { icon: '', text: 'No automatic processing: source is blacklisted.' }
 )
 
 const openExtensionPage = async () => {
     const tab = await loadActiveTab()
     const createData = {
-        url: "/src/extension-page/extension-page.html",
+        url: '/src/extension-page/extension-page.html',
         openerTabId: tab?.id,
-    };
-    browser.tabs.create(createData);
+    }
+    browser.tabs.create(createData)
     window.close()
 }
-
 </script>
 
 <template>
@@ -45,18 +45,18 @@ const openExtensionPage = async () => {
         class="panel-card ma-3"
     >
         <v-card-subtitle>
-
             <v-tooltip
                 v-if="blacklistEntry"
                 :text="blackListNotification.text"
-                v-slot:activator="{ props }"
             >
-                <v-icon
-                    v-bind="props"
-                    class="mr-2"
-                    :icon="blackListNotification.icon"
-                    color="primary"
-                />
+                <template v-slot:activator="{ props }">
+                    <v-icon
+                        v-bind="props"
+                        class="mr-2"
+                        :icon="blackListNotification.icon"
+                        color="primary"
+                    />
+                </template>
             </v-tooltip>
             <span class="wrap-on-hover">{{ url }}</span>
         </v-card-subtitle>
@@ -66,7 +66,6 @@ const openExtensionPage = async () => {
                 v-if="url"
                 class="image-row justify-space-between"
             >
-
                 <FaviconImg
                     :src="url"
                     class="image-display-icon"
@@ -76,9 +75,7 @@ const openExtensionPage = async () => {
                     :url="url"
                     class="image-display-icon"
                 />
-
             </div>
-
         </v-card-text>
 
         <v-card-actions>
@@ -89,7 +86,6 @@ const openExtensionPage = async () => {
                 @click="openExtensionPage"
             >Configure</v-btn>
         </v-card-actions>
-
     </v-card>
 </template>
 <style scoped>
@@ -113,5 +109,4 @@ const openExtensionPage = async () => {
     height: 200px;
     max-width: 200px;
     max-height: 200px;
-}
-</style>
+}</style>

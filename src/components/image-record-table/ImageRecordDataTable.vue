@@ -1,17 +1,16 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import type { ImageDataRecord } from '@/scripts/background/storage/icon-storage';
+import { ref } from 'vue'
+import type { ImageDataRecord } from '@/scripts/background/storage/icon-storage'
 import { byteToKilobyte } from '@/util/byte-to-kilobyte'
-import DownloadSvgButton from './DownloadSvgButton.vue';
-import FaviconImg from '../image-display/FaviconImg.vue';
-import FaviconSvg from '../image-display/FaviconSvg.vue';
-
+import DownloadSvgButton from './DownloadSvgButton.vue'
+import FaviconImg from '../image-display/FaviconImg.vue'
+import FaviconSvg from '../image-display/FaviconSvg.vue'
 
 type Props = {
     imageRecords: ImageDataRecord[]
 }
 const props = withDefaults(defineProps<Props>(), {
-    imageRecords: () => [] as ImageDataRecord[]
+    imageRecords: () => [] as ImageDataRecord[],
 })
 
 const search = ref('')
@@ -34,11 +33,11 @@ const headers = [
     { key: 'actions', title: 'Actions', sortable: false, minWidth: '134px' },
 ]
 
-const sortBy = ref([{ "key": "lastAccess", "order": "desc" }])
+const sortBy = ref([{ key: 'lastAccess', order: 'desc' }])
 
 const faviconDisplayProps = {
-    width: "72px",
-    height: "72px",
+    width: '72px',
+    height: '72px',
     noFrame: true,
     class: 'ma-1',
 }
@@ -91,7 +90,6 @@ const faviconDisplayProps = {
                 {{ byteToKilobyte(item.columns.size) }}
             </template>
 
-
             <template v-slot:item.noAutomaticOverride="{ item }">
                 <div class="text-center">
                     <v-icon
@@ -101,59 +99,59 @@ const faviconDisplayProps = {
                 </div>
             </template>
             <template v-slot:item.actions="{ item }">
-                <div style="min-width: 134px;">
-                    <v-tooltip
-                        text="Trace again"
-                        v-slot:activator="{ props }"
-                    >
-                        <v-btn
-                            v-bind="props"
-                            variant="plain"
-                            icon="mdi-draw"
-                            :to="{ name: 'trace-by-url', params: { url: item.columns.url } }"
-                        />
+                <div style="min-width: 134px">
+                    <v-tooltip text="Trace again">
+                        <template v-slot:activator="{ props }">
+                            <v-btn
+                                v-bind="props"
+                                variant="plain"
+                                icon="mdi-draw"
+                                :to="{ name: 'trace-by-url', params: { url: item.columns.url } }"
+                            />
+                        </template>
                     </v-tooltip>
-                    <v-tooltip
-                        text="Edit"
-                        v-slot:activator="{ props }"
-                    >
-                        <v-btn
-                            v-bind="props"
-                            variant="plain"
-                            icon="mdi-pen"
-                            :to="{ name: 'edit-by-url', params: { url: item.columns.url }, query: { isLocked: item.columns.noAutomaticOverride ? 1 : 0 } }"
-                        />
+                    <v-tooltip text="Edit">
+                        <template v-slot:activator="{ props }">
+                            <v-btn
+                                v-bind="props"
+                                variant="plain"
+                                icon="mdi-pen"
+                                :to="{
+                                    name: 'edit-by-url',
+                                    params: { url: item.columns.url },
+                                    query: { isLocked: item.columns.noAutomaticOverride ? 1 : 0 },
+                                }"
+                            />
+                        </template>
                     </v-tooltip>
-                    <v-tooltip
-                        text="Download"
-                        v-slot:activator="{ props }"
-                    >
-                        <DownloadSvgButton
-                            v-bind="props"
-                            variant="plain"
-                            :url="item.columns.url"
-                            :svg="item.columns.icon"
-                        />
+                    <v-tooltip text="Download">
+                        <template v-slot:activator="{ props }">
+                            <DownloadSvgButton
+                                v-bind="props"
+                                variant="plain"
+                                :url="item.columns.url"
+                                :svg="item.columns.icon"
+                            />
+                        </template>
                     </v-tooltip>
-                    <v-tooltip
-                        text="Delete"
-                        v-slot:activator="{ props }"
-                    >
-                        <v-btn
-                            v-bind="props"
-                            variant="plain"
-                            icon="mdi-delete"
-                            @click.stop="emit('removeRecord', item.raw)"
-                        />
+                    <v-tooltip text="Delete">
+                        <template v-slot:activator="{ props }">
+                            <v-btn
+                                v-bind="props"
+                                variant="plain"
+                                icon="mdi-delete"
+                                @click.stop="emit('removeRecord', item.raw)"
+                            />
+                        </template>
                     </v-tooltip>
                 </div>
             </template>
-
         </v-data-table>
     </v-card>
 </template>
 
-<style scoped>*:deep(.image-record-table .v-table__wrapper) {
+<style scoped>
+*:deep(.image-record-table .v-table__wrapper) {
     overflow: unset;
 }
 

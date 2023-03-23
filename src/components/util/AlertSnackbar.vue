@@ -1,21 +1,17 @@
 <script setup lang="ts">
-
 export type AlertSnackbarProps = {
-    color?: string,
-    message: string|null,
+    color?: string
+    message: string | null
 }
-const props = withDefaults(
-    defineProps<AlertSnackbarProps>(), {
-    color: 'purple'
+const props = withDefaults(defineProps<AlertSnackbarProps>(), {
+    color: 'purple',
 })
 
 const emit = defineEmits(['update:message'])
 const emitClearMessage = () => {
     emit('update:message', null)
 }
-
 </script>
-
 
 <template>
     <v-snackbar
@@ -24,7 +20,7 @@ const emitClearMessage = () => {
         :color="color"
         v-bind="$attrs"
     >
-        {{props.message}}
+        {{ props.message }}
 
         <template v-slot:action="{ attrs }">
             <v-btn
@@ -35,10 +31,6 @@ const emitClearMessage = () => {
             />
         </template>
     </v-snackbar>
-
-
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

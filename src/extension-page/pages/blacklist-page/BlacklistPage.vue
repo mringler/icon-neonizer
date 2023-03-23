@@ -1,17 +1,15 @@
 <script setup lang="ts">
-import type { AlertSnackbarProps } from '@/components/util/AlertSnackbar.vue';
-import AlertSnackbar from '@/components/util/AlertSnackbar.vue';
-import Heading from '@/components/util/Heading.vue';
-import { Blacklist, BlacklistedPage } from '@/scripts/background/storage/blacklist';
+import type { AlertSnackbarProps } from '@/components/util/AlertSnackbar.vue'
+import AlertSnackbar from '@/components/util/AlertSnackbar.vue'
+import Heading from '@/components/util/Heading.vue'
+import { Blacklist, BlacklistedPage } from '@/scripts/background/storage/blacklist'
 import { onBeforeMount, Ref, ref, toRaw } from 'vue'
-import BlacklistEntryDialog from './BlacklistEntryDialog.vue';
-
+import BlacklistEntryDialog from './BlacklistEntryDialog.vue'
 
 const blacklist: Ref<BlacklistedPage[]> = ref([])
 const snackbarInput: Ref<AlertSnackbarProps> = ref({ message: null })
 
 onBeforeMount(loadBlacklist)
-
 
 async function loadBlacklist() {
     blacklist.value = await Blacklist.loadBlacklist()
@@ -30,13 +28,14 @@ async function updatePage(ix: number, blacklistPage: BlacklistedPage) {
     Object.assign(blacklist.value[ix], blacklistPage)
     return Blacklist.storeBlacklist(toRaw(blacklist.value))
 }
-
 </script>
 
 <template>
     <Heading>Edit Blacklist</Heading>
-
-    <p>If a favicon url matches the beginning of an entry in the blacklist, it will not be processed automatically.</p>
+    <div class="text-subtitle-1 mb-3">
+        If a favicon url matches the beginning of an entry in the blacklist, it will not be
+        processed automatically or replaced by a different icon if a replacement URL is given.
+    </div>
 
     <AlertSnackbar
         v-model:message="snackbarInput.message"
@@ -48,27 +47,18 @@ async function updatePage(ix: number, blacklistPage: BlacklistedPage) {
     >
         <thead>
             <tr>
-                <th class="text-left w-33">
-                    Url fragment
-                </th>
-                <th class="text-left w-33">
-                    Replacement
-                </th>
-                <th class="text-left w-33">
-                    Note
-                </th>
+                <th class="text-left w-33">Url fragment</th>
+                <th class="text-left w-33">Replacement</th>
+                <th class="text-left w-33">Note</th>
                 <th class="min-width-fit-content">
-                    <BlacklistEntryDialog
-                        @update:page="addPage"
-                        v-slot:activator="{ props }"
-                    >
-                        <v-btn
-                            color="primary"
-                            variant="text"
-                            v-bind="props"
-                        >
-                            Add Url
-                        </v-btn>
+                    <BlacklistEntryDialog @update:page="addPage">
+                        <template v-slot:activator="{ props }">
+                            <v-btn
+                                color="primary"
+                                variant="text"
+                                v-bind="props"
+                            > Add Url </v-btn>
+                        </template>
                     </BlacklistEntryDialog>
                 </th>
             </tr>
@@ -90,40 +80,41 @@ async function updatePage(ix: number, blacklistPage: BlacklistedPage) {
                 <td class="nowrap">
                     <BlacklistEntryDialog
                         :page="blacklistPage"
-                        @update:page="page => updatePage(ix, page)"
-                        v-slot:activator="{ props: modalProps }"
+                        @update:page="(page) => updatePage(ix, page)"
                     >
-                        <v-tooltip
-                            text="Edit"
-                            v-slot:activator="{ props: tooltipProps }"
-                        >
-                            <v-btn
-                                v-bind="{...tooltipProps, ...modalProps}"
-                                variant="flat"
-                                icon="mdi-pen"
-                            />
-                        </v-tooltip>
+                        <template v-slot:activator="{ props: modalProps }">
+                            <v-tooltip text="Edit">
+                                <template v-slot:activator="{ props: tooltipProps }">
+                                    <v-btn
+                                        v-bind="{ ...tooltipProps, ...modalProps }"
+                                        variant="flat"
+                                        icon="mdi-pen"
+                                    />
+                                </template>
+                            </v-tooltip>
+                        </template>
                     </BlacklistEntryDialog>
 
-                    <v-tooltip
-                        text="Delete"
-                        v-slot:activator="{ props }"
-                    >
-                        <v-btn
-                            v-bind="props"
-                            icon="mdi-delete"
-                            variant="flat"
-                            @click="removePage(blacklistPage)"
-                        />
+                    <v-tooltip text="Delete">
+                        <template v-slot:activator="{ props }">
+                            <v-btn
+                                v-bind="props"
+                                icon="mdi-delete"
+                                variant="flat"
+                                @click="removePage(blacklistPage)"
+                            />
+                        </template>
                     </v-tooltip>
                 </td>
             </tr>
             <tr v-if="blacklist?.length === 0">
-                <td colspan="2"><v-alert
+                <td colspan="4">
+                    <v-alert
                         variant="outlined"
                         type="info"
                         class="my-4"
-                    >No blacklisted pages.</v-alert></td>
+                    >No blacklisted pages.</v-alert>
+                </td>
             </tr>
         </tbody>
     </v-table>

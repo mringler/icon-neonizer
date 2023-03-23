@@ -1,39 +1,37 @@
 <script setup lang="ts">
 import { ref, Ref, watch, computed, watchEffect } from 'vue'
-import AlertSnackbar from '../util/AlertSnackbar.vue';
-import { IconStorage } from '@/scripts/background/storage/icon-storage';
-import FaviconSvg from '../image-display/FaviconSvg.vue';
-import ConfirmUnsavedChanges from '../util/ConfirmUnsavedChanges.vue';
-import type { ConfirmProps } from '../util/Confirmation.vue';
-import { useConfirmationDialog } from '@/composables/confirmDialog';
+import AlertSnackbar from '../util/AlertSnackbar.vue'
+import { IconStorage } from '@/scripts/background/storage/icon-storage'
+import FaviconSvg from '../image-display/FaviconSvg.vue'
+import type { ConfirmProps } from '../util/Confirmation.vue'
+import { useConfirmationDialog } from '@/composables/confirmDialog'
+import { useConfirmUnsavedChanges } from '@/composables/confirmUnsavedChanges'
 
-const showConfirm = useConfirmationDialog()
-
-type Props = {
-    url: string,
-    svg: string,
+const props = defineProps<{
+    url: string
+    svg: string
     isLocked?: boolean
-}
-const props = defineProps<Props>()
+}>()
+
+const emit = defineEmits(['update:svg'])
 
 const originalSvg: Ref<string | null> = ref(null)
 const editedSvg: Ref<string | null> = ref(null)
 const snackbarMessage = ref<string | null>(null)
 const lock = ref(false)
 
-const emit = defineEmits(['update:svg'])
-
-watch(
-    () => props.svg,
-    () => {
-        originalSvg.value = editedSvg.value = props.svg
-    },
-    { immediate: true }
-)
-
-watchEffect(() => lock.value = Boolean(props.isLocked))
-
 const svgHasChanged = computed(() => originalSvg.value !== editedSvg.value)
+
+
+const showConfirm = useConfirmationDialog()
+useConfirmUnsavedChanges(svgHasChanged)
+
+watchEffect(() => {
+    editedSvg.value = props.svg
+    originalSvg.value = props.svg
+})
+watchEffect(() => (lock.value = Boolean(props.isLocked)))
+
 
 const reset = () => {
     const confirmProps: ConfirmProps = {
@@ -42,14 +40,14 @@ const reset = () => {
         confirmText: 'Continue',
         onConfirm: () => {
             editedSvg.value = originalSvg.value
-        }
+        },
     }
     showConfirm(confirmProps)
 }
 
 const store = async () => {
     if (!editedSvg.value?.trim()) {
-        return;
+        return
     }
     await IconStorage.storeIcon(props.url, editedSvg.value, lock.value)
     originalSvg.value = editedSvg.value
@@ -60,7 +58,6 @@ const store = async () => {
 
 <template>
     <AlertSnackbar v-model:message="snackbarMessage" />
-    <ConfirmUnsavedChanges :no-change="!svgHasChanged" />
 
     <v-container>
         <v-row>
@@ -69,7 +66,6 @@ const store = async () => {
                 md="9"
                 xl="8"
             >
-
                 <v-text-field
                     :value="url"
                     readonly
@@ -79,15 +75,12 @@ const store = async () => {
                     label="Svg Image"
                     auto-grow
                     v-model="editedSvg"
-                ></v-textarea>
-
-            </v-col><v-col
+                ></v-textarea> </v-col><v-col
                 cols="12"
                 md="3"
                 xl="4"
             >
-
-                <div style="position: sticky; top: 70px;">
+                <div style="position: sticky; top: 70px">
                     <FaviconSvg
                         :svg="editedSvg"
                         class="mb-2"
@@ -126,10 +119,6 @@ const store = async () => {
                 </div>
             </v-col>
         </v-row>
-
     </v-container>
-
 </template>
-<style scoped>
-
-</style>
+<style scoped></style>

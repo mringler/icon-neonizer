@@ -3,7 +3,7 @@ export function byteToKilobyte(b: number): string {
 }
 
 export function svgToKilobyte(svg: string): string {
-    const encoder = new TextEncoder();
+    const encoder = new TextEncoder()
     const numberOfBytes = encoder.encode(svg).length
     return byteToKilobyte(numberOfBytes)
 }

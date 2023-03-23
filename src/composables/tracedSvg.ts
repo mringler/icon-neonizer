@@ -20,9 +20,12 @@ export function useTracedSvg(url: string | null | undefined | Ref<string | null 
     }
 
     const loadValues = async () => {
-        [svg.value, blacklistEntry.value] = [null, undefined];
-        svgPromise.value = loadSvg();
-        [svg.value, blacklistEntry.value] = await Promise.all([svgPromise.value, loadBlacklistPage()] as const)
+        ;[svg.value, blacklistEntry.value] = [null, undefined]
+        svgPromise.value = loadSvg()
+        ;[svg.value, blacklistEntry.value] = await Promise.all([
+            svgPromise.value,
+            loadBlacklistPage(),
+        ] as const)
     }
 
     if (isRef(url)) {
@@ -34,7 +37,9 @@ export function useTracedSvg(url: string | null | undefined | Ref<string | null 
     return { svg, blacklistEntry, svgPromise, reload: loadValues }
 }
 
-export function useTracedSvgInfo(tracedSvg: string | null | undefined | Ref<string | null | undefined>) {
+export function useTracedSvgInfo(
+    tracedSvg: string | null | undefined | Ref<string | null | undefined>
+) {
     const svg = computed(() => unref(tracedSvg))
     const dom = computed(() => {
         if (!svg.value) return null
@@ -44,11 +49,12 @@ export function useTracedSvgInfo(tracedSvg: string | null | undefined | Ref<stri
             return null
         }
     })
-    const countElementsInSvg = <K extends keyof SVGElementTagNameMap>(tagName: K) => dom.value?.getElementsByTagName(tagName).length ?? null
+    const countElementsInSvg = <K extends keyof SVGElementTagNameMap>(tagName: K) =>
+        dom.value?.getElementsByTagName(tagName).length ?? null
 
     return {
         numberOfPaths: computed(() => countElementsInSvg('path')),
         numberOfGradients: computed(() => countElementsInSvg('linearGradient')),
-        sizeKb: computed(() => svg.value ? svgToKilobyte(svg.value) : null),
+        sizeKb: computed(() => (svg.value ? svgToKilobyte(svg.value) : null)),
     }
 }

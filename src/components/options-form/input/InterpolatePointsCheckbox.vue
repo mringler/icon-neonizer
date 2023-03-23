@@ -1,16 +1,20 @@
-<script setup  lang="ts">
-import { toRef } from 'vue';
-import type { GradientDrawerOptions } from '@/scripts/background/tracer/svg-drawer/gradient-drawer-options';
+<script setup lang="ts">
+import { toRef } from 'vue'
+import type { GradientDrawerOptions } from '@/scripts/background/tracer/svg-drawer/gradient-drawer-options'
 import { useInputConfig } from '@/composables/inputConfig'
 
-const props = withDefaults(defineProps<{
-    options: GradientDrawerOptions,
-    showHelp: boolean,
-}>(), {
-    showHelp: false
-})
+const props = withDefaults(
+    defineProps<{
+        options: GradientDrawerOptions
+        showHelp: boolean
+    }>(),
+    {
+        showHelp: false,
+    }
+)
 
-const description = 'Interpolate traced points. Gives clearer lines, but distorts small images where shifts by a half pixel are noticeable.'
+const description =
+    'Interpolate traced points. Gives clearer lines, but distorts small images where shifts by a half pixel are noticeable.'
 const inputConfig = useInputConfig(toRef(props, 'showHelp'), { description })
 </script>
 

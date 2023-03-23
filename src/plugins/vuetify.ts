@@ -1,21 +1,20 @@
+import { aliases, mdi } from 'vuetify/iconsets/mdi'
+import { createVuetify } from 'vuetify'
 
-import { aliases, mdi } from 'vuetify/iconsets/mdi';
-import { createVuetify } from 'vuetify';
-
-import { en } from 'vuetify/locale';
+import { en } from 'vuetify/locale'
 import { VDataTable } from 'vuetify/labs/VDataTable'
 
 // Misc
 //import { loadFonts } from './webfontloader';
 //loadFonts();
 
-import 'vuetify/styles';
-import '@mdi/font/css/materialdesignicons.css';
+import 'vuetify/styles'
+import '@mdi/font/css/materialdesignicons.css'
 
 export default createVuetify({
-  // Global configuration
-  // https://next.vuetifyjs.com/en/features/global-configuration/
-  /*
+    // Global configuration
+    // https://next.vuetifyjs.com/en/features/global-configuration/
+    /*
   defaults: {
     global: {
       ripple: false,
@@ -25,35 +24,35 @@ export default createVuetify({
     },
   },
   */
-  // Icon Fonts
-  // https://next.vuetifyjs.com/en/features/icon-fonts/
-  icons: {
-    defaultSet: 'mdi',
-    aliases,
-    sets: {
-      mdi,
+    // Icon Fonts
+    // https://next.vuetifyjs.com/en/features/icon-fonts/
+    icons: {
+        defaultSet: 'mdi',
+        aliases,
+        sets: {
+            mdi,
+        },
     },
-  },
-  // Internationalization (i18n)
-  // https://next.vuetifyjs.com/en/features/internationalization/#internationalization-i18n
-  locale: {
-    locale: 'en',
-    fallback: 'en',
-    messages: { en },
-  },
-  // Theme
-  // https://next.vuetifyjs.com/en/features/theme/
-  theme: {
-    defaultTheme: 'dark',
-    themes:{
-        dark:{
-            colors: {
-                //primary: '#009999'
-            }
-        }
-    }
-  },
-  components: {
-    VDataTable
-  }
-});
+    // Internationalization (i18n)
+    // https://next.vuetifyjs.com/en/features/internationalization/#internationalization-i18n
+    locale: {
+        locale: 'en',
+        fallback: 'en',
+        messages: { en },
+    },
+    // Theme
+    // https://next.vuetifyjs.com/en/features/theme/
+    theme: {
+        defaultTheme: 'dark',
+        themes: {
+            dark: {
+                colors: {
+                    //primary: '#009999'
+                },
+            },
+        },
+    },
+    components: {
+        VDataTable,
+    },
+})

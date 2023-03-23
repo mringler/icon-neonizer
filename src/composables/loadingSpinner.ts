@@ -2,9 +2,9 @@ import { ref, inject, provide } from 'vue'
 import type { InjectionKey, Ref } from 'vue'
 
 type LoadingSpinnerData = {
-    setLoading: (value: boolean) => void,
-    withLoading: <T>(loader: () => Promise<T>) => Promise<T>,
-    loadingItems: Ref<number>,
+    setLoading: (value: boolean) => void
+    withLoading: <T>(loader: () => Promise<T>) => Promise<T>
+    loadingItems: Ref<number>
 }
 
 const LoadingSpinnerSymbol: InjectionKey<LoadingSpinnerData> = Symbol.for('inp:loading-spinner')
@@ -34,5 +34,3 @@ export function useLoadingSpinner() {
 
     return loadingSpinnerData
 }
-
-

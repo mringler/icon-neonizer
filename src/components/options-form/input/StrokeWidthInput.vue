@@ -1,15 +1,18 @@
-<script setup  lang="ts">
-import { toRef } from 'vue';
-import { FillStyle } from '@image-tracer/core';
-import type { GradientDrawerOptions } from '@/scripts/background/tracer/svg-drawer/gradient-drawer-options';
+<script setup lang="ts">
+import { toRef } from 'vue'
+import { FillStyle } from '@image-tracer/core'
+import type { GradientDrawerOptions } from '@/scripts/background/tracer/svg-drawer/gradient-drawer-options'
 import { useInputConfig } from '@/composables/inputConfig'
 
-const props = withDefaults(defineProps<{
-    options: GradientDrawerOptions,
-    showHelp: boolean,
-}>(), {
-    showHelp: false
-})
+const props = withDefaults(
+    defineProps<{
+        options: GradientDrawerOptions
+        showHelp: boolean
+    }>(),
+    {
+        showHelp: false,
+    }
+)
 
 const description = 'Stroke width in pixel.'
 const inputConfig = useInputConfig(toRef(props, 'showHelp'), { description })

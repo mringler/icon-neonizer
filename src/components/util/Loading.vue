@@ -1,15 +1,6 @@
-<script setup lang="ts">
-
-</script>
+<script setup lang="ts"></script>
 
 <template>
-
-    <v-progress-circular
-        indeterminate
-        color="primary"
-    />
-
+    <v-progress-circular indeterminate color="primary" />
 </template>
-<style scoped>
-
-</style>
+<style scoped></style>

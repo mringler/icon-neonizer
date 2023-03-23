@@ -4,11 +4,10 @@ import type { GradientDrawerOptions } from '../tracer/svg-drawer/gradient-drawer
 
 const NonIconKey = {
     options: '--options--',
-    blacklistedPages: '--blacklist--'
+    blacklistedPages: '--blacklist--',
 } as const
 
-type NonIconKeyLiteral = typeof NonIconKey[keyof typeof NonIconKey]
-
+type NonIconKeyLiteral = (typeof NonIconKey)[keyof typeof NonIconKey]
 
 type ImageEntry = {
     i: string // icon
@@ -29,19 +28,17 @@ export type ImageDataRecord = {
 const urlPrefixRegex = /^(https?:\/\/)?(www\.)?/
 
 export namespace IconStorage {
-
     function cleanUrl(url: string) {
         return url.replace(urlPrefixRegex, '')
     }
 
-    function restoreUrl(url: string, entry: ImageEntry): string{
-        const protocol = (entry.s === 0) ? 'http' : 'https'
-        const www = (entry.w) ? 'www.' : ''
+    function restoreUrl(url: string, entry: ImageEntry): string {
+        const protocol = entry.s === 0 ? 'http' : 'https'
+        const www = entry.w ? 'www.' : ''
         return `${protocol}://${www}${url}`
     }
 
-    function buildImageEntry(rawUrl: string, icon: string, noAutomaticOverride: boolean | 0 | 1){
-        
+    function buildImageEntry(rawUrl: string, icon: string, noAutomaticOverride: boolean | 0 | 1) {
         const data: ImageEntry = {
             i: LZString.compressToUTF16(icon),
             a: Date.now(),
@@ -49,17 +46,21 @@ export namespace IconStorage {
         if (noAutomaticOverride) {
             data.k = 1
         }
-        if(!rawUrl.startsWith('https://')){
+        if (!rawUrl.startsWith('https://')) {
             data.s = 0
         }
         const hasWWW = /^https?:\/\/www\./.test(rawUrl)
-        if(hasWWW){
+        if (hasWWW) {
             data.w = 1
         }
         return data
     }
 
-    export async function storeIcon(url: string, icon: string, noAutomaticOverride?: boolean | 0 | 1): Promise<void> {
+    export async function storeIcon(
+        url: string,
+        icon: string,
+        noAutomaticOverride?: boolean | 0 | 1
+    ): Promise<void> {
         if (!url) {
             return
         }
@@ -69,17 +70,20 @@ export namespace IconStorage {
             noAutomaticOverride = oldEntry?.k ?? false
         }
         const data = buildImageEntry(url, icon, noAutomaticOverride)
-        await browser.storage.local.set({ [cleanedUrl]: data });
+        await browser.storage.local.set({ [cleanedUrl]: data })
     }
 
     export async function hasIconForUrl(url: string): Promise<boolean> {
         const cleanedUrl = cleanUrl(url)
-        const entry = await browser.storage.local.get(cleanedUrl) as Record<string, ImageEntry | null>
+        const entry = (await browser.storage.local.get(cleanedUrl)) as Record<
+            string,
+            ImageEntry | null
+        >
         return Boolean(entry)
     }
 
     async function loadImageData(url: string): Promise<ImageEntry | undefined> {
-        const data = await browser.storage.local.get(url) as Record<string, ImageEntry>
+        const data = (await browser.storage.local.get(url)) as Record<string, ImageEntry>
         return data[url]
     }
 
@@ -87,29 +91,29 @@ export namespace IconStorage {
         const cleanedUrl = cleanUrl(url)
         const imageEntry = await loadImageData(cleanedUrl)
         if (!imageEntry) {
-            return null//Promise.reject()
+            return null //Promise.reject()
         }
-        const icon = LZString.decompressFromUTF16(imageEntry.i) as string;
+        const icon = LZString.decompressFromUTF16(imageEntry.i) as string
         storeIcon(url, icon, imageEntry.k) // update access data
         return icon
     }
 
     async function loadAllImageData(): Promise<Record<string, ImageEntry>> {
         const storeData = await browser.storage.local.get()
-        Object.values(NonIconKey).forEach((key) => delete (storeData[key]))
+        Object.values(NonIconKey).forEach((key) => delete storeData[key])
         return storeData as Record<string, ImageEntry>
     }
 
     export async function loadAll(): Promise<ImageDataRecord[]> {
         const entries = await loadAllImageData()
-        const encoder = new TextEncoder();
+        const encoder = new TextEncoder()
         return Object.entries(entries).map(([url, data]) => {
             return {
                 url: restoreUrl(url, data),
                 icon: LZString.decompressFromUTF16(data.i) as string,
                 lastAccess: data.a,
                 noAutomaticOverride: Boolean(data.k),
-                size: encoder.encode(data.i).length
+                size: encoder.encode(data.i).length,
             }
         })
     }
@@ -121,24 +125,27 @@ export namespace IconStorage {
 
     export async function cleanup() {
         console.log('RUNNING CLEANUP')
-        const twoWeeksAgo = Date.now() - 12096e5;
+        const twoWeeksAgo = Date.now() - 12096e5
         const entries = await loadAllImageData()
         Object.entries(entries).forEach(([url, data]) => {
-            (!data.k && data.a < twoWeeksAgo) && removeIcon(url)
+            !data.k && data.a < twoWeeksAgo && removeIcon(url)
         })
     }
 
     async function storeNonIcon<ValueType = any>(key: NonIconKeyLiteral, value: ValueType) {
-        return browser.storage.local.set({ [key]: value });
+        return browser.storage.local.set({ [key]: value })
     }
 
-    async function loadNonIcon<ValueType = any>(key: NonIconKeyLiteral, defaultValue?: ValueType): Promise<typeof defaultValue> {
-        const entry = await browser.storage.local.get(key);
-        return entry[key] as ValueType ?? defaultValue
+    async function loadNonIcon<ValueType = any>(
+        key: NonIconKeyLiteral,
+        defaultValue?: ValueType
+    ): Promise<typeof defaultValue> {
+        const entry = await browser.storage.local.get(key)
+        return (entry[key] as ValueType) ?? defaultValue
     }
 
     export async function storeOptions(options: GradientDrawerOptions) {
-        const {verbose, ...storeOptions} = options
+        const { verbose, ...storeOptions } = options
         return storeNonIcon<GradientDrawerOptions>(NonIconKey.options, storeOptions)
     }
 
@@ -146,7 +153,7 @@ export namespace IconStorage {
         return loadNonIcon<GradientDrawerOptions>(NonIconKey.options)
     }
 
-    // Blacklist 
+    // Blacklist
 
     export async function storeBlacklist(blacklist: BlacklistedPage[]) {
         blacklist.sort()
@@ -154,7 +161,9 @@ export namespace IconStorage {
     }
 
     export async function loadBlacklist(): Promise<BlacklistedPage[]> {
-        return loadNonIcon<BlacklistedPage[]>(NonIconKey.blacklistedPages, []) as Promise<BlacklistedPage[]>
+        return loadNonIcon<BlacklistedPage[]>(NonIconKey.blacklistedPages, []) as Promise<
+            BlacklistedPage[]
+        >
     }
 
     /*

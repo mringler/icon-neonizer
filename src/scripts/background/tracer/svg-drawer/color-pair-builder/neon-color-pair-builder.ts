@@ -2,13 +2,6 @@ import { RgbColor, RgbColorData } from "@image-tracer/core";
 import type { HSV } from 'color-functions/dist/rgb2hsv';
 import { ColorPairBuilder } from "./color-pair-builder";
 
-const neonPink = 'rgb(245, 53, 170)';
-const neonRed = 'rgb(247, 33, 25)'; // f72119
-const neonPurple = 'rgb(102,83,255)'
-const neonBlue = 'rgb(31, 81, 255)'
-const neonGreen = 'rgb(15, 255, 80)'
-const neonYellow = `rgb(204, 255, 21)`;
-
 // from https://htmlcolorcodes.com/colors/
 // https://vasilis.nl/nerd/code/human-colours/tests/hue-en-gb.php
 type ColorDef = HSV & RgbColorData & { name: string, hex: string, startHue: number, endHue: number }

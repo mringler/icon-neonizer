@@ -1,14 +1,14 @@
-import { RgbColor, TraceData } from "@image-tracer/core";
-import type { ColorPairBuilder } from "./svg-drawer/color-pair-builder/color-pair-builder";
-import type { GradientBuilder, GradientTags } from "./svg-drawer/gradient-builder/gradient-builder";
-import { GradientDrawerOptions } from "./svg-drawer/gradient-drawer-options";
+import { RgbColor, TraceData } from '@image-tracer/core'
+import type { ColorPairBuilder } from './svg-drawer/color-pair-builder/color-pair-builder'
+import type { GradientBuilder, GradientTags } from './svg-drawer/gradient-builder/gradient-builder'
+import { GradientDrawerOptions } from './svg-drawer/gradient-drawer-options'
 
 type ColorHash = `#${number}`
 type ColorData = {
-    rgb: RgbColor,
-    hash: ColorHash,
-    id: string,
-    gradient: GradientTags,
+    rgb: RgbColor
+    hash: ColorHash
+    id: string
+    gradient: GradientTags
 }
 type ColorMap = Record<string, ColorData>
 type SvgColorElements = SVGPathElement | SVGCircleElement | SVGRectElement
@@ -33,12 +33,12 @@ export namespace SvgColorReplacer {
         const svgNode = svgDocument.querySelector('svg')!
         svgNode.removeAttribute('width')
         svgNode.removeAttribute('height')
-        svgNode.querySelectorAll('style').forEach(style => style.remove())
+        svgNode.querySelectorAll('style').forEach((style) => style.remove())
     }
 
     export function parseSvg(svgString: string): Document {
         const svgDocument = new DOMParser().parseFromString(svgString, 'image/svg+xml')
-        const errorNode = svgDocument.querySelector('parsererror');
+        const errorNode = svgDocument.querySelector('parsererror')
         if (errorNode) {
             throw new Error('Error parsing SVG: ' + errorNode.textContent)
         }
@@ -46,7 +46,9 @@ export namespace SvgColorReplacer {
     }
 
     function insertGradientsIntoSvg(svgDocument: Document, colorMap: ColorMap) {
-        const gradients = Object.values(colorMap).flatMap(colorData => colorData.gradient).join('')
+        const gradients = Object.values(colorMap)
+            .flatMap((colorData) => colorData.gradient)
+            .join('')
         const svgNode = svgDocument.querySelector('svg')
         if (!gradients || !svgNode) {
             return
@@ -56,7 +58,10 @@ export namespace SvgColorReplacer {
         svgNode.prepend(defs)
     }
 
-    function updatePathColors(colorDataBuilder: ColorDataBuilder, paths: NodeListOf<SvgColorElements>): ColorMap {
+    function updatePathColors(
+        colorDataBuilder: ColorDataBuilder,
+        paths: NodeListOf<SvgColorElements>
+    ): ColorMap {
         const colorMap: ColorMap = {}
         const colorProps = ['fill', 'stroke'] as const
         for (let i = 0; i < paths.length; i++) {
@@ -77,14 +82,17 @@ export namespace SvgColorReplacer {
     }
 
     class ColorDataBuilder {
-
         protected colorPairBuilder: ColorPairBuilder
         protected gradientBuilder: GradientBuilder
         protected colorStringToColorData: Record<string, ColorData> = {}
 
         public constructor(svgDom: Document, customOptions?: Partial<GradientDrawerOptions>) {
-            this.colorPairBuilder = GradientDrawerOptions.getColorPairBuilderFromOption(customOptions?.colorBuilder)
-            this.gradientBuilder = GradientDrawerOptions.getGradientBuilderFromOption(customOptions?.gradientBuilder)
+            this.colorPairBuilder = GradientDrawerOptions.getColorPairBuilderFromOption(
+                customOptions?.colorBuilder
+            )
+            this.gradientBuilder = GradientDrawerOptions.getGradientBuilderFromOption(
+                customOptions?.gradientBuilder
+            )
 
             const traceData = this.buildMockTraceData(svgDom)
             this.gradientBuilder.init(traceData, customOptions?.scale ?? 1)
@@ -109,33 +117,40 @@ export namespace SvgColorReplacer {
             if (!this.colorStringToColorData[colorString]) {
                 const rgb = this.colorStringToRgbColor(colorString)
                 const hash = rgb.toCssColorHex()
-                const [id, gradient] = this.gradientBuilder.generateGradient(rgb, this.colorPairBuilder)
+                const [id, gradient] = this.gradientBuilder.generateGradient(
+                    rgb,
+                    this.colorPairBuilder
+                )
                 this.colorStringToColorData[colorString] = { rgb, hash, id, gradient }
             }
             return this.colorStringToColorData[colorString]
         }
 
         protected colorStringToRgbColor(colorString: string): RgbColor {
-            if(colorString.startsWith('#')){
+            if (colorString.startsWith('#')) {
                 return this.hexToRgbA(colorString)
             }
-            const rgba = colorString.split("(")[1].split(")")[0].split(",").map(s => parseInt(s))
+            const rgba = colorString
+                .split('(')[1]
+                .split(')')[0]
+                .split(',')
+                .map((s) => parseInt(s))
             return new RgbColor(...rgba)
         }
 
         protected hexToRgbA(hex: string) {
             if (!/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
-                throw new Error('Bad Hex');
+                throw new Error('Bad Hex')
             }
-            let chars = hex.substring(1).split('');
+            let chars = hex.substring(1).split('')
             if (chars.length < 6) {
-                chars = chars.flatMap(c => [c,c])
+                chars = chars.flatMap((c) => [c, c])
             }
             if (chars.length < 8) {
                 chars.push('ff')
             }
-            const val = Number('0x' + chars.join(''));
-            const rgba = Array.from({length: 4}, (_,i) => (val >> (8 * (3 - i))) & 255)
+            const val = Number('0x' + chars.join(''))
+            const rgba = Array.from({ length: 4 }, (_, i) => (val >> (8 * (3 - i))) & 255)
             return new RgbColor(...rgba)
         }
     }

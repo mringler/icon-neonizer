@@ -1,5 +1,4 @@
-<script setup lang="ts">
-</script>
+<script setup lang="ts"></script>
 
 <template>
     <v-tooltip
@@ -11,7 +10,6 @@
         v-bind="$attrs"
     >
         <template v-slot:activator="{ props }">
-
             <v-icon
                 v-bind="props"
                 color="primary"
@@ -20,6 +18,6 @@
             <!--v-btn icon="mdi-help" v-bind="props" size="small"/-->
         </template>
         <slot />
-
-</v-tooltip></template>
+    </v-tooltip>
+</template>
 <style scoped></style>

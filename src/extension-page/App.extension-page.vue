@@ -2,58 +2,47 @@
 import { ref } from 'vue'
 import AppBar from '@/components/util/AppBar.vue'
 import NavigationDrawer from '@/components/util/NavigationDrawer.vue'
-import Confirmation from '@/components/util/Confirmation.vue';
-import { createConfirmationDialog } from '@/composables/confirmDialog';
-import { createLoadingSpinner } from '@/composables/loadingSpinner';
+import Confirmation from '@/components/util/Confirmation.vue'
+import { createConfirmationDialog } from '@/composables/confirmDialog'
+import { createLoadingSpinner } from '@/composables/loadingSpinner'
 
 const loadingItems = createLoadingSpinner()
 const confirmProps = createConfirmationDialog()
 const showDrawer = ref(true)
 
 const navigationItems = [
-  { title: 'Page Icon', type: 'subheader' },
-  { title: 'Trace', value: 'trace', props: { to: '/', prependIcon: 'mdi-draw' } },
-  { title: 'Edit', value: 'edit', props: { to: '/edit-current', prependIcon: 'mdi-pen' } },
-  { title: 'Management', type: 'subheader' },
-  { title: 'Storage', value: 'storage', props: { to: '/storage', prependIcon: 'mdi-database' } },
-  { title: 'Blacklist', value: 'blacklist', props: { to: '/blacklist', prependIcon: 'mdi-cancel' } },
+    { title: 'Page Icon', type: 'subheader' },
+    { title: 'Trace', value: 'trace', props: { to: '/', prependIcon: 'mdi-draw' } },
+    { title: 'Edit', value: 'edit', props: { to: '/edit-current', prependIcon: 'mdi-pen' } },
+    { title: 'Management', type: 'subheader' },
+    { title: 'Storage', value: 'storage', props: { to: '/storage', prependIcon: 'mdi-database' } },
+    {
+        title: 'Blacklist',
+        value: 'blacklist',
+        props: { to: '/blacklist', prependIcon: 'mdi-cancel' },
+    },
 ]
-
 </script>
 
 <template>
-  <v-app>
+    <v-app>
+        <AppBar @toggleNavigation="showDrawer = !showDrawer" />
 
-    <AppBar @toggleNavigation="showDrawer = !showDrawer" />
+        <NavigationDrawer :items="navigationItems" v-model="showDrawer" />
 
-    <NavigationDrawer
-      :items="navigationItems"
-      v-model="showDrawer"
-    />
+        <v-main>
+            <v-progress-linear indeterminate color="purple" v-if="loadingItems > 0" />
 
-    <v-main>
-      <v-progress-linear
-        indeterminate
-        color="purple"
-        v-if="loadingItems > 0"
-      />
-      
-      <v-container
-        fluid
-        tag="section"
-      >
-        <router-view></router-view>
-      </v-container>
-    </v-main>
+            <v-container fluid tag="section">
+                <router-view></router-view>
+            </v-container>
+        </v-main>
 
-    <Confirmation
-      :showConfirm="Boolean(confirmProps)"
-      @update:showConfirm="confirmProps = null"
-      v-bind="confirmProps"
-    />
-
-  </v-app>
+        <Confirmation
+            :showConfirm="Boolean(confirmProps)"
+            @update:showConfirm="confirmProps = null"
+            v-bind="confirmProps"
+        />
+    </v-app>
 </template>
-<style scoped>
-
-</style>
+<style scoped></style>

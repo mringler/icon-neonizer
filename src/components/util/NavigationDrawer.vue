@@ -1,10 +1,7 @@
 <script setup lang="ts">
-
-
 type Item = any // TODO get from Vuetify
-type Props = {items: Item[]}
+type Props = { items: Item[] }
 const props = defineProps<Props>()
-
 </script>
 
 <template>
@@ -14,10 +11,6 @@ const props = defineProps<Props>()
         app
     >
         <v-list :items="props.items"></v-list>
-
     </v-navigation-drawer>
-
 </template>
-<style scoped>
-
-</style>
+<style scoped></style>

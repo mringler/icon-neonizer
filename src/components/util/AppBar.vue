@@ -1,6 +1,5 @@
 <script setup lang="ts">
-
-function reloadBackground(){
+function reloadBackground() {
     browser.runtime.reload()
 }
 </script>
@@ -23,13 +22,12 @@ function reloadBackground(){
 
         <v-spacer></v-spacer>
 
-        <v-btn icon @click="reloadBackground">
+        <v-btn
+            icon
+            @click="reloadBackground"
+        >
             <v-icon>mdi-reload</v-icon>
         </v-btn>
-
     </v-app-bar>
-
 </template>
-<style scoped>
-
-</style>
+<style scoped></style>

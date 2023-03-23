@@ -1,16 +1,14 @@
-import { GradientPoints, GradientBuilder } from "./gradient-builder";
+import { GradientPoints, GradientBuilder } from './gradient-builder'
 
-
-export class GradientBuilderFixed extends GradientBuilder{
-
+export class GradientBuilderFixed extends GradientBuilder {
     protected gradientPoints!: GradientPoints
 
-    public constructor(){
+    public constructor() {
         super()
         this.gradientPoints = super.selectGradientPoints()
     }
 
-    protected selectGradientPoints(): GradientPoints{
-        return this.gradientPoints;
+    protected selectGradientPoints(): GradientPoints {
+        return this.gradientPoints
     }
 }

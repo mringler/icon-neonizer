@@ -1,16 +1,20 @@
-<script setup  lang="ts">
-import { toRef } from 'vue';
-import type { GradientDrawerOptions } from '@/scripts/background/tracer/svg-drawer/gradient-drawer-options';
+<script setup lang="ts">
+import { toRef } from 'vue'
+import type { GradientDrawerOptions } from '@/scripts/background/tracer/svg-drawer/gradient-drawer-options'
 import { useInputConfig } from '@/composables/inputConfig'
 
-const props = withDefaults(defineProps<{
-    options: GradientDrawerOptions,
-    showHelp: boolean,
-}>(), {
-    showHelp: false
-})
+const props = withDefaults(
+    defineProps<{
+        options: GradientDrawerOptions
+        showHelp: boolean
+    }>(),
+    {
+        showHelp: false,
+    }
+)
 
-const description = 'Defines how far (in pixels) a straight line element can deviate from the traced pixel line before it is broken up into multiple line elements.'
+const description =
+    'Defines how far (in pixels) a straight line element can deviate from the traced pixel line before it is broken up into multiple line elements.'
 const inputConfig = useInputConfig(toRef(props, 'showHelp'), { description })
 </script>
 

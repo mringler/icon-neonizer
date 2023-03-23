@@ -1,15 +1,14 @@
 import { InlineImageLoader } from '@/scripts/background/inline-image-loader'
 import { ImageLoader } from '@image-tracer/browser'
-import { ref, Ref, isRef, unref, watchEffect } from 'vue'
+import { ref, Ref, isRef, watchEffect } from 'vue'
 import { useSrcUrl } from './srcUrl'
 
 export function useImageData(url: string | Ref<string>): Ref<Promise<ImageData> | null> {
-    
     const urlPromise = useSrcUrl(url)
 
-    async function loadImageData() : Promise<ImageData>{
+    async function loadImageData(): Promise<ImageData> {
         const resolvedUrl = await urlPromise.value
-        if (!resolvedUrl){
+        if (!resolvedUrl) {
             return Promise.reject()
         }
         if (!resolvedUrl.startsWith('data:image')) {

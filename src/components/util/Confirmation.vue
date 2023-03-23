@@ -1,20 +1,19 @@
 <script setup lang="ts">
-
 export interface ConfirmProps {
-    title?: string,
-    message?: string,
-    onCancel?: Function,
-    onConfirm?: Function,
-    confirmText?: string,
-    cancelText?: string,
+    title?: string
+    message?: string
+    onCancel?: Function
+    onConfirm?: Function
+    confirmText?: string
+    cancelText?: string
 }
 interface Props extends ConfirmProps {
-    showConfirm: boolean,
+    showConfirm: boolean
 }
 const props = withDefaults(defineProps<Props>(), {
     cancelText: 'cancel',
     confirmText: 'confirm',
-});
+})
 
 const emit = defineEmits(['update:showConfirm'])
 
@@ -30,21 +29,23 @@ function confirm() {
     props.onConfirm && props.onConfirm()
     emitClose()
 }
-
 </script>
 
 <template>
     <v-dialog
         :model-value="props.showConfirm"
-        @update:model-value="value => emit('update:showConfirm', value)"
+        @update:model-value="(value) => emit('update:showConfirm', value)"
         persistent
     >
         <template v-slot:activator="{ props }">
-            <slot name="activator" v-bind="props"/>
+            <slot
+                name="activator"
+                v-bind="props"
+            />
         </template>
         <v-card
             class="align-self-center"
-            style="width: fit-content;"
+            style="width: fit-content"
             :title="props.title"
             :text="props.message"
         >
@@ -67,9 +68,6 @@ function confirm() {
             </v-card-actions>
         </v-card>
     </v-dialog>
-
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

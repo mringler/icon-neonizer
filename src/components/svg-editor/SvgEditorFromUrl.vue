@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { ref, Ref, watch, watchEffect } from 'vue'
-import Heading from '@/components/util/Heading.vue';
-import { IconStorage } from '@/scripts/background/storage/icon-storage';
-import SvgEditor from './SvgEditor.vue';
-import { useLoadingIndicator } from '@/composables/loadingIndicator';
-import { Blacklist, BlacklistedPage } from '@/scripts/background/storage/blacklist';
+import { ref, Ref, watchEffect } from 'vue'
+import Heading from '@/components/util/Heading.vue'
+import { IconStorage } from '@/scripts/background/storage/icon-storage'
+import SvgEditor from './SvgEditor.vue'
+import { useLoadingIndicator } from '@/composables/loadingIndicator'
+import { Blacklist, BlacklistedPage } from '@/scripts/background/storage/blacklist'
 
 const props = defineProps<{
-    url: string,
+    url: string
     isLocked?: boolean
 }>()
 
@@ -16,14 +16,16 @@ const blacklistEntry: Ref<BlacklistedPage | undefined> = ref(undefined)
 const { loading, indicateLoading } = useLoadingIndicator()
 
 watchEffect(async () => {
-    indicateLoading(async () => svg.value = await IconStorage.loadIcon(props.url))
+    indicateLoading(async () => (svg.value = await IconStorage.loadIcon(props.url)))
     blacklistEntry.value = await Blacklist.getBlacklistEntry(props.url)
 })
-
 </script>
 
 <template>
-    <section tag="section" v-if="!loading">
+    <section
+        tag="section"
+        v-if="!loading"
+    >
         <Heading>Edit SVG</Heading>
         <div class="text-subtitle-1">Manually edit the replacement icon SVG.</div>
 
@@ -37,9 +39,8 @@ watchEffect(async () => {
         >
             <template v-if="blacklistEntry.replacementUrl">
                 Icon is blacklisted and replaced by another URL.
-                <router-link
-                    :to="{ name: 'edit-by-url', params: { url: blacklistEntry.replacementUrl } }"
-                >Edit replacement icon instead.</router-link>
+                <router-link :to="{ name: 'edit-by-url', params: { url: blacklistEntry.replacementUrl } }">Edit replacement
+                    icon instead.</router-link>
             </template>
             <template v-else>Icon is blacklisted and will not be replaced.</template>
         </v-alert>

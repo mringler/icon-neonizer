@@ -1,12 +1,12 @@
-import { ScriptsApi, buildApi } from "../ApiInterfaces";
-import { InlineImageLoader } from "./inline-image-loader";
-import { Blacklist } from "./storage/blacklist";
-import { IconStorage } from "./storage/icon-storage";
-import { SvgColorReplacer } from "./tracer/svg-color-replacer";
-import type { GradientDrawerOptions } from "./tracer/svg-drawer/gradient-drawer-options";
-import { Tracer } from "./tracer/tracer";
+import { ScriptsApi, buildApi } from '../ApiInterfaces'
+import { InlineImageLoader } from './inline-image-loader'
+import { Blacklist } from './storage/blacklist'
+import { IconStorage } from './storage/icon-storage'
+import { SvgColorReplacer } from './tracer/svg-color-replacer'
+import type { GradientDrawerOptions } from './tracer/svg-drawer/gradient-drawer-options'
+import { Tracer } from './tracer/tracer'
 
-export type BackgroundApiInterface = ScriptsApi<typeof backgroundApi>;
+export type BackgroundApiInterface = ScriptsApi<typeof backgroundApi>
 
 export async function initBackgroundApi() {
     buildApi(backgroundApi)
@@ -20,10 +20,14 @@ const backgroundApi = {
     getStoredIcons: IconStorage.loadAll,
     removeIcon: IconStorage.removeIcon,
     getOptions: Tracer.getOptions,
-    traceWithOptions
+    traceWithOptions,
 }
 
-async function processIconUrl(iconUrl: string, force = false, store = true): Promise<string | null> {
+async function processIconUrl(
+    iconUrl: string,
+    force = false,
+    store = true
+): Promise<string | null> {
     return processIconData(iconUrl, () => traceByUrl(iconUrl), force, store)
 }
 
@@ -32,28 +36,28 @@ async function processInlineData(inlineData: string, url: string, force = false,
 }
 
 async function traceWithOptions(iconUrl: string, customOptions?: Partial<GradientDrawerOptions>) {
-    return (iconUrl.startsWith('data:image')) ?
-        traceInlineData(iconUrl, customOptions):
-        traceByUrl(iconUrl, customOptions)
+    return iconUrl.startsWith('data:image')
+        ? traceInlineData(iconUrl, customOptions)
+        : traceByUrl(iconUrl, customOptions)
 }
 
 async function traceInlineData(inlineData: string, customOptions?: Partial<GradientDrawerOptions>) {
     const [contentType, data] = InlineImageLoader.parseIcon(inlineData)
     if (!data) {
-        throw new Error('No data from inlineData'+ inlineData)
+        throw new Error('No data from inlineData' + inlineData)
     }
-    return (contentType === 'data:image/svg+xml') ?
-        SvgColorReplacer.replaceColorsInSvg(data, customOptions) :
-        Tracer.traceBuffer(new TextEncoder().encode(data), customOptions)
+    return contentType === 'data:image/svg+xml'
+        ? SvgColorReplacer.replaceColorsInSvg(data, customOptions)
+        : Tracer.traceBuffer(new TextEncoder().encode(data), customOptions)
 }
 
 async function traceByUrl(iconUrl: string, customOptions?: Partial<GradientDrawerOptions>) {
     const response = await fetch(iconUrl)
     if (!response.ok) {
-        throw new Error('Failed to load image from url ' + iconUrl);
+        throw new Error('Failed to load image from url ' + iconUrl)
     }
 
-    const arrayBuffer = await response.arrayBuffer();
+    const arrayBuffer = await response.arrayBuffer()
 
     const contentType = response.headers.get('content-type')
     if (contentType !== 'image/svg+xml') {
@@ -64,14 +68,19 @@ async function traceByUrl(iconUrl: string, customOptions?: Partial<GradientDrawe
     return SvgColorReplacer.replaceColorsInSvg(svgString, customOptions)
 }
 
-async function processIconData(iconUrl: string, loader: (() => Promise<string> | string), force = false, store = true): Promise<string | null> {
+async function processIconData(
+    iconUrl: string,
+    loader: () => Promise<string> | string,
+    force = false,
+    store = true
+): Promise<string | null> {
     const blacklistEntry = await Blacklist.getBlacklistEntry(iconUrl)
     if (blacklistEntry?.replacementUrl) {
         iconUrl = blacklistEntry.replacementUrl
     }
-    let icon = await IconStorage.loadIcon(iconUrl);
+    let icon = await IconStorage.loadIcon(iconUrl)
     if (icon && !force) {
-        return icon;
+        return icon
     }
 
     if (blacklistEntry) {
@@ -84,6 +93,6 @@ async function processIconData(iconUrl: string, loader: (() => Promise<string> |
         console.log(`Error tracing ${iconUrl}`, e)
         return null
     }
-    store && IconStorage.storeIcon(iconUrl, icon);
-    return icon;
+    store && IconStorage.storeIcon(iconUrl, icon)
+    return icon
 }

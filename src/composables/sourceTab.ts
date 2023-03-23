@@ -4,13 +4,14 @@ import { loadOpenerTab } from '@/util/active-tab'
 import { callContentApi } from '@/util/content-api-caller'
 
 const SourceTabSymbol: InjectionKey<{
-    sourceTab: Ref<browser.tabs.Tab | null>,
-    sourceIconUrl: Ref<string | null>,
-    loading: Ref<boolean>,
+    sourceTab: Ref<browser.tabs.Tab | null>
+    sourceIconUrl: Ref<string | null>
+    loading: Ref<boolean>
 }> = Symbol.for('inp:source-tab')
 
-export function createSourceTab(onLoadedCallback: (sourceTab: browser.tabs.Tab|null, sourceIconUrl: string|null) => unknown) {
-
+export function createSourceTab(
+    onLoadedCallback: (sourceTab: browser.tabs.Tab | null, sourceIconUrl: string | null) => unknown
+) {
     const sourceTab: Ref<browser.tabs.Tab | null> = ref(null)
     const sourceIconUrl: Ref<string | null> = ref(null)
     const loading = ref(true)

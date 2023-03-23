@@ -1,19 +1,19 @@
 <script setup lang="ts">
 import { ref, Ref, toRef, onBeforeMount, toRaw, computed, ComputedRef } from 'vue'
 import OptionsFormCard from '@/components/options-form/OptionsFormCard.vue'
-import { callBackgroundApi } from '@/util/background-api-caller';
-import AlertSnackbar from '@/components/util/AlertSnackbar.vue';
-import { IconStorage } from '@/scripts/background/storage/icon-storage';
-import FaviconImg from '@/components/image-display/FaviconImg.vue';
-import FaviconSvg from '@/components/image-display/FaviconSvg.vue';
-import FaviconStored from '@/components/image-display/FaviconStored.vue';
-import Heading from '@/components/util/Heading.vue';
-import type { GradientDrawerOptions } from '@/scripts/background/tracer/svg-drawer/gradient-drawer-options';
-import { Favicon } from '@/scripts/content/favicon';
+import { callBackgroundApi } from '@/util/background-api-caller'
+import AlertSnackbar from '@/components/util/AlertSnackbar.vue'
+import { IconStorage } from '@/scripts/background/storage/icon-storage'
+import FaviconImg from '@/components/image-display/FaviconImg.vue'
+import FaviconSvg from '@/components/image-display/FaviconSvg.vue'
+import FaviconStored from '@/components/image-display/FaviconStored.vue'
+import Heading from '@/components/util/Heading.vue'
+import type { GradientDrawerOptions } from '@/scripts/background/tracer/svg-drawer/gradient-drawer-options'
+import { Favicon } from '@/scripts/content/favicon'
 import { useImageData } from '@/composables/imageData'
-import { useSrcUrl } from '@/composables/srcUrl';
-import TracedImageInfo from '@/components/image-display/TracedImageInfo.vue';
-import { useTracedSvg } from '@/composables/tracedSvg';
+import { useSrcUrl } from '@/composables/srcUrl'
+import TracedImageInfo from '@/components/image-display/TracedImageInfo.vue'
+import { useTracedSvg } from '@/composables/tracedSvg'
 
 type Props = {
     url: string
@@ -26,45 +26,51 @@ const tracedSvg: Ref<string | undefined> = ref()
 const errorMessage: Ref<string | null> = ref(null)
 const saveCount = ref(0)
 const useFallback = ref(false)
-const imageDataLoader: ComputedRef<() => Promise<ImageData>> = computed(() => async () => useImageData(url.value).value!)
-const url = computed(() => useFallback.value ? Favicon.getGoogleApiUrl(new URL(props.url).host) + '&passFilter=1' : props.url)
+const imageDataLoader: ComputedRef<() => Promise<ImageData>> = computed(
+    () => async () => useImageData(url.value).value!
+)
+const url = computed(() =>
+    useFallback.value
+        ? Favicon.getGoogleApiUrl(new URL(props.url).host) + '&passFilter=1'
+        : props.url
+)
 
-const { svg: storedSvg, reload: reloadStored, blacklistEntry} = useTracedSvg(toRef(props, 'url'))
-
+const { svg: storedSvg, reload: reloadStored, blacklistEntry } = useTracedSvg(toRef(props, 'url'))
 
 onBeforeMount(async () => {
-    options.value = await callBackgroundApi('getOptions', []);
+    options.value = await callBackgroundApi('getOptions', [])
 })
 
 const retrace = async () => {
     try {
         const resolvedUrl = await useSrcUrl(url.value).value
-        tracedSvg.value = await callBackgroundApi('traceWithOptions', [resolvedUrl, toRaw(options.value)])
+        tracedSvg.value = await callBackgroundApi('traceWithOptions', [
+            resolvedUrl,
+            toRaw(options.value),
+        ])
     } catch (e) {
-        errorMessage.value = e as string;
+        errorMessage.value = e as string
         throw e
     }
 }
 
 const save = async () => {
-    if (!url || !tracedSvg.value) {
-        errorMessage.value = 'Could not save icon - no url or icon';
+    if (!url.value || !tracedSvg.value) {
+        errorMessage.value = 'Could not save icon - no url or icon'
         return
     }
     await IconStorage.storeIcon(props.url, tracedSvg.value)
-    errorMessage.value = 'Icon updated';
+    errorMessage.value = 'Icon updated'
     saveCount.value++
     reloadStored()
     emit('update:svg', tracedSvg.value)
 }
-
 
 const iconCols = {
     cols: 4,
     md: 3,
     xl: 2,
 }
-
 </script>
 
 <template>
@@ -72,7 +78,8 @@ const iconCols = {
         <Heading>Trace Icon</Heading>
         <div class="text-subtitle-1">Trace source icon with custom parameters.</div>
 
-        <v-alert v-if="blacklistEntry"
+        <v-alert
+            v-if="blacklistEntry"
             class="my-3"
             icon="mdi-alert-circle"
             :title="blacklistEntry.replacementUrl ? 'Redirected URL' : 'Blacklisted URL'"
@@ -80,17 +87,16 @@ const iconCols = {
             variant="outlined"
         >
             <template v-if="blacklistEntry.replacementUrl">
-                Icon is blacklisted and replaced by another URL. 
-                <router-link :to="{ name: 'trace-by-url', params: { url: blacklistEntry.replacementUrl } }">Trace replacement icon instead.</router-link> 
+                Icon is blacklisted and replaced by another URL.
+                <router-link :to="{ name: 'trace-by-url', params: { url: blacklistEntry.replacementUrl } }">Trace
+                    replacement icon instead.</router-link>
             </template>
             <template v-else>Icon is blacklisted and will not be replaced.</template>
         </v-alert>
 
         <v-container>
             <v-row class="icon-row">
-
                 <v-col v-bind="iconCols">
-
                     <div class="text-subtitle-1">Source Icon</div>
 
                     <FaviconImg :src="url" />
@@ -111,7 +117,6 @@ const iconCols = {
                 </v-col>
 
                 <v-col v-bind="iconCols">
-
                     <div class="text-subtitle-1">Stored Icon</div>
 
                     <FaviconStored
@@ -126,7 +131,6 @@ const iconCols = {
                 </v-col>
 
                 <v-col v-bind="iconCols">
-
                     <div class="text-subtitle-1">Traced Icon</div>
 
                     <FaviconSvg :svg="tracedSvg">
@@ -134,7 +138,6 @@ const iconCols = {
                     </FaviconSvg>
 
                     <TracedImageInfo :tracedSvg="tracedSvg" />
-
                 </v-col>
             </v-row>
 
@@ -156,14 +159,15 @@ const iconCols = {
 
                     <v-btn
                         :disabled="!tracedSvg"
-                        :to="tracedSvg ? { name: 'edit-svg', params: { svg: tracedSvg, url: props.url } } : {}"
+                        :to="
+                            tracedSvg
+                                ? { name: 'edit-svg', params: { svg: tracedSvg, url: props.url } }
+                                : {}
+                        "
                     >edit</v-btn>
                 </template>
             </OptionsFormCard>
-
-
         </v-container>
-
     </section>
 
     <AlertSnackbar v-model:message="errorMessage" />

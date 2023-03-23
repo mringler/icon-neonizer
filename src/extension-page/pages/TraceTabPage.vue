@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import TraceUrlPage from './TraceUrlPage.vue';
-import SourceTabProvider from '@/components/util/SourceTabProvider.vue';
+import TraceUrlPage from './TraceUrlPage.vue'
+import SourceTabProvider from '@/components/util/SourceTabProvider.vue'
 </script>
 
 <template>
@@ -14,6 +14,4 @@ import SourceTabProvider from '@/components/util/SourceTabProvider.vue';
         />
     </SourceTabProvider>
 </template>
-<style scoped>
-
-</style>
+<style scoped></style>

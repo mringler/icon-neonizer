@@ -1,32 +1,32 @@
-<script setup  lang="ts">
-import { toRef } from 'vue';
-import type { GradientDrawerOptions } from '@/scripts/background/tracer/svg-drawer/gradient-drawer-options';
-import { CreatePaletteMode, RgbColor } from '@image-tracer/core';
-import SelectedColorChips from '../color-picker/SelectedColorChips.vue';
-import ImagePixelColorPickerPopup from '../color-picker/ImagePixelColorPickerPopup.vue';
-import { useInputConfig } from '@/composables/inputConfig'
+<script setup lang="ts">
+import type { GradientDrawerOptions } from '@/scripts/background/tracer/svg-drawer/gradient-drawer-options'
+import { CreatePaletteMode, RgbColor } from '@image-tracer/core'
+import SelectedColorChips from '../color-picker/SelectedColorChips.vue'
+import ImagePixelColorPickerPopup from '../color-picker/ImagePixelColorPickerPopup.vue'
 
-const props = withDefaults(defineProps<{
-    options: GradientDrawerOptions,
-    showHelp: boolean,
-    imageData?: ImageData | (() => Promise<ImageData>),
-    noAutoOpen?: boolean,
-}>(), {
-    showHelp: false
-})
+const props = withDefaults(
+    defineProps<{
+        options: GradientDrawerOptions
+        showHelp: boolean
+        imageData?: ImageData | (() => Promise<ImageData>)
+        noAutoOpen?: boolean
+    }>(),
+    {
+        showHelp: false,
+    }
+)
 
-const description = 'Pick target colors from the source image.'
-const inputConfig = useInputConfig(toRef(props, 'showHelp'), {description})
+//const description = 'Pick target colors from the source image.'
 
 function autoOpenColorPicker(): boolean {
-    return !props.noAutoOpen && !Boolean(props.options.palette?.length)
+    return !props.noAutoOpen && !props.options.palette?.length
 }
 
-function updateColorMode(colors: RgbColor[]){
-    if(colors.length > 0){
-        props.options.colorsampling = CreatePaletteMode.PALETTE
-    } else if (props.noAutoOpen){
-        props.options.colorsampling = CreatePaletteMode.SCAN
+function updateColorMode(colors: RgbColor[]) {
+    if (colors.length > 0) {
+        props.options.colorSamplingMode = CreatePaletteMode.PALETTE
+    } else if (props.noAutoOpen) {
+        props.options.colorSamplingMode = CreatePaletteMode.SCAN
     }
     props.options.palette = colors
 }

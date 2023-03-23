@@ -1,5 +1,4 @@
 export namespace Favicon {
-
     export function getPageFaviconHref(dom?: Document): string | undefined {
         const element = getLargestFaviconHtmlElement(dom)
         if (!element) {
@@ -8,7 +7,7 @@ export namespace Favicon {
         if (element.dataset.oldHref) {
             return element.dataset.oldHref
         }
-        return element.href?.trim();
+        return element.href?.trim()
     }
 
     export function getGoogleApiUrl(domain: string | undefined): string {
@@ -17,34 +16,38 @@ export namespace Favicon {
     }
 
     function getFaviconHtmlElement(): HTMLLinkElement | null {
-        return document.querySelector<HTMLLinkElement>("link[rel~='icon']");
+        return document.querySelector<HTMLLinkElement>('link[rel~="icon"]')
     }
 
     function getFaviconHtmlElements(dom = document): NodeListOf<HTMLLinkElement> {
-        return dom.querySelectorAll<HTMLLinkElement>("link[rel~='icon']"); // "link[rel$='icon'], link[rel~='image_src']"
+        return dom.querySelectorAll<HTMLLinkElement>('link[rel~="icon"]') // "link[rel$='icon'], link[rel~='image_src']"
     }
 
     export function urlIsFavicon(url: string): boolean {
         const urlEnd = url.replace(/https?:\/\/[^\/]+\//, '/')
-        return Boolean(document.querySelector<HTMLLinkElement>(`link[rel~='icon'][href$="${urlEnd}"]`));
+        return Boolean(
+            document.querySelector<HTMLLinkElement>(`link[rel~='icon'][href$="${urlEnd}"]`)
+        )
     }
 
     export function fixupForFilteredUrl(url: string) {
         const urlEnd = url.replace(/https?:\/\/[^\/]+\//, '/')
-        const nodes = document.querySelectorAll<HTMLLinkElement>(`link[rel~='icon'][href$="${urlEnd}"]`)
-        nodes.forEach(node => {
+        const nodes = document.querySelectorAll<HTMLLinkElement>(
+            `link[rel~='icon'][href$="${urlEnd}"]`
+        )
+        nodes.forEach((node) => {
             node.type = 'image/svg+xml'
-            node.dataset.neFilter = "1"
+            node.dataset.neFilter = '1'
         })
     }
 
-    export function urlIsHandledByFilter(url: string): boolean {
-        const links = document.querySelectorAll<HTMLLinkElement>(`link[rel~='icon']`)
+    export function urlIsHandledByFilter(): boolean {
+        const links = document.querySelectorAll<HTMLLinkElement>('link[rel~="icon"]')
         if (links.length === 0) {
             return true
         }
-        for(let i = 0; i < links.length; i++){
-            if(links[i].dataset.neFilter){
+        for (let i = 0; i < links.length; i++) {
+            if (links[i].dataset.neFilter) {
                 return true
             }
         }
@@ -52,18 +55,19 @@ export namespace Favicon {
     }
 
     export function urlIsReplaced(): boolean {
-        return Boolean(document.querySelector<HTMLLinkElement>(`link[rel~='icon'][data-old-href]`));
+        return Boolean(document.querySelector<HTMLLinkElement>('link[rel~="icon"][data-old-href]'))
     }
 
     function getLargestFaviconHtmlElement(dom?: Document): HTMLLinkElement | null {
-        const nodes = getFaviconHtmlElements(dom);
+        const nodes = getFaviconHtmlElements(dom)
         if (nodes.length === 0) {
             return null
         }
         if (nodes.length === 1) {
             return nodes[0]
         }
-        let foundSize = 0, foundIx = 0;
+        let foundSize = 0,
+            foundIx = 0
         for (let elementIx = 0; elementIx < nodes.length; elementIx++) {
             const node = nodes[elementIx]
             const sizes = node.sizes
@@ -73,19 +77,19 @@ export namespace Favicon {
             for (let sizeIx = 0; sizeIx < sizes.length; sizeIx++) {
                 const size = parseInt(sizes[sizeIx].toLowerCase().split('x')[0])
                 if (size <= foundSize) {
-                    continue;
+                    continue
                 }
 
-                foundSize = size;
-                foundIx = elementIx;
-                break;
+                foundSize = size
+                foundIx = elementIx
+                break
             }
         }
-        return nodes[foundIx];
+        return nodes[foundIx]
     }
 
     export function setBase64Icon(base64Icon: string): void {
-        const linkElement = getFaviconHtmlElement();
+        const linkElement = getFaviconHtmlElement()
         if (!linkElement) {
             return
         }
@@ -97,40 +101,39 @@ export namespace Favicon {
     }
 
     export function svgToHref(svgString: string): string {
-        return 'data:image/svg+xml,' + encodeURIComponent(svgString);
+        return 'data:image/svg+xml,' + encodeURIComponent(svgString)
     }
 
     function updateLinkElements(svgString: string) {
         if (!document.head || !svgString) {
-            return;
+            return
         }
 
         const href = svgToHref(svgString)
-        const elements = getFaviconHtmlElements();
+        const elements = getFaviconHtmlElements()
         if (elements.length === 0) {
-            const linkElement = document.createElement('link');
-            linkElement.rel = 'icon';
-            fixupLinkElement(linkElement, href);
-            document.head.appendChild(linkElement);
-            linkElement.dataset.oldHref = "none"
-            return;
+            const linkElement = document.createElement('link')
+            linkElement.rel = 'icon'
+            fixupLinkElement(linkElement, href)
+            document.head.appendChild(linkElement)
+            linkElement.dataset.oldHref = 'none'
+            return
         }
         for (let i = 0; i < elements.length; i++) {
             const element = elements[i]
-            fixupLinkElement(element, href);
+            fixupLinkElement(element, href)
             document.head.appendChild(element)
         }
     }
 
     function fixupLinkElement(linkElement: HTMLLinkElement, href: string): void {
         if (!linkElement.dataset.oldHref && linkElement.href) {
-            linkElement.dataset.oldHref = linkElement.href;
+            linkElement.dataset.oldHref = linkElement.href
         }
-        linkElement.type = 'image/svg+xml';
-        linkElement.href = href;
+        linkElement.type = 'image/svg+xml'
+        linkElement.href = href
         if (linkElement.sizes) {
-            linkElement.sizes.add('any');
+            linkElement.sizes.add('any')
         }
     }
-
 }

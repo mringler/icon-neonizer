@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watchEffect } from 'vue'
-import type { RgbColor } from '@image-tracer/core';
-import ColorPickerCard from './ColorPickerCard.vue';
+import type { RgbColor } from '@image-tracer/core'
+import ColorPickerCard from './ColorPickerCard.vue'
 
 type Props = {
     showPicker?: boolean
@@ -12,19 +12,19 @@ type Props = {
 }
 const props = withDefaults(defineProps<Props>(), {
     colors: () => [] as RgbColor[],
-});
+})
 
 const isAddOpen = ref(false)
-watchEffect(() => (props.showPicker !== undefined) && (isAddOpen.value = props.showPicker) )
+watchEffect(() => props.showPicker !== undefined && (isAddOpen.value = props.showPicker))
 
 const emit = defineEmits(['update:colors', 'doAdd', 'update:showPicker'])
 
-function emitUpdate(colors: RgbColor[]){
+function emitUpdate(colors: RgbColor[]) {
     emit('update:colors', colors)
 }
 
 function addColor(color: RgbColor) {
-    if (props.unique && props.colors.some(existing => existing.equals(color))) {
+    if (props.unique && props.colors.some((existing) => existing.equals(color))) {
         return
     }
     emitUpdate(props.colors.concat([color]))
@@ -45,7 +45,6 @@ function showAdd(value = true) {
     isAddOpen.value = value
     emit('update:showPicker', value)
 }
-
 </script>
 
 <template>
@@ -62,7 +61,9 @@ function showAdd(value = true) {
             <span
                 class="swatch"
                 :style="{ backgroundColor: color.toCssColorHex() }"
-            />{{ color.toCssColorHex() }}
+            />{{
+                color.toCssColorHex()
+            }}
         </v-chip>
         <v-chip
             v-if="!props.noAdd"

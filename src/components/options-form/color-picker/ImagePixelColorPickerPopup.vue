@@ -1,25 +1,24 @@
 <script setup lang="ts">
-
-import { watch, ref, Ref } from 'vue';
-import type { RgbColor } from '@image-tracer/core';
-import ImagePixelColorPicker from './ImagePixelColorPicker.vue';
-import SelectedColorChips from './SelectedColorChips.vue';
+import { watch, ref, Ref } from 'vue'
+import type { RgbColor } from '@image-tracer/core'
+import ImagePixelColorPicker from './ImagePixelColorPicker.vue'
+import SelectedColorChips from './SelectedColorChips.vue'
 
 type Props = {
-    modelValue: boolean,
-    colors: RgbColor[],
-    unique?: boolean,
-    imageData: ImageData | (() => Promise<ImageData>),
+    modelValue: boolean
+    colors: RgbColor[]
+    unique?: boolean
+    imageData: ImageData | (() => Promise<ImageData>)
 }
 
 const props = withDefaults(defineProps<Props>(), {
     colors: () => [] as RgbColor[],
-});
+})
 const pickedColors: Ref<RgbColor[]> = ref([])
 
 watch(
     () => props.colors,
-    () => pickedColors.value = props.colors.slice(),
+    () => (pickedColors.value = props.colors.slice()),
     { immediate: true }
 )
 
@@ -35,12 +34,11 @@ function emitUpdate() {
 }
 
 function addColor(color: RgbColor) {
-    if (props.unique && pickedColors.value.some(c => c.equals(color))) {
+    if (props.unique && pickedColors.value.some((c) => c.equals(color))) {
         return
     }
     pickedColors.value.push(color)
 }
-
 </script>
 
 <template>
@@ -74,16 +72,12 @@ function addColor(color: RgbColor) {
                     color="secondary"
                     variant="text"
                     @click="emitIsOpen(false)"
-                >
-                    Cancel
-                </v-btn>
+                > Cancel </v-btn>
                 <v-btn
                     color="primary"
                     variant="outlined"
                     @click="emitUpdate"
-                >
-                    Add
-                </v-btn>
+                > Add </v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>

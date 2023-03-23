@@ -1,48 +1,48 @@
 <script setup lang="ts">
-import { CreatePaletteMode, } from '@image-tracer/core';
+import { CreatePaletteMode } from '@image-tracer/core'
 import { computed, h, DefineComponent } from 'vue'
-import type { GradientDrawerOptions } from '@/scripts/background/tracer/svg-drawer/gradient-drawer-options';
+import type { GradientDrawerOptions } from '@/scripts/background/tracer/svg-drawer/gradient-drawer-options'
 
 import ColorBuilderSelect from './input/ColorBuilderSelect.vue'
-import ColorGradientSelect from './input/ColorGradientSelect.vue';
-import FullOpacityThresholdInput from './input/FullOpacityThresholdInput.vue';
-import RemoveBackgroundCheckbox from './input/RemoveBackgroundCheckbox.vue';
-import FillStyleSelect from './input/FillStyleSelect.vue';
-import ColorSamplingModeSelect from './input/ColorSamplingModeSelect.vue';
-import StrokeWidthInput from './input/StrokeWidthInput.vue';
-import TrimSelect from './input/TrimSelect.vue';
-import ScaleInputVue from './input/ScaleInput.vue';
-import LineErrorMarginInput from './input/LineErrorMarginInput.vue';
-import CurveErrorMarginInput from './input/CurveErrorMarginInput.vue';
-import MinimumShapeOutlineSizeInput from './input/MinimumShapeOutlineSizeInput.vue';
-import BlurRadiusInput from './input/BlurRadiusInput.vue';
-import BlurDeltaInput from './input/BlurDeltaInput.vue';
-import SharpenCheckbox from './input/SharpenCheckbox.vue';
-import SharpenDeltaInput from './input/SharpenDeltaInput.vue';
-import InterpolatePointsCheckbox from './input/InterpolatePointsCheckbox.vue';
-import EnhanceRightAnglesCheckbox from './input/EnhanceRightAnglesCheckbox.vue';
-import ImageColorPicker from './input/ImageColorPicker.vue';
-import NumberOfColorsInput from './input/NumberOfColorsInput.vue';
-import ClusteringCyclesInput from './input/ClusteringCyclesInput.vue';
-import MinimumQuotaInput from './input/MinimumQuotaInput.vue';
-import { VRow, VCol } from 'vuetify/components';
-import MinOpacityThresholdInput from './input/MinOpacityThresholdInput.vue';
+import ColorGradientSelect from './input/ColorGradientSelect.vue'
+import FullOpacityThresholdInput from './input/FullOpacityThresholdInput.vue'
+import RemoveBackgroundCheckbox from './input/RemoveBackgroundCheckbox.vue'
+import FillStyleSelect from './input/FillStyleSelect.vue'
+import ColorSamplingModeSelect from './input/ColorSamplingModeSelect.vue'
+import StrokeWidthInput from './input/StrokeWidthInput.vue'
+import TrimSelect from './input/TrimSelect.vue'
+import ScaleInputVue from './input/ScaleInput.vue'
+import LineErrorMarginInput from './input/LineErrorMarginInput.vue'
+import CurveErrorMarginInput from './input/CurveErrorMarginInput.vue'
+import MinimumShapeOutlineSizeInput from './input/MinimumShapeOutlineSizeInput.vue'
+import BlurRadiusInput from './input/BlurRadiusInput.vue'
+import BlurDeltaInput from './input/BlurDeltaInput.vue'
+import SharpenCheckbox from './input/SharpenCheckbox.vue'
+import SharpenDeltaInput from './input/SharpenDeltaInput.vue'
+import InterpolatePointsCheckbox from './input/InterpolatePointsCheckbox.vue'
+import EnhanceRightAnglesCheckbox from './input/EnhanceRightAnglesCheckbox.vue'
+import ImageColorPicker from './input/ImageColorPicker.vue'
+import NumberOfColorsInput from './input/NumberOfColorsInput.vue'
+import ClusteringCyclesInput from './input/ClusteringCyclesInput.vue'
+import MinimumQuotaInput from './input/MinimumQuotaInput.vue'
+import { VRow, VCol } from 'vuetify/components'
+import MinOpacityThresholdInput from './input/MinOpacityThresholdInput.vue'
 
 const props = defineProps<{
-    options: GradientDrawerOptions,
-    imageData?: ImageData | (() => Promise<ImageData>),
-    showOnlyFavorites: boolean,
+    options: GradientDrawerOptions
+    imageData?: ImageData | (() => Promise<ImageData>)
+    showOnlyFavorites: boolean
     showHelp: boolean
 }>()
 
 type ComponentDeclaration = {
     component: DefineComponent<{ options: GradientDrawerOptions, showHelp: boolean }, any, any, any, any>,
-    cols?: any,
-    props?: any,
+    cols?: any
+    props?: any
     favorite?: boolean
 }
 
-type Row = ({ title: string } | ComponentDeclaration[])
+type Row = { title: string } | ComponentDeclaration[]
 
 const fixedRows: Row[] = [
     { title: 'Svg Options' },
@@ -58,15 +58,14 @@ const fixedRows: Row[] = [
         { component: TrimSelect },
         { component: ScaleInputVue },
     ],
-    [
-        { component: RemoveBackgroundCheckbox, favorite: true },
-    ],
+    [{ component: RemoveBackgroundCheckbox, favorite: true }],
     { title: 'Tracer Options' },
     [
         { component: LineErrorMarginInput },
         { component: CurveErrorMarginInput },
         { component: MinimumShapeOutlineSizeInput, cols: { sm: 12 }, favorite: true },
-    ], [
+    ],
+    [
         { component: BlurRadiusInput },
         { component: BlurDeltaInput },
         { component: SharpenCheckbox },
@@ -81,12 +80,11 @@ const fixedRows: Row[] = [
 ]
 
 const formRows = computed(() => {
-
     const rows: Row[] = [...fixedRows]
     if (props.options.colorSamplingMode === CreatePaletteMode.PALETTE && props.imageData) {
         rows.push([
             { component: ColorSamplingModeSelect, cols: { md: 6, lg: 3 } },
-            { component: ImageColorPicker, cols: { sm: 12, md: 6, lg: 9, xl: 9 }, props: { imageData: props.imageData } },
+            { component: ImageColorPicker, cols: { sm: 12, md: 6, lg: 9, xl: 9 }, props: { imageData: props.imageData },},
         ])
     } else {
         rows.push([
@@ -113,18 +111,25 @@ const cols = {
     cols: 12,
     sm: 6,
     md: 3,
-    xl: 3
+    xl: 3,
 }
 
 const FormRows = () => {
     const componentProps = { options: props.options, showHelp: props.showHelp }
 
-    return formRows.value.map(row =>
-        h(VRow, !Array.isArray(row) ?
-            h(VCol, { class: 'text-h6' }, [row.title]) :
-            row.map(col => h(VCol, col.cols ? { ...cols, ...col.cols } : cols, [
-                h(col.component, col.props ? { ...col.props, ...componentProps } : componentProps)
-            ]))
+    return formRows.value.map((row) =>
+        h(
+            VRow,
+            !Array.isArray(row)
+                ? h(VCol, { class: 'text-h6' }, [row.title])
+                : row.map((col) =>
+                    h(VCol, col.cols ? { ...cols, ...col.cols } : cols, [
+                        h(
+                            col.component,
+                            col.props ? { ...col.props, ...componentProps } : componentProps
+                        ),
+                    ])
+                )
         )
     )
 }

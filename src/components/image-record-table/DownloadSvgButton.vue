@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import {ref, Ref, computed} from 'vue';
+import { ref, Ref, computed } from 'vue'
 
 type Props = {
-    url: string,
-    svg: string,
+    url: string
+    svg: string
 }
 const props = defineProps<Props>()
-const href: Ref<null|string> = ref(null)
-const name: Ref<null|string> = ref(null)
+const href: Ref<null | string> = ref(null)
+const name: Ref<null | string> = ref(null)
 
-function getFileName(urlLike: string): string{
+function getFileName(urlLike: string): string {
     const hostRegex = /(https?:\/\/)?([^\/]+)/ // everything after https:// before /
-    return urlLike.replace(hostRegex, "$2") || 'neonized-icon';
+    return urlLike.replace(hostRegex, '$2') || 'neonized-icon'
 }
 
 const fileName = computed(() => {
@@ -19,21 +19,20 @@ const fileName = computed(() => {
 })
 let didRun = false
 
-function setHref(e : MouseEvent){
-    if(didRun){
+function setHref(e: MouseEvent) {
+    if (didRun) {
         return
     }
     didRun = true
-    
+
     href.value = 'data:text/plain;charset=utf-8,' + encodeURIComponent(props.svg)
     name.value = getFileName(props.url)
-    const target = (e.target as HTMLAnchorElement)
+    const target = e.target as HTMLAnchorElement
     target.click()
 }
 </script>
 
 <template>
-
     <v-btn
         class="download-svg"
         tag="a"
@@ -42,10 +41,9 @@ function setHref(e : MouseEvent){
         :download="fileName"
         @click="setHref"
     />
-
 </template>
 <style scoped>
-    .download-svg{
-        cursor:pointer;
-    }
+.download-svg {
+    cursor: pointer;
+}
 </style>

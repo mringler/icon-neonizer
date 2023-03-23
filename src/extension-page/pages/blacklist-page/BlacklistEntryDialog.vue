@@ -1,25 +1,22 @@
 <script setup lang="ts">
-import type { BlacklistedPage } from '@/scripts/background/storage/blacklist';
+import type { BlacklistedPage } from '@/scripts/background/storage/blacklist'
 import { Ref, ref, watch, toRaw } from 'vue'
 
 type Props = {
-    page?: BlacklistedPage,
+    page?: BlacklistedPage
 }
 const props = defineProps<Props>()
 
 const page: Ref<BlacklistedPage> = ref({ url: '', replacementUrl: '', comment: '' })
 const showModal = ref(false)
 
-watch(
-    () => props.page,
-    resetPage,
-    { immediate: true }
-)
+watch(() => props.page, resetPage, { immediate: true })
 
 const emit = defineEmits(['update:page'])
 
 function resetPage() {
-    if(!props.page){
+    if (!props.page) {
+        page.value = { url: '', replacementUrl: '', comment: '' }
         return
     }
     Object.assign(page.value, props.page)
@@ -34,11 +31,9 @@ function close() {
     resetPage()
     showModal.value = false
 }
-
 </script>
 
 <template>
-
     <v-dialog
         v-model="showModal"
         class="blacklist-url-dialog"
@@ -78,9 +73,7 @@ function close() {
                     color="secondary"
                     variant="text"
                     @click="close"
-                >
-                    Cancel
-                </v-btn>
+                > Cancel </v-btn>
                 <v-btn
                     color="primary"
                     variant="outlined"
@@ -92,7 +85,6 @@ function close() {
             </v-card-actions>
         </v-card>
     </v-dialog>
-
 </template>
 <style scoped>
 .blacklist-url-dialog {

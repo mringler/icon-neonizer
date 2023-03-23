@@ -1,6 +1,6 @@
 export function toFaviconDownloadUrl(faviconUrl: string): string {
     if (!faviconUrl || faviconUrl.startsWith('data:')) {
-        return faviconUrl;
+        return faviconUrl
     }
     if (!faviconUrl.startsWith('http')) {
         faviconUrl = 'http://' + faviconUrl

@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import type { AlertSnackbarProps } from '@/components/util/AlertSnackbar.vue';
-import AlertSnackbar from '@/components/util/AlertSnackbar.vue';
-import { IconStorage, ImageDataRecord } from '@/scripts/background/storage/icon-storage';
+import type { AlertSnackbarProps } from '@/components/util/AlertSnackbar.vue'
+import AlertSnackbar from '@/components/util/AlertSnackbar.vue'
+import { IconStorage, ImageDataRecord } from '@/scripts/background/storage/icon-storage'
 import { onBeforeMount, Ref, ref, computed } from 'vue'
 import { byteToKilobyte } from '@/util/byte-to-kilobyte'
-import ImageRecordTable from '@/components/image-record-table/ImageRecordDataTable.vue';
-import DataCard from '@/components/util/DataCard.vue';
-import LoadingContent from '@/components/util/LoadingContent.vue';
-import { useConfirmationDialog } from '@/composables/confirmDialog';
-import Heading from '@/components/util/Heading.vue';
+import ImageRecordTable from '@/components/image-record-table/ImageRecordDataTable.vue'
+import DataCard from '@/components/util/DataCard.vue'
+import LoadingContent from '@/components/util/LoadingContent.vue'
+import { useConfirmationDialog } from '@/composables/confirmDialog'
+import Heading from '@/components/util/Heading.vue'
 
 const showConfirm = useConfirmationDialog()
 
@@ -28,20 +28,19 @@ const remove = async (record: ImageDataRecord, deleteLocked = false) => {
             title: 'Item is locked.',
             message: 'Delete anyway?',
             confirmText: 'Delete',
-            onConfirm: () => remove(record, true)
+            onConfirm: () => remove(record, true),
         })
     }
     await IconStorage.removeIcon(record.url)
-    const ix = storageData.value.findIndex(el => el === record)
+    const ix = storageData.value.findIndex((el) => el === record)
     storageData.value.splice(ix, 1)
     snackbarInput.value = { message: 'Icon removed from storage', color: 'green' }
 }
 
 const dataSummary = computed(() => {
-
     return {
         'Stored icons': storageData.value.length,
-        'Size in storage': totalSizeKb.value + ' kB'
+        'Size in storage': totalSizeKb.value + ' kB',
     }
 })
 
@@ -49,7 +48,6 @@ const totalSizeKb = computed(() => {
     const byteSize = storageData.value.reduce((sum, icon) => sum + icon.size, 0)
     return byteToKilobyte(byteSize)
 })
-
 </script>
 
 <template>
@@ -58,15 +56,13 @@ const totalSizeKb = computed(() => {
         :color="snackbarInput.color"
     />
 
-
-    <Heading>Icons in storage</Heading>
+    <Heading>Icons in Storage</Heading>
     <div class="text-subtitle-1 mb-3">View and organize stored icons.</div>
 
     <LoadingContent :is-loading="isLoading">
-
         <ImageRecordTable
             :imageRecords="storageData"
-            @remove-record="record => remove(record)"
+            @remove-record="(record) => remove(record)"
         >
             <template v-slot:header>
                 <DataCard
@@ -74,7 +70,6 @@ const totalSizeKb = computed(() => {
                     width="300px"
                     class="mb-4"
                 />
-
             </template>
         </ImageRecordTable>
     </LoadingContent>

@@ -1,16 +1,15 @@
-import type { GradientDrawerOptions } from "@/scripts/background/tracer/svg-drawer/gradient-drawer-options"
-import type { ComponentObjectPropsOptions } from "vue"
+import type { GradientDrawerOptions } from '@/scripts/background/tracer/svg-drawer/gradient-drawer-options'
 
 type OptionFormProps = {
-    options: GradientDrawerOptions,
-    showHelp: boolean,
+    options: GradientDrawerOptions
+    showHelp: boolean
 }
 
 export type OptionFormPropsType = Readonly<Omit<OptionFormProps, never> & {}>
 
-export function useOptionsFormInputProps(){
+export function useOptionsFormInputProps() {
     return {
-        options: {type: Object, required: true},
-        showHelp: {type: Boolean, default: false}
+        options: { type: Object, required: true },
+        showHelp: { type: Boolean, default: false },
     }
 }

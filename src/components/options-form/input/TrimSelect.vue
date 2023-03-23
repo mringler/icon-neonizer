@@ -1,15 +1,18 @@
-<script setup  lang="ts">
-import { toRef } from 'vue';
-import { TrimMode } from '@image-tracer/core';
-import type { GradientDrawerOptions } from '@/scripts/background/tracer/svg-drawer/gradient-drawer-options';
+<script setup lang="ts">
+import { toRef } from 'vue'
+import { TrimMode } from '@image-tracer/core'
+import type { GradientDrawerOptions } from '@/scripts/background/tracer/svg-drawer/gradient-drawer-options'
 import { useInputConfig } from '@/composables/inputConfig'
 
-const props = withDefaults(defineProps<{
-    options: GradientDrawerOptions,
-    showHelp: boolean,
-}>(), {
-    showHelp: false
-})
+const props = withDefaults(
+    defineProps<{
+        options: GradientDrawerOptions
+        showHelp: boolean
+    }>(),
+    {
+        showHelp: false,
+    }
+)
 
 const description = 'Remove empty space around image content.'
 const itemsTrim = [
@@ -17,7 +20,10 @@ const itemsTrim = [
     { title: 'Keep aspect ratio', value: TrimMode.KEEP_RATIO, description: 'Remove empty space while preserving aspect ratio.' },
     { title: 'All', value: TrimMode.ALL, description: 'Remove all empty space.' },
 ]
-const inputConfig = useInputConfig(toRef(props, 'showHelp'), { description, tableData: { data: itemsTrim, keys:  {title: 'Option', description: 'Description'} }})
+const inputConfig = useInputConfig(toRef(props, 'showHelp'), {
+    description,
+    tableData: { data: itemsTrim, keys: { title: 'Option', description: 'Description' } },
+})
 </script>
 
 <template>
