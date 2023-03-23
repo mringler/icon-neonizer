@@ -1,46 +1,29 @@
-# icon-neonizer-pages
+# Icon Neonizer - Firefox extension for brightly glowing favicons
 
-This template should help get you started developing with Vue 3 in Vite.
+Automatically replace favicons with a shiny bright version: 
 
-## Recommended IDE Setup
+![comparison between regular favicons and neonized version](readme-images/tabs-comp.png)
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+When visiting a site for the first time, the favicon is extracted, traced, and re-drawn with new colors.
 
-## Type Support for `.vue` Imports in TS
+You can quickly compare the old an new icon through the extension's popup:
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+![screenshot of extension page to edit SVG](readme-images/popup.png)
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+To tailor the icon, Icon Neonizer comes with a lavish interface that lets you configure the tracing process in detail:
 
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+![screenshot of trace icon page](readme-images/trace.png)
 
-## Customize configuration
+Manually change colors, remove or add elements or replace the whole SVG through the included editor:
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+![screenshot of edit SVG page](readme-images/edit.png)
 
-## Project Setup
+For each page, the generated icon is stored (for a limited time), so that icons are replaced consistently between visits. Browse your stored icons to see when they were last used, check size and to edit or remove them:
 
-```sh
-npm install
-```
+![screenshot of storage page](readme-images/storage.png)
 
-### Compile and Hot-Reload for Development
+But you don't have to replace every icon, a blacklist is available to exclude sites or use a shared icon:
 
-```sh
-npm run dev
-```
+![screenshot of blacklist page](readme-images/blacklist.png)
 
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+Colors, colors, colors! It's not for everybody, but if it is fun for you, it is a lot of fun!
