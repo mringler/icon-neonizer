@@ -5,6 +5,7 @@ import { SvgColorReplacer } from '../tracer/svg-color-replacer'
 import { Tracer } from '../tracer/tracer'
 
 export namespace FaviconRequestFilter {
+
     export function setRequestFilter() {
         const pattern: browser.webRequest.RequestFilter = {
             urls: ['*://*/*favicon*'],
@@ -24,31 +25,43 @@ export namespace FaviconRequestFilter {
     async function updateHeaderContentType(
         details: browser.webRequest._OnHeadersReceivedDetails
     ): Promise<browser.webRequest.BlockingResponse> {
+        console.log('got headers')
         const headers = details.responseHeaders
         if (!headers || passFilterRegex.test(details.url)) {
             return {}
         }
 
-        const [isFavicon, blacklistEntry] = await Promise.all([
-            isFaviconUrlInTab(details.tabId, details.url),
-            Blacklist.getBlacklistEntry(details.url),
-        ] as const)
-
-        if (
-            (!details.url.endsWith('/favicon.ico') && !isFavicon) ||
-            (blacklistEntry && !blacklistEntry.replacementUrl)
-        ) {
-            !blacklistEntry && console.log('INP- no favicon ' + details.url)
+        const isFilteredFavicon = await checkIsFilteredFavicon(details.tabId, details.url)
+        if (!isFilteredFavicon) {
             return {}
         }
 
-        const contentType = headers.find((header) => header.name === 'content-type')
-        if (contentType) {
-            contentType.value = 'image/svg+xml'
-        } else {
-            headers.push({ name: 'content-type', value: 'image/svg+xml' })
-        }
+        const initialContentType = setHeader(headers, 'content-type', 'image/svg+xml')
+        placeOnHeadersReceivedPromise(details.tabId, details.requestId, initialContentType)
+        callContentApi('fixupForFilteredUrl', [details.url])
         return { responseHeaders: headers }
+    }
+
+    async function checkIsFilteredFavicon(tabId: number, url: string) {
+        const [isFaviconInTab, blacklistEntry] = await Promise.all([
+            isFaviconUrlInTab(tabId, url),
+            Blacklist.getBlacklistEntry(url),
+        ] as const)
+
+        const isFavicon = url.endsWith('/favicon.ico') || isFaviconInTab
+        const isBlacklistedWithoutReplacement = blacklistEntry && !blacklistEntry.replacementUrl
+        return isFavicon && !isBlacklistedWithoutReplacement
+    }
+
+    function setHeader(headers: browser.webRequest.HttpHeaders, name: string, value: string) {
+        const header = headers.find(header => header.name === name)
+        const oldHeaderValue = header?.value
+        if (header) {
+            header.value = value
+        } else {
+            headers.push({ name, value })
+        }
+        return oldHeaderValue
     }
 
     /**
@@ -61,19 +74,17 @@ export namespace FaviconRequestFilter {
             return {}
         }
 
-        let iconUrl = details.url
-        const blacklistEntry = await Blacklist.getBlacklistEntry(iconUrl)
-        if (blacklistEntry?.replacementUrl) {
-            iconUrl = blacklistEntry.replacementUrl
+        const iconUrl = await getReplacementUrl(details.url)
+        if (!iconUrl) {
+            return {}
         }
-        callContentApi('fixupForFilteredUrl', [iconUrl])
 
         const filter = browser.webRequest.filterResponseData(details.requestId)
         const data: ArrayBuffer[] = []
 
         const storedIconPromise = IconStorage.loadIcon(iconUrl)
         const isFaviconPromise = callContentApi('urlIsFavicon', [iconUrl])
-        let largestFaviconUrlPromise: Promise<string | undefined> | null = null
+        let headersProcessedPromise: Promise<string | false | undefined> | null = null
 
         const closeWithSvg = (svg: string) => {
             const encoder = new TextEncoder()
@@ -85,25 +96,31 @@ export namespace FaviconRequestFilter {
          * If image exists in cache, send it and end request.
          */
         filter.onstart = async () => {
-            const svg = await storedIconPromise
-            if (svg) {
-                console.log('INP- replacing request with stored favicon for', iconUrl)
-                closeWithSvg(svg)
-                return
-            }
+            console.log('onstart -awaiting')
+            headersProcessedPromise = awaitOnHeadersReceivedPromise(details.tabId, details.requestId)
+            const [isHandledByFilter, storedSvg] = await Promise.all([headersProcessedPromise, storedIconPromise])
+            console.log('onstart -awaiting done')
 
-            if (!iconUrl.endsWith('/favicon.ico') && !(await isFaviconPromise)) {
-                console.log('INP- seems to be a regular image, stop filtering', iconUrl)
-                filter.disconnect()
+            if (!isHandledByFilter) {
+                console.log('INP- no onHeadersReceived event, probably response from service worker - cannot handle in filter', iconUrl)
                 return
             }
-            largestFaviconUrlPromise = callContentApi('getPageFaviconHref', [], details.tabId)
+            if (storedSvg) {
+                console.log('INP- replacing request with stored favicon for', iconUrl)
+                closeWithSvg(storedSvg)
+                return
+            }
+        }
+
+        filter.onerror = (e: Event) => {
+            console.log('INP- loading error', e)
         }
 
         /**
          * Collect image data.
          */
         filter.ondata = async (event: browser.webRequest._StreamFilterOndataEvent) => {
+            console.log('ondata')
             data.push(event.data)
         }
 
@@ -112,36 +129,55 @@ export namespace FaviconRequestFilter {
          */
         filter.onstop = async (event: Event) => {
             // make sure storedIconPromise is fulfilled
-            const storedSvg = await storedIconPromise
-            if (storedSvg) {
-                return
-            }
+            const [initialContentType, storedSvg, isFavicon] = await Promise.all([
+                headersProcessedPromise,
+                storedIconPromise,
+                isFaviconPromise
+            ])
+
             const fullData = concatenateArrayBuffer(data)
-
-            const [svg, largestFaviconUrl] = await Promise.all([
-                Tracer.traceBuffer(fullData).catch(() => null),
-                largestFaviconUrlPromise,
-            ] as const)
-
-            if (svg) {
-                const isLargestFavicon = !largestFaviconUrl || iconUrl.includes(largestFaviconUrl)
-                isLargestFavicon && IconStorage.storeIcon(iconUrl, svg)
-                closeWithSvg(svg)
+            if (initialContentType === false || !iconUrl.endsWith('/favicon.ico') && !isFavicon) {
+                filter.write(fullData)
+                filter.close()
                 return
             }
 
-            try {
+            if (storedSvg) {
+                return // handled in onstart
+            }
+
+            if (initialContentType === 'image/svg+xml') {
                 const updatedSvg = updateSvgResponse(fullData)
                 IconStorage.storeIcon(iconUrl, updatedSvg)
                 closeWithSvg(updatedSvg)
                 return
-            } catch (e) {}
+            }
+
+            const [tracedSvg, largestFaviconUrl] = await Promise.all([
+                Tracer.traceBuffer(fullData).catch(() => null),
+                callContentApi('getPageFaviconHref', [], details.tabId),
+            ])
+
+            if (tracedSvg) {
+                const isLargestFavicon = !largestFaviconUrl || iconUrl.includes(largestFaviconUrl)
+                isLargestFavicon && IconStorage.storeIcon(iconUrl, tracedSvg)
+                closeWithSvg(tracedSvg)
+                return
+            }
 
             filter.write(fullData)
             filter.close()
         }
 
         return {}
+    }
+
+    async function getReplacementUrl(iconUrl: string) {
+        const blacklistEntry = await Blacklist.getBlacklistEntry(iconUrl)
+        if (blacklistEntry?.replacementUrl) {
+            return blacklistEntry.replacementUrl
+        }
+        return blacklistEntry ? null : iconUrl
     }
 
     function updateSvgResponse(response: Uint8Array): string {
@@ -173,5 +209,55 @@ export namespace FaviconRequestFilter {
             runAt: 'document_start',
         })
         return hasLink
+    }
+
+    async function placeOnHeadersReceivedPromise(tabId: number, requestId: string, initialContentType: string | undefined): Promise<void> {
+        const promiseName = 'nePromise' + requestId
+        await browser.tabs.executeScript(tabId, {
+            code: `
+            (function(){
+                if (window.${promiseName}){
+                    console.log('found promise, resolving')
+                    window.${promiseName}('${initialContentType}')
+                } else {
+                    console.log('setting new promise')
+                    window.${promiseName} = Promise.resolve('${initialContentType}')
+                }
+            })()
+            `,
+            runAt: 'document_start',
+        })
+    }
+
+    async function awaitOnHeadersReceivedPromise(tabId: number, requestId: string): Promise<string | undefined | false> {
+        const promiseName = 'nePromise' + requestId
+        const [headersProcessed] = await browser.tabs.executeScript(tabId, {
+            code: `
+            (async function(){
+                let headersProcessed = null
+                if(window.${promiseName}){
+                    console.log('headers already done')
+                    headersProcessed = await window.${promiseName}
+                }else{
+                    console.log('Setting resolve')
+                    headersProcessed = await new Promise(resolve => {
+                        console.log('Waiting for headers')
+                        const timeoutId = setTimeout(() => resolve(false), 3000)
+                        window.${promiseName} = (headerData) => {
+                            clearTimeout(timeoutId)
+                            resolve(headerData)
+                        }
+                        
+                    })
+                }
+                console.log('await finished, removing promise', headersProcessed)
+                delete window.${promiseName}
+                return headersProcessed
+            })()
+            `,
+            runAt: 'document_start',
+        })
+        console.log('headersProcessed', headersProcessed)
+        return headersProcessed
     }
 }

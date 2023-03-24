@@ -41,6 +41,7 @@ export async function replaceFavicon(iconUrl: string, force = false, inlineData?
 }
 
 async function verifyHref(actualHref: string, iconUrl: string): Promise<void> {
+    console.log('ne- verifyHref')
     if (isHandledByFilter(iconUrl)) {
         return
     }
@@ -49,6 +50,7 @@ async function verifyHref(actualHref: string, iconUrl: string): Promise<void> {
     if (expectedHref && expectedHref === actualHref) {
         return
     }
+    console.log('ne- Found wrong favicon, restoring')
     Favicon.setSvg(svgString!)
 }
 
