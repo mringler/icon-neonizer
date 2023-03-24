@@ -39,6 +39,7 @@ export namespace Favicon {
             node.type = 'image/svg+xml'
             node.dataset.neFilter = '1'
         })
+        return nodes.length > 0
     }
 
     export function urlIsHandledByFilter(): boolean {
