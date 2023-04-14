@@ -5,6 +5,15 @@ import { byteToKilobyte } from '@/util/byte-to-kilobyte'
 import DownloadSvgButton from './DownloadSvgButton.vue'
 import FaviconImg from '../image-display/FaviconImg.vue'
 import FaviconSvg from '../image-display/FaviconSvg.vue'
+import { VDataTable } from 'vuetify/lib/labs/components'
+
+type DT = InstanceType<typeof VDataTable>
+type Headers = DT['headers']
+type ArrayItems<T> = T extends Array<Array<infer I>> ? I : never
+type RawHeaders = ArrayItems<Headers>
+type DataTableHeader = Omit<RawHeaders, 'align'> & {align?: 'start' | 'center' | 'end'}
+
+type SortItem = DT['sortBy'] extends Array<infer T> ? T : never
 
 type Props = {
     imageRecords: ImageDataRecord[]
@@ -23,7 +32,7 @@ const timestampToDate = (timestamp: number): string => {
     return date.toLocaleString(language)
 }
 
-const headers = [
+const headers: DataTableHeader[] = [
     { key: 'originalIcon', title: 'Original', sortable: false },
     { key: 'icon', title: 'Replacement', sortable: false },
     { key: 'url', title: 'URL', maxWidth: '480px' },
@@ -33,7 +42,7 @@ const headers = [
     { key: 'actions', title: 'Actions', sortable: false, minWidth: '134px' },
 ]
 
-const sortBy = ref([{ key: 'lastAccess', order: 'desc' }])
+const sortBy = ref([{ key: 'lastAccess', order: 'desc' }] as SortItem[])
 
 const faviconDisplayProps = {
     width: '72px',
@@ -71,23 +80,23 @@ const faviconDisplayProps = {
         >
             <template v-slot:item.originalIcon="{ item }">
                 <FaviconImg
-                    :src="item.columns.url"
+                    :src="item.columns.url as string"
                     v-bind="faviconDisplayProps"
                     class="overflow-hidden"
                 />
             </template>
             <template v-slot:item.icon="{ item }">
                 <FaviconSvg
-                    :svg="item.columns.icon"
+                    :svg="item.columns.icon as string"
                     v-bind="faviconDisplayProps"
                 />
             </template>
 
             <template v-slot:item.lastAccess="{ item }">
-                {{ timestampToDate(item.columns.lastAccess) }}
+                {{ timestampToDate(item.columns.lastAccess as number) }}
             </template>
             <template v-slot:item.size="{ item }">
-                {{ byteToKilobyte(item.columns.size) }}
+                {{ byteToKilobyte(item.columns.size as number) }}
             </template>
 
             <template v-slot:item.noAutomaticOverride="{ item }">
@@ -106,7 +115,7 @@ const faviconDisplayProps = {
                                 v-bind="props"
                                 variant="plain"
                                 icon="mdi-draw"
-                                :to="{ name: 'trace-by-url', params: { url: item.columns.url } }"
+                                :to="{ name: 'trace-by-url', params: { url: item.columns.url as string} }"
                             />
                         </template>
                     </v-tooltip>
@@ -118,7 +127,7 @@ const faviconDisplayProps = {
                                 icon="mdi-pen"
                                 :to="{
                                     name: 'edit-by-url',
-                                    params: { url: item.columns.url },
+                                    params: { url: item.columns.url as string },
                                     query: { isLocked: item.columns.noAutomaticOverride ? 1 : 0 },
                                 }"
                             />
@@ -129,8 +138,8 @@ const faviconDisplayProps = {
                             <DownloadSvgButton
                                 v-bind="props"
                                 variant="plain"
-                                :url="item.columns.url"
-                                :svg="item.columns.icon"
+                                :url="item.columns.url as string"
+                                :svg="item.columns.icon as string"
                             />
                         </template>
                     </v-tooltip>
