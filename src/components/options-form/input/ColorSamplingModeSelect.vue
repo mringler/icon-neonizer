@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { toRef } from 'vue'
-import { CreatePaletteMode } from '@image-tracer/core'
+import { CreatePaletteMode } from '@image-tracer-ts/core'
 import type { GradientDrawerOptions } from '@/scripts/background/tracer/svg-drawer/gradient-drawer-options'
 import { useInputConfig } from '@/composables/inputConfig'
 

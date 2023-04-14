@@ -1,4 +1,4 @@
-import { RgbColor, RgbColorData } from '@image-tracer/core'
+import { RgbColor, RgbColorData } from '@image-tracer-ts/core'
 import type { HSV } from 'color-functions/dist/rgb2hsv'
 import { SaturatedColorPairBuilder } from './saturated-color-pair-builder'
 

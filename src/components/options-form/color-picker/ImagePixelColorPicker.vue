@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { RgbColor } from '@image-tracer/core'
+import { RgbColor } from '@image-tracer-ts/core'
 import { ref, Ref, onMounted, watch } from 'vue'
 
 type Props = {

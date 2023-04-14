@@ -1,4 +1,4 @@
-import type { RgbColor, TraceData } from '@image-tracer/core'
+import type { RgbColor, TraceData } from '@image-tracer-ts/core'
 import type { ColorPairBuilder } from '../color-pair-builder/color-pair-builder'
 
 export type GradientPoints = { x1: number; x2: number; y1: number; y2: number }

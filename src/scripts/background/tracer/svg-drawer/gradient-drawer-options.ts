@@ -1,4 +1,4 @@
-import { Options } from '@image-tracer/core'
+import { Options } from '@image-tracer-ts/core'
 import { AdaptiveColorPairBuilder } from './color-pair-builder/adaptive-color-pair-builder'
 import type { ColorPairBuilder } from './color-pair-builder/color-pair-builder'
 import { DarkeningColorPairBuilder } from './color-pair-builder/darkening-color-pair-builder'

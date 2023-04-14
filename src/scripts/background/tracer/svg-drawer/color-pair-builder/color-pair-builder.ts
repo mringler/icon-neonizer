@@ -1,4 +1,4 @@
-import { RgbColor, RgbColorData, TraceData } from '@image-tracer/core'
+import { RgbColor, RgbColorData, TraceData } from '@image-tracer-ts/core'
 import rgb2hsv, { HSV } from 'color-functions/dist/rgb2hsv'
 import hsv2rgb from 'color-functions/dist/hsv2rgb'
 

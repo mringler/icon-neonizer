@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { RgbColor } from '@image-tracer/core'
+import { RgbColor } from '@image-tracer-ts/core'
 import { ref, watchEffect, toRaw } from 'vue'
 import type { GradientDrawerOptions } from '@/scripts/background/tracer/svg-drawer/gradient-drawer-options'
 

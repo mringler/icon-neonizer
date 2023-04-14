@@ -1,4 +1,4 @@
-import type { TraceData } from '@image-tracer/core'
+import type { TraceData } from '@image-tracer-ts/core'
 import { GradientPoints, GradientBuilder } from './gradient-builder'
 
 export class GradientBuilderDirected extends GradientBuilder {

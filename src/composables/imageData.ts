@@ -1,5 +1,5 @@
 import { InlineImageLoader } from '@/scripts/background/inline-image-loader'
-import { ImageLoader } from '@image-tracer/browser'
+import { ImageLoader } from '@image-tracer-ts/browser'
 import { ref, Ref, isRef, watchEffect } from 'vue'
 import { useSrcUrl } from './srcUrl'
 

@@ -1,4 +1,4 @@
-import { TraceData, RgbColor, SvgDrawer } from '@image-tracer/core'
+import { TraceData, RgbColor, SvgDrawer } from '@image-tracer-ts/core'
 import type { ColorPairBuilder } from './color-pair-builder/color-pair-builder'
 import type { GradientBuilder, GradientTags } from './gradient-builder/gradient-builder'
 import { GradientDrawerOptions } from './gradient-drawer-options'

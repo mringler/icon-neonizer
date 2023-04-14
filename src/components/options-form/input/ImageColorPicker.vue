@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { GradientDrawerOptions } from '@/scripts/background/tracer/svg-drawer/gradient-drawer-options'
-import { CreatePaletteMode, RgbColor } from '@image-tracer/core'
+import { CreatePaletteMode, RgbColor } from '@image-tracer-ts/core'
 import SelectedColorChips from '../color-picker/SelectedColorChips.vue'
 import ImagePixelColorPickerPopup from '../color-picker/ImagePixelColorPickerPopup.vue'
 

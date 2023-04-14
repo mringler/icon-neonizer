@@ -1,4 +1,4 @@
-import type { RgbColor, TraceData } from '@image-tracer/core'
+import type { RgbColor, TraceData } from '@image-tracer-ts/core'
 import type { HSV } from 'color-functions/dist/rgb2hsv'
 import { ColorPairBuilder } from './color-pair-builder'
 import { PreSelectedColorPairBuilder } from './pre-selected-color-pair-builder.'

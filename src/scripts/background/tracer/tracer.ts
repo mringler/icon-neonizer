@@ -1,12 +1,13 @@
 import { toFaviconDownloadUrl } from '@/util/to-favicon-download-url'
 import {
-    ImageTracerBrowser,
     CreatePaletteMode,
     LayeringMode,
     FillStyle,
     TrimMode,
     ImageLoader,
-} from '@image-tracer/browser'
+    ImageTracer,
+    RgbColor,
+} from '@image-tracer-ts/browser'
 import { IconStorage } from '../storage/icon-storage'
 import { ColorBuilderOption, GradientDrawerOptions } from './svg-drawer/gradient-drawer-options'
 import { SvgDrawerGradient } from './svg-drawer/svg-drawer-gradient'
@@ -38,7 +39,8 @@ export namespace Tracer {
             options.strokeWidth = imageData.width > 100 ? 6 : 2
         }
         const drawer = new SvgDrawerGradient(options)
-        return ImageTracerBrowser.fromImageData(imageData, options, drawer)
+        const tracer = new ImageTracer(options)
+        return tracer.traceImage(imageData, drawer)
     }
 
     export async function getOptions(
