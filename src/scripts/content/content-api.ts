@@ -10,8 +10,6 @@ function buildContentApi(iconUrl: string) {
         getOriginalFaviconUrl: () => iconUrl,
         verifyHref: (href: string) => verifyHref(href, iconUrl),
         getPageFaviconHref: Favicon.getPageFaviconHref,
-        urlIsFavicon: Favicon.urlIsFavicon,
-        fixupForFilteredUrl: Favicon.fixupForFilteredUrl,
     }
 }
 

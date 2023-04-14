@@ -23,25 +23,6 @@ export namespace Favicon {
         return dom.querySelectorAll<HTMLLinkElement>('link[rel~="icon"]') // "link[rel$='icon'], link[rel~='image_src']"
     }
 
-    export function urlIsFavicon(url: string): boolean {
-        const urlEnd = url.replace(/https?:\/\/[^\/]+\//, '/')
-        return Boolean(
-            document.querySelector<HTMLLinkElement>(`link[rel~='icon'][href$="${urlEnd}"]`)
-        )
-    }
-
-    export function fixupForFilteredUrl(url: string) {
-        const urlEnd = url.replace(/https?:\/\/[^\/]+\//, '/')
-        const nodes = document.querySelectorAll<HTMLLinkElement>(
-            `link[rel~='icon'][href$="${urlEnd}"]`
-        )
-        nodes.forEach((node) => {
-            node.type = 'image/svg+xml'
-            node.dataset.neFilter = '1'
-        })
-        return nodes.length > 0
-    }
-
     export function urlIsHandledByFilter(): boolean {
         const links = document.querySelectorAll<HTMLLinkElement>('link[rel~="icon"]')
         if (links.length === 0) {
