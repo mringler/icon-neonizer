@@ -28,4 +28,10 @@
       "path": "./tsconfig.config.json"
     }
   ],
+  "ts-node": {
+    "esm": true,
+    "compilerOptions": {
+      "module": "nodenext",
+    }
+  }
 }
