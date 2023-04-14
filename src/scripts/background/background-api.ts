@@ -15,10 +15,6 @@ export async function initBackgroundApi() {
 const backgroundApi = {
     processIconUrl,
     processInlineData,
-    getStoredIcon: IconStorage.loadIcon,
-    storeIcon: IconStorage.storeIcon,
-    getStoredIcons: IconStorage.loadAll,
-    removeIcon: IconStorage.removeIcon,
     getOptions: Tracer.getOptions,
     traceWithOptions,
 }
