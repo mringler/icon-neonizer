@@ -13,7 +13,9 @@ const props = defineProps<{
     isLocked?: boolean
 }>()
 
-const emit = defineEmits(['update:svg'])
+const emit = defineEmits<{
+    (e: 'update:svg', svg: string): void
+}>()
 
 const originalSvg: Ref<string | null> = ref(null)
 const editedSvg: Ref<string | null> = ref(null)

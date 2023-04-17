@@ -12,7 +12,9 @@ const showModal = ref(false)
 
 watch(() => props.page, resetPage, { immediate: true })
 
-const emit = defineEmits(['update:page'])
+const emit = defineEmits<{
+    (e: 'update:page', page: BlacklistedPage): void
+}>()
 
 function resetPage() {
     if (!props.page) {

@@ -10,8 +10,7 @@ import { VDataTable } from 'vuetify/lib/labs/components'
 type DT = InstanceType<typeof VDataTable>
 type Headers = DT['headers']
 type ArrayItems<T> = T extends Array<Array<infer I>> ? I : never
-type RawHeaders = ArrayItems<Headers>
-type DataTableHeader = Omit<RawHeaders, 'align'> & {align?: 'start' | 'center' | 'end'}
+type DataTableHeader = ArrayItems<Headers>
 
 type SortItem = DT['sortBy'] extends Array<infer T> ? T : never
 
@@ -24,7 +23,9 @@ const props = withDefaults(defineProps<Props>(), {
 
 const search = ref('')
 
-const emit = defineEmits(['removeRecord'])
+const emit = defineEmits<{
+    (e: 'removeRecord', record: ImageDataRecord): void
+}>()
 
 const timestampToDate = (timestamp: number): string => {
     const date = new Date(timestamp)
@@ -38,7 +39,7 @@ const headers: DataTableHeader[] = [
     { key: 'url', title: 'URL', maxWidth: '480px' },
     { key: 'lastAccess', title: 'Last Access', align: 'start' },
     { key: 'size', title: 'Size [kB]', align: 'end' },
-    { key: 'noAutomaticOverride', title: 'Locked', align: 'center' },
+    { key: 'noAutomaticOverride', title: 'Locked', align: 'center' as any },
     { key: 'actions', title: 'Actions', sortable: false, minWidth: '134px' },
 ]
 

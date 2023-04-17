@@ -17,7 +17,11 @@ const props = withDefaults(defineProps<Props>(), {
 const isAddOpen = ref(false)
 watchEffect(() => props.showPicker !== undefined && (isAddOpen.value = props.showPicker))
 
-const emit = defineEmits(['update:colors', 'doAdd', 'update:showPicker'])
+const emit = defineEmits<{
+    (e: 'update:colors', colors: RgbColor[]): void
+    (e: 'doAdd'): void
+    (e: 'update:showPicker', value: boolean): void
+}>()
 
 function emitUpdate(colors: RgbColor[]) {
     emit('update:colors', colors)

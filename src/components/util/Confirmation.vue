@@ -15,7 +15,9 @@ const props = withDefaults(defineProps<Props>(), {
     confirmText: 'confirm',
 })
 
-const emit = defineEmits(['update:showConfirm'])
+const emit = defineEmits<{
+    (e: 'update:showConfirm', value: boolean): void
+}>()
 
 function emitClose() {
     emit('update:showConfirm', false)

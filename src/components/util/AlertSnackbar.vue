@@ -7,7 +7,9 @@ const props = withDefaults(defineProps<AlertSnackbarProps>(), {
     color: 'purple',
 })
 
-const emit = defineEmits(['update:message'])
+const emit = defineEmits<{
+    (e: 'update:message', message: string|null): void
+}>()
 const emitClearMessage = () => {
     emit('update:message', null)
 }

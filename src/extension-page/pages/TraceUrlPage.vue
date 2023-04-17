@@ -19,7 +19,9 @@ type Props = {
     url: string
 }
 const props = defineProps<Props>()
-const emit = defineEmits(['update:svg'])
+const emit = defineEmits<{
+    (e: 'update:svg', svg: string): void
+}>()
 
 const options: Ref<GradientDrawerOptions> = ref({} as GradientDrawerOptions)
 const tracedSvg: Ref<string | undefined> = ref()

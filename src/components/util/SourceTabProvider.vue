@@ -9,7 +9,9 @@ const props = defineProps<{
     showLoading?: boolean
     requireUrl?: boolean
 }>()
-const emit = defineEmits(['loaded'])
+const emit = defineEmits<{
+    (e: 'loaded', tab: browser.tabs.Tab | null, url: string|null): void
+}>()
 
 const { loading, sourceTab, sourceIconUrl } = createSourceTab((tab, url) =>
     emit('loaded', tab, url)

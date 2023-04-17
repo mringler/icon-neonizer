@@ -9,7 +9,10 @@ const props = defineProps<Props>()
 
 const canvas: Ref<HTMLCanvasElement | null> = ref(null)
 
-const emit = defineEmits(['pickedColor'])
+const emit = defineEmits<{
+    (e:'pickedColor', color: RgbColor): void
+}>()
+
 onMounted(setImage)
 watch(() => props.imageData, setImage)
 

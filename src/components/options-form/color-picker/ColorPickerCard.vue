@@ -4,7 +4,10 @@ import { RgbColor } from '@image-tracer-ts/core'
 
 const colorHex: Ref<string | null> = ref(null)
 
-const emit = defineEmits(['selectColor', 'close'])
+const emit = defineEmits<{
+    (e: 'selectColor', color: RgbColor): void
+    (e: 'close'): void
+}>()
 
 function emitSelectColor() {
     if (!colorHex.value) {

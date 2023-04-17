@@ -22,7 +22,10 @@ watch(
     { immediate: true }
 )
 
-const emit = defineEmits(['update:colors', 'update:modelValue'])
+const emit = defineEmits<{
+    (e: 'update:colors', colors: RgbColor[]): void
+    (e: 'update:modelValue', value: boolean): void 
+}>()
 
 function emitIsOpen(value: boolean) {
     emit('update:modelValue', value)
