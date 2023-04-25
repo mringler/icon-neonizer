@@ -1,6 +1,6 @@
 import { IconStorage } from './icon-storage'
 
-export type BlacklistedPage = { url: string; replacementUrl: string; comment: string }
+export type BlacklistedPage = { url: string; replacementUrl: string  | null; comment: string }
 
 export namespace Blacklist {
     export const loadBlacklist = IconStorage.loadBlacklist

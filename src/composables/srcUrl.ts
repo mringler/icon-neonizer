@@ -18,6 +18,9 @@ export function useSrcUrl(url: string | Ref<string>) {
         if (inlineUrl?.startsWith('/')) {
             inlineUrl = urlString + inlineUrl
         }
+        if (inlineUrl?.startsWith('http')) {
+            inlineUrl = toFaviconDownloadUrl(inlineUrl)
+        }
         return inlineUrl ?? Promise.reject()
     }
 
