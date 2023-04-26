@@ -3,9 +3,12 @@ import { initBackgroundApi } from './background-api'
 import { FaviconRequestFilter } from './request-filter/favicon-request-filter'
 import { IconStorage } from './storage/icon-storage'
 import { TouchIconRequestFilter } from './request-filter/touch-icon-request-filter.'
+import { TabMenu } from './tab-menu/tab-menu'
+
 
 FaviconRequestFilter.setRequestFilter()
 TouchIconRequestFilter.setRequestFilter()
+TabMenu.createTabMenuItem()
 
 initBackgroundApi()
 
