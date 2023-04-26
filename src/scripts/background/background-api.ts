@@ -2,7 +2,7 @@ import { ScriptsApi, buildApi } from '../ApiInterfaces'
 import { InlineImageLoader } from './inline-image-loader'
 import { Blacklist } from './storage/blacklist'
 import { IconStorage } from './storage/icon-storage'
-import { SvgColorReplacer } from './tracer/svg-color-replacer'
+import { SvgColorReplacer } from './tracer/svg-drawer/svg-color-replacer/svg-color-replacer'
 import type { GradientDrawerOptions } from './tracer/svg-drawer/gradient-drawer-options'
 import { Tracer } from './tracer/tracer'
 

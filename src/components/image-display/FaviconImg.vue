@@ -8,7 +8,7 @@ const props = defineProps<{
     src: string
 }>()
 
-const [processedSrc] = useAwaited(useSrcUrl(toRef(props, 'src')))
+const [processedSrc] = useAwaited(useSrcUrl(toRef(props, 'src')).srcUrl)
 const showEmpty = ref(false)
 </script>
 

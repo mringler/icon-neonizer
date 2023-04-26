@@ -1,7 +1,7 @@
 import { callContentApi } from '@/util/content-api-caller'
 import { Blacklist } from '../storage/blacklist'
 import { IconStorage } from '../storage/icon-storage'
-import { SvgColorReplacer } from '../tracer/svg-color-replacer'
+import { SvgColorReplacer } from '../tracer/svg-drawer/svg-color-replacer/svg-color-replacer'
 import { Tracer } from '../tracer/tracer'
 import { FaviconRequestFilterBase } from './favicon-request-filter-base'
 
@@ -61,7 +61,7 @@ export namespace FaviconRequestFilter {
                 }
     
                 try {
-                    const updatedSvg = updateSvgResponse(fullData)
+                    const updatedSvg = await updateSvgResponse(fullData)
                     IconStorage.storeIcon(iconUrl, updatedSvg)
                     closeWithSvg(updatedSvg)
                     return true
@@ -70,9 +70,10 @@ export namespace FaviconRequestFilter {
         }
     }
 
-    function updateSvgResponse(response: Uint8Array): string {
+    async function updateSvgResponse(response: Uint8Array): Promise<string> {
         const svgString = new TextDecoder().decode(response)
-        return SvgColorReplacer.replaceColorsInSvg(svgString)
+        const config = await IconStorage.loadOptions()
+        return SvgColorReplacer.replaceColorsInSvg(svgString, config)
     }
 
     async function isFaviconUrlInTab(tabId: number, url: string): Promise<boolean> {

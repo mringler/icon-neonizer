@@ -40,10 +40,10 @@ export namespace GradientDrawerOptions {
             case ColorBuilderOption.lighten: return new LighteningColorPairBuilder()
             case ColorBuilderOption.neon: return new NeonColorPairBuilder()
             case ColorBuilderOption.whiteout: return new PreSelectedColorPairBuilder()
-            case ColorBuilderOption.adaptive: return new AdaptiveColorPairBuilder()
-            case ColorBuilderOption.saturate:
+            case ColorBuilderOption.saturate: return new SaturatedColorPairBuilder()
+            case ColorBuilderOption.adaptive: 
             default:
-                return new SaturatedColorPairBuilder()
+                return new AdaptiveColorPairBuilder()
         }
     }
 

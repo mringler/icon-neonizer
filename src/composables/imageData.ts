@@ -4,7 +4,7 @@ import { ref, Ref, isRef, watchEffect } from 'vue'
 import { useSrcUrl } from './srcUrl'
 
 export function useImageData(url: string | Ref<string>): Ref<Promise<ImageData> | null> {
-    const urlPromise = useSrcUrl(url)
+    const {srcUrl: urlPromise} = useSrcUrl(url)
 
     async function loadImageData(): Promise<ImageData> {
         const resolvedUrl = await urlPromise.value

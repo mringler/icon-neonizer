@@ -18,7 +18,7 @@ export class AdaptiveColorPairBuilder extends ColorPairBuilder {
             numberColors = 0
         for (let i = 0; i < traceData.colors.length; i++) {
             const color = traceData.colors[i]
-            if (color.a < 50 || traceData.areasByColor[i].length === 0) {
+            if (color.a < 50 || traceData.areasByColor[i]?.length === 0) {
                 continue
             }
             const min = Math.min(color.r, color.g, color.b)

@@ -43,9 +43,11 @@ onBeforeMount(async () => {
     options.value = await callBackgroundApi('getOptions', [])
 })
 
+const {srcUrl, isSvg} = useSrcUrl(url.value)
+
 const retrace = async () => {
     try {
-        const resolvedUrl = await useSrcUrl(url.value).value
+        const resolvedUrl = await srcUrl.value
         tracedSvg.value = await callBackgroundApi('traceWithOptions', [
             resolvedUrl,
             toRaw(options.value),
@@ -146,6 +148,7 @@ const iconCols = {
             <OptionsFormCard
                 v-model:options="options"
                 :image-data="imageDataLoader"
+                :isSvg="isSvg"
             >
                 <template v-slot:toolbar-center>
                     <v-btn

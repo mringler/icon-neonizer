@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RgbColor } from '@image-tracer-ts/core'
-import { ref, watchEffect, toRaw } from 'vue'
+import { ref, watchEffect, toRaw, computed } from 'vue'
 import type { GradientDrawerOptions } from '@/scripts/background/tracer/svg-drawer/gradient-drawer-options'
 
 import { IconStorage } from '@/scripts/background/storage/icon-storage'
@@ -10,6 +10,7 @@ import FormRows from './FormRows.vue'
 const props = defineProps<{
     options: GradientDrawerOptions
     imageData?: ImageData | (() => Promise<ImageData>)
+    isSvg: boolean
 }>()
 
 const showHelp = ref(false)
@@ -91,6 +92,7 @@ async function storeOptions() {
                     :imageData="imageData"
                     :showHelp="showHelp"
                     :showOnlyFavorites="showOnlyFavorites"
+                    :isSvg="isSvg"
                 />
             </v-container>
         </v-form>

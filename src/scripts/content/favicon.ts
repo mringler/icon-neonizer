@@ -65,7 +65,8 @@ export namespace Favicon {
             const node = nodes[elementIx]
             const sizes = node.sizes
             if (sizes.length === 0 || node.type === 'image/svg+xml') {
-                continue
+                foundIx = elementIx
+                break;
             }
             for (let sizeIx = 0; sizeIx < sizes.length; sizeIx++) {
                 const size = parseInt(sizes[sizeIx].toLowerCase().split('x')[0])

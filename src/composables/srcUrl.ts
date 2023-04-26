@@ -4,6 +4,7 @@ import { ref, Ref, isRef, unref, watchEffect } from 'vue'
 
 export function useSrcUrl(url: string | Ref<string>) {
     const srcUrl: Ref<Promise<string>> = ref() as Ref<Promise<string>>
+    const isSvg = ref(false)
 
     async function buildUrl() {
         const urlString = unref(url)
@@ -11,6 +12,11 @@ export function useSrcUrl(url: string | Ref<string>) {
         srcUrl.value = isInline
             ? loadInlineUrl(urlString)
             : Promise.resolve(toFaviconDownloadUrl(urlString))
+
+        const resoledUrl = await srcUrl.value
+        isSvg.value = resoledUrl.startsWith('data:') 
+            ? resoledUrl.startsWith('data:image/svg+xml')
+            : resoledUrl.endsWith('.svg') || resoledUrl.includes('.svg?')
     }
 
     async function loadInlineUrl(urlString: string) {
@@ -30,5 +36,5 @@ export function useSrcUrl(url: string | Ref<string>) {
         buildUrl()
     }
 
-    return srcUrl
+    return { srcUrl, isSvg }
 }
