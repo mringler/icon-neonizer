@@ -31,7 +31,8 @@ async function updatePage(ix: number, blacklistPage: BlacklistedPage) {
 </script>
 
 <template>
-    <Heading>Edit Blacklist</Heading>
+    <Heading title="Edit Blacklist" subtitle="Set rules for URLs that need special handling"/>
+
     <div class="text-subtitle-1 mb-3">
         If a favicon url matches the beginning of an entry in the blacklist, it will not be
         processed automatically or replaced by a different icon if a replacement URL is given.
@@ -47,7 +48,7 @@ async function updatePage(ix: number, blacklistPage: BlacklistedPage) {
     >
         <thead>
             <tr>
-                <th class="text-left w-33">Url fragment</th>
+                <th class="text-left w-33">URL fragment</th>
                 <th class="text-left w-33">Replacement</th>
                 <th class="text-left w-33">Note</th>
                 <th class="min-width-fit-content">

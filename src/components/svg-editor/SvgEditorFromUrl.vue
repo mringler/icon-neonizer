@@ -26,8 +26,7 @@ watchEffect(async () => {
         tag="section"
         v-if="!loading"
     >
-        <Heading>Edit SVG</Heading>
-        <div class="text-subtitle-1">Manually edit the replacement icon SVG.</div>
+        <Heading title="Edit SVG" subtitle="Manually edit the replacement icon SVG"/>
 
         <v-alert
             v-if="blacklistEntry"

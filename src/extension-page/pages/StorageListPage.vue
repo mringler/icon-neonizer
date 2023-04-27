@@ -56,8 +56,7 @@ const totalSizeKb = computed(() => {
         :color="snackbarInput.color"
     />
 
-    <Heading>Icons in Storage</Heading>
-    <div class="text-subtitle-1 mb-3">View and organize stored icons.</div>
+    <Heading title="Icons in Storage" subtitle="View and organize stored icons" />
 
     <LoadingContent :is-loading="isLoading">
         <ImageRecordTable

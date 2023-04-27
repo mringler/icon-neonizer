@@ -79,8 +79,7 @@ const iconCols = {
 
 <template>
     <section tag="section">
-        <Heading>Trace Icon</Heading>
-        <div class="text-subtitle-1">Trace source icon with custom parameters.</div>
+        <Heading title="Trace Icon" subtitle="Create replacement icon with custom parameters" />
 
         <v-alert
             v-if="blacklistEntry"
