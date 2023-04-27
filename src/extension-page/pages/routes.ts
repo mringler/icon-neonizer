@@ -1,10 +1,10 @@
-import EditCurrentSvgPage from './EditCurrentSvgPage.vue'
-import SvgEditor from '@/components/svg-editor/SvgEditor.vue'
-import EditSvgPage from '@/components/svg-editor/SvgEditorFromUrl.vue'
-import StorageListPage from './StorageListPage.vue'
-import TraceUrlPage from './TraceUrlPage.vue'
-import TraceTabPage from './TraceTabPage.vue'
-import BlacklistPage from './blacklist-page/BlacklistPage.vue'
+const EditCurrentSvgPage = () => import('./EditCurrentSvgPage.vue')
+const SvgEditor = () => import('@/components/svg-editor/SvgEditor.vue')
+const EditSvgPage = () => import('@/components/svg-editor/SvgEditorFromUrl.vue')
+const StorageListPage = () => import('./StorageListPage.vue')
+const TraceUrlPage = () => import('./TraceUrlPage.vue')
+const TraceTabPage = () => import('./TraceTabPage.vue')
+const BlacklistPage = () => import('./blacklist-page/BlacklistPage.vue')
 
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 
@@ -23,7 +23,7 @@ const routes: RouteRecordRaw[] = [
             return { url: route.params.url, isLocked }
         },
     },
-    { name: 'blacklist', path: '/blacklist', component: BlacklistPage },
+    { name: 'blacklist', path: '/blacklist', component: BlacklistPage},
 ]
 
 export const router = createRouter({
