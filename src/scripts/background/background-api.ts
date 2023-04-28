@@ -5,6 +5,9 @@ import { IconStorage } from './storage/icon-storage'
 import { SvgColorReplacer } from './tracer/svg-drawer/svg-color-replacer/svg-color-replacer'
 import type { GradientDrawerOptions } from './tracer/svg-drawer/gradient-drawer-options'
 import { Tracer } from './tracer/tracer'
+import { TabMenu } from './tab-menu/tab-menu'
+import { RequestFilterManager } from './request-filter/RequestFilterManager'
+import { Settings } from './storage/Settings'
 
 export type BackgroundApiInterface = ScriptsApi<typeof backgroundApi>
 
@@ -17,6 +20,7 @@ const backgroundApi = {
     processInlineData,
     getOptions: Tracer.getOptions,
     traceWithOptions,
+    reloadSettings,
 }
 
 async function processIconUrl(
@@ -91,4 +95,10 @@ async function processIconData(
     }
     store && IconStorage.storeIcon(iconUrl, icon)
     return icon
+}
+
+export async function reloadSettings(){
+    const settings = await Settings.load(true)
+    TabMenu.setTabMenuItem(settings.enableTabMenu)
+    RequestFilterManager.init(settings)
 }

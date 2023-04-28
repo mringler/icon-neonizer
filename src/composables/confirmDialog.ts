@@ -12,10 +12,12 @@ export function createConfirmationDialog() {
     return confirmProps
 }
 
-export function useConfirmationDialog() {
+export function useConfirmationDialog(confirmProps: ConfirmProps): () => void;
+export function useConfirmationDialog(): (confirmProps: ConfirmProps) => void;
+export function useConfirmationDialog(confirmProps?: ConfirmProps) {
     const showDialog = inject(ConfirmationDialogSymbol)
 
     if (!showDialog) throw new Error('Failed to inject ConfirmationDialog!')
 
-    return showDialog
+    return confirmProps ? () => showDialog(confirmProps) : showDialog
 }

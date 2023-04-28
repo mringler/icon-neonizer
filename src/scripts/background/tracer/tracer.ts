@@ -6,10 +6,9 @@ import {
     TrimMode,
     ImageLoader,
     ImageTracer,
-    RgbColor,
 } from '@image-tracer-ts/browser'
 import { IconStorage } from '../storage/icon-storage'
-import { ColorBuilderOption, GradientDrawerOptions } from './svg-drawer/gradient-drawer-options'
+import { ColorBuilderOption, GradientDrawerOptions, GradientDrawerOptionsUtil } from './svg-drawer/gradient-drawer-options'
 import { SvgDrawerGradient } from './svg-drawer/svg-drawer-gradient'
 
 export namespace Tracer {
@@ -46,12 +45,12 @@ export namespace Tracer {
     export async function getOptions(
         options: Partial<GradientDrawerOptions> | null = null
     ): Promise<GradientDrawerOptions> {
-        const storedOptions = (await IconStorage.loadOptions()) ?? getTracerOptions()
+        const storedOptions = (await IconStorage.loadOptions()) ?? getTracerOptionsPreset()
         const combinedOptions = Object.assign({}, storedOptions, options)
-        return GradientDrawerOptions.buildFrom(combinedOptions)
+        return GradientDrawerOptionsUtil.buildFrom(combinedOptions)
     }
 
-    function getTracerOptions(): Partial<GradientDrawerOptions> {
+    export function getTracerOptionsPreset(): Partial<GradientDrawerOptions> {
         return {
             numberOfColors: 32,
             colorClusteringCycles: 3,

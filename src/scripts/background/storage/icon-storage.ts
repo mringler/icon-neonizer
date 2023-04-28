@@ -1,10 +1,12 @@
 import LZString from 'lz-string'
 import type { BlacklistedPage } from './blacklist'
 import type { GradientDrawerOptions } from '../tracer/svg-drawer/gradient-drawer-options'
+import type { SettingsData } from './Settings'
 
 const NonIconKey = {
     options: '--options--',
     blacklistedPages: '--blacklist--',
+    settings: '--settings--'
 } as const
 
 type NonIconKeyLiteral = (typeof NonIconKey)[keyof typeof NonIconKey]
@@ -123,12 +125,15 @@ export namespace IconStorage {
         return browser.storage.local.remove(url)
     }
 
-    export async function cleanup() {
+    export async function cleanup(interval: number) {
         console.log('RUNNING CLEANUP')
-        const twoWeeksAgo = Date.now() - 12096e5
+        if (interval <= 0) {
+            return
+        }
+        const thresholdTimestamp = Date.now() - interval;
         const entries = await loadAllImageData()
         Object.entries(entries).forEach(([url, data]) => {
-            !data.k && data.a < twoWeeksAgo && removeIcon(url)
+            (!data.k && data.a < thresholdTimestamp) && removeIcon(url)
         })
     }
 
@@ -146,6 +151,9 @@ export namespace IconStorage {
 
     export async function storeOptions(options: GradientDrawerOptions) {
         const { verbose, ...storeOptions } = options
+        if (storeOptions.palette?.length === 0) {
+            storeOptions.palette = null
+        }
         return storeNonIcon<GradientDrawerOptions>(NonIconKey.options, storeOptions)
     }
 
@@ -153,8 +161,20 @@ export namespace IconStorage {
         return loadNonIcon<GradientDrawerOptions>(NonIconKey.options)
     }
 
-    // Blacklist
+    export async function removeOptions(): Promise<void> {
+        return browser.storage.local.remove(NonIconKey.options)
+    }
 
+    /* Settings */
+    export async function storeSettings(settings: SettingsData) {
+        return storeNonIcon<SettingsData>(NonIconKey.settings, settings)
+    }
+
+    export async function loadSettings(): Promise<SettingsData | undefined> {
+        return loadNonIcon<SettingsData>(NonIconKey.settings, undefined)
+    }
+
+    /* Blacklist */
     export async function storeBlacklist(blacklist: BlacklistedPage[]) {
         blacklist.sort()
         return storeNonIcon(NonIconKey.blacklistedPages, blacklist)

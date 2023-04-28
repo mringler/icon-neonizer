@@ -3,7 +3,8 @@ import { Blacklist } from '../storage/blacklist'
 import { IconStorage } from '../storage/icon-storage'
 
 export namespace TouchIconRequestFilter {
-    export function setRequestFilter() {
+    export function setRequestFilter(): () => void {
+
         const pattern: browser.webRequest.RequestFilter = {
             urls: ['*://*/*apple-touch*'],
             types: ['image'],
@@ -15,6 +16,11 @@ export namespace TouchIconRequestFilter {
         ])
 
         browser.webRequest.onBeforeRequest.addListener(replaceIconFilter, pattern, ['blocking'])
+        
+        return () => {
+            browser.webRequest.onHeadersReceived.removeListener(updateHeaderContentType)
+            browser.webRequest.onBeforeRequest.removeListener(replaceIconFilter)
+        }
     }
 
     async function updateHeaderContentType(

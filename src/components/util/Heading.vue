@@ -3,6 +3,7 @@
 const props = defineProps<{
     title: string
     subtitle?: string
+    subtitleClass?: string | string[]
 }>()
 </script>
 
@@ -10,9 +11,12 @@ const props = defineProps<{
     <div class="text-center mb-4">
         <h1 class="text-h4 mb-2">{{ title }}</h1>
         <div
-            v-if="subtitle"
+            v-if="subtitle || $slots.subtitle"
             class="text-subtitle-1"
-        >{{ subtitle }}</div>
+            :class="subtitleClass"
+        >
+            <slot name="subtitle">{{ subtitle }}</slot>
+        </div>
     </div>
 </template>
 <style scoped></style>

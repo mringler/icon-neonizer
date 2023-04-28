@@ -6,7 +6,9 @@ const TraceUrlPage = () => import('./TraceUrlPage.vue')
 const TraceTabPage = () => import('./TraceTabPage.vue')
 const BlacklistPage = () => import('./blacklist-page/BlacklistPage.vue')
 
+
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
+import { SettingsRoutes } from './settings-page/settings-routes'
 
 const routes: RouteRecordRaw[] = [
     { name: 'trace-current', path: '/', component: TraceTabPage },
@@ -24,9 +26,12 @@ const routes: RouteRecordRaw[] = [
         },
     },
     { name: 'blacklist', path: '/blacklist', component: BlacklistPage},
+    
 ]
 
 export const router = createRouter({
     history: createWebHashHistory(),
     routes,
 })
+
+SettingsRoutes.declareRoutes(router)

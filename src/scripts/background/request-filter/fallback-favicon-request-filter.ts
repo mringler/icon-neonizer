@@ -4,10 +4,9 @@ import { Tracer } from '../tracer/tracer'
 import { FaviconRequestFilterBase } from './favicon-request-filter-base'
 
 
-
 export namespace FallbackFaviconRequestFilter {
 
-    export function setRequestFilter() {
+    export function setRequestFilter(): () => void {
         const config: FaviconRequestFilterBase.Configuration = {
             urlPattern: '*://*/favicon.ico',
             requiresHeaderUpdate,

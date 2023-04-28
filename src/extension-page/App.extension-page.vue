@@ -16,11 +16,8 @@ const navigationItems = [
     { title: 'Edit', value: 'edit', props: { to: '/edit-current', prependIcon: 'mdi-pen' } },
     { title: 'Management', type: 'subheader' },
     { title: 'Storage', value: 'storage', props: { to: '/storage', prependIcon: 'mdi-database' } },
-    {
-        title: 'Blacklist',
-        value: 'blacklist',
-        props: { to: '/blacklist', prependIcon: 'mdi-cancel' },
-    },
+    { title: 'Blacklist', value: 'blacklist', props: { to: '/blacklist', prependIcon: 'mdi-cancel' } },
+    { title: 'Settings', value: 'settings', props: { to: '/settings', prependIcon: 'mdi-cog' } },
 ]
 </script>
 
@@ -28,21 +25,30 @@ const navigationItems = [
     <v-app>
         <AppBar @toggleNavigation="showDrawer = !showDrawer" />
 
-        <NavigationDrawer :items="navigationItems" v-model="showDrawer" />
+        <NavigationDrawer
+            :items="navigationItems"
+            v-model="showDrawer"
+        />
 
         <v-main>
-            <v-progress-linear indeterminate color="purple" v-if="loadingItems > 0" />
+            <v-progress-linear
+                indeterminate
+                color="purple"
+                v-if="loadingItems > 0"
+            />
 
-            <v-container fluid tag="section">
+            <v-container
+                fluid
+                tag="section"
+            >
                 <router-view></router-view>
             </v-container>
         </v-main>
 
-        <Confirmation
-            :showConfirm="Boolean(confirmProps)"
-            @update:showConfirm="confirmProps = null"
-            v-bind="confirmProps"
-        />
-    </v-app>
-</template>
+    <Confirmation
+        :showConfirm="Boolean(confirmProps)"
+        @update:showConfirm="confirmProps = null"
+        v-bind="confirmProps"
+    />
+</v-app></template>
 <style scoped></style>

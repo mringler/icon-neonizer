@@ -14,7 +14,7 @@ export namespace FaviconRequestFilterBase {
         onStopWithoutStored: (fullData: Uint8Array, closeWithSvg: (svg: string) => any) => Promise<false | any>
     }
 
-    export function setRequestFilter(configuration: Configuration) {
+    export function setRequestFilter(configuration: Configuration): () => void {
         const pattern: browser.webRequest.RequestFilter = {
             urls: [configuration.urlPattern],
             types: ['image'],
@@ -28,6 +28,12 @@ export namespace FaviconRequestFilterBase {
 
         const onBeforeRequestCallback = buildOnBeforeRequestCallback(configuration)
         browser.webRequest.onBeforeRequest.addListener(onBeforeRequestCallback, pattern, ['blocking'])
+
+        const removeEventListeners = () => {
+            browser.webRequest.onHeadersReceived.removeListener(onHeadersReceivedCallback)
+            browser.webRequest.onBeforeRequest.removeListener(onBeforeRequestCallback)
+        }
+        return removeEventListeners
     }
 
     const passFilterRegex = /passFilter=1$/

@@ -1,8 +1,8 @@
 import type { RgbColor, TraceData } from "@image-tracer-ts/browser"
 import type { ColorPairBuilder } from "../color-pair-builder/color-pair-builder"
 import type { GradientBuilder, GradientTags } from "../gradient-builder/gradient-builder"
-import { GradientDrawerOptions } from "../gradient-drawer-options"
-import type { ColorStringMap, SvgPathEditor } from "./svg-path-editor"
+import { GradientDrawerOptions, GradientDrawerOptionsUtil } from "../gradient-drawer-options"
+import type { ColorStringMap } from "./svg-path-editor"
 import type { ColorHash } from "./color-extractor"
 
 
@@ -20,10 +20,10 @@ export class ColorGradientMapBuilder {
     protected gradientBuilder: GradientBuilder
 
     public constructor(svgDom: Document, rgbColors: RgbColor[], customOptions?: Partial<GradientDrawerOptions>) {
-        this.colorPairBuilder = GradientDrawerOptions.getColorPairBuilderFromOption(
+        this.colorPairBuilder = GradientDrawerOptionsUtil.getColorPairBuilderFromOption(
             customOptions?.colorBuilder
         )
-        this.gradientBuilder = GradientDrawerOptions.getGradientBuilderFromOption(
+        this.gradientBuilder = GradientDrawerOptionsUtil.getGradientBuilderFromOption(
             customOptions?.gradientBuilder
         )
 

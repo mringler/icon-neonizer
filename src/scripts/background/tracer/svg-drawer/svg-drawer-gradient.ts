@@ -1,7 +1,7 @@
 import { TraceData, RgbColor, SvgDrawer } from '@image-tracer-ts/core'
 import type { ColorPairBuilder } from './color-pair-builder/color-pair-builder'
 import type { GradientBuilder, GradientTags } from './gradient-builder/gradient-builder'
-import { GradientDrawerOptions } from './gradient-drawer-options'
+import { GradientDrawerOptions, GradientDrawerOptionsUtil } from './gradient-drawer-options'
 
 export class SvgDrawerGradient extends SvgDrawer {
     protected colorToGradientId = new Map<RgbColor, string>()
@@ -18,8 +18,8 @@ export class SvgDrawerGradient extends SvgDrawer {
 
     public constructor(options: Partial<GradientDrawerOptions>) {
         super(options)
-        this.colorPairBuilder = GradientDrawerOptions.getColorPairBuilderFromOption(options.colorBuilder)
-        this.gradientBuilder = GradientDrawerOptions.getGradientBuilderFromOption(options.gradientBuilder)
+        this.colorPairBuilder = GradientDrawerOptionsUtil.getColorPairBuilderFromOption(options.colorBuilder)
+        this.gradientBuilder = GradientDrawerOptionsUtil.getGradientBuilderFromOption(options.gradientBuilder)
         const getBoundVal = (val: number | undefined) => !val && val !== 0 ? 1 : Math.max(0, Math.min(Number(val), 1))
         this.fullOpacityThreshold = getBoundVal(options.fullOpacityThreshold)
         this.minOpacityThreshold = getBoundVal(options.minOpacityThreshold)

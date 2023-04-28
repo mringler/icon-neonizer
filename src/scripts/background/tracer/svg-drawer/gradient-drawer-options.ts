@@ -33,7 +33,7 @@ export interface GradientDrawerOptions extends Options {
     removeBackground?: boolean
 }
 
-export namespace GradientDrawerOptions {
+export namespace GradientDrawerOptionsUtil {
     export function getColorPairBuilderFromOption(option?: ColorBuilderOption): ColorPairBuilder {
         switch (option) {
             case ColorBuilderOption.darken: return new DarkeningColorPairBuilder()

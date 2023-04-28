@@ -8,7 +8,7 @@ import { FaviconRequestFilterBase } from './favicon-request-filter-base'
 
 export namespace FaviconRequestFilter {
 
-    export function setRequestFilter() {
+    export function setRequestFilter(): () => void {
         const config: FaviconRequestFilterBase.Configuration = {
             urlPattern: '*://*/*favicon*',
             requiresHeaderUpdate,
