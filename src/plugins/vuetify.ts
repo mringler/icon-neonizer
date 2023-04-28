@@ -11,6 +11,8 @@ import { VDataTable } from 'vuetify/labs/VDataTable'
 import 'vuetify/styles'
 import '@mdi/font/css/materialdesignicons.css'
 
+const defaultTheme = window?.matchMedia?.('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
+
 export default createVuetify({
     // Global configuration
     // https://next.vuetifyjs.com/en/features/global-configuration/
@@ -43,13 +45,25 @@ export default createVuetify({
     // Theme
     // https://next.vuetifyjs.com/en/features/theme/
     theme: {
-        defaultTheme: 'dark',
+        defaultTheme,
         themes: {
             dark: {
                 colors: {
-                    //primary: '#009999'
+                    info:  '#04d9ff',
+                    success: '#0fff50',
+                    warning: '#c6f714',
+                    error: '#ff3131',
                 },
             },
+            light:{
+                colors: {
+                    primary: '#7d12ff',
+                    info:  '#04d9ff',
+                    success: '#0fff50',
+                    warning: '#c6f714',
+                    error: '#ff3131',
+                },
+            }
         },
     },
     components: {

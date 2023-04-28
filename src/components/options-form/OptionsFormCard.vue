@@ -34,7 +34,6 @@ async function storeOptions() {
 
 <template>
     <v-card
-        flat
         max-width="1200"
     >
         <v-toolbar density="compact">

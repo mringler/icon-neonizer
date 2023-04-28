@@ -40,53 +40,55 @@ const openExtensionPage = async () => {
 </script>
 
 <template>
-    <v-card
-        title="Icon Neonizer"
-        class="panel-card ma-3"
-    >
-        <v-card-subtitle>
-            <v-tooltip
-                v-if="blacklistEntry"
-                :text="blackListNotification.text"
-            >
-                <template v-slot:activator="{ props }">
-                    <v-icon
-                        v-bind="props"
-                        class="mr-2"
-                        :icon="blackListNotification.icon"
-                        color="primary"
+    <v-app>
+        <v-card
+            title="Icon Neonizer"
+            class="panel-card ma-3"
+        >
+            <v-card-subtitle>
+                <v-tooltip
+                    v-if="blacklistEntry"
+                    :text="blackListNotification.text"
+                >
+                    <template v-slot:activator="{ props }">
+                        <v-icon
+                            v-bind="props"
+                            class="mr-2"
+                            :icon="blackListNotification.icon"
+                            color="primary"
+                        />
+                    </template>
+                </v-tooltip>
+                <span class="wrap-on-hover">{{ url }}</span>
+            </v-card-subtitle>
+
+            <v-card-text>
+                <div
+                    v-if="url"
+                    class="image-row justify-space-between"
+                >
+                    <FaviconImg
+                        :src="url"
+                        class="image-display-icon"
                     />
-                </template>
-            </v-tooltip>
-            <span class="wrap-on-hover">{{ url }}</span>
-        </v-card-subtitle>
 
-        <v-card-text>
-            <div
-                v-if="url"
-                class="image-row justify-space-between"
-            >
-                <FaviconImg
-                    :src="url"
-                    class="image-display-icon"
-                />
+                    <FaviconStored
+                        :url="url"
+                        class="image-display-icon"
+                    />
+                </div>
+            </v-card-text>
 
-                <FaviconStored
-                    :url="url"
-                    class="image-display-icon"
-                />
-            </div>
-        </v-card-text>
-
-        <v-card-actions>
-            <v-btn
-                block
-                variant="tonal"
-                color="primary"
-                @click="openExtensionPage"
-            >Configure</v-btn>
-        </v-card-actions>
-    </v-card>
+            <v-card-actions>
+                <v-btn
+                    block
+                    variant="tonal"
+                    color="primary"
+                    @click="openExtensionPage"
+                >Configure</v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-app>
 </template>
 <style scoped>
 .panel-card {
@@ -109,4 +111,5 @@ const openExtensionPage = async () => {
     height: 200px;
     max-width: 200px;
     max-height: 200px;
-}</style>
+}
+</style>
