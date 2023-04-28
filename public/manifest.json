@@ -41,7 +41,7 @@
 
     "browser_action": {
         "default_icon": "icons/logo.svg",
-        "default_title": "Neonize",
+        "default_title": "Icon Neonizer",
         "default_popup": "src/popup/popup.html"
     }
   }
