@@ -6,6 +6,7 @@ import { Blacklist, BlacklistedPage } from '@/scripts/background/storage/blackli
 import { IconStorage } from '@/scripts/background/storage/icon-storage'
 import FaviconImg from '@/components/image-display/FaviconImg.vue'
 import FaviconStored from '@/components/image-display/FaviconStored.vue'
+import { mdiFileReplace } from '@mdi/js'
 
 const url: Ref<string | null> = ref(null)
 const blacklistEntry: Ref<BlacklistedPage | undefined> = ref()
@@ -24,7 +25,7 @@ onBeforeMount(loadUrl)
 
 const blackListNotification = computed(() =>
     blacklistEntry.value?.replacementUrl
-        ? { icon: 'mdi-file-replace', text: 'URL was replaced through blacklist' }
+        ? { icon: mdiFileReplace, text: 'URL was replaced through blacklist' }
         : { icon: '', text: 'No automatic processing: source is blacklisted.' }
 )
 

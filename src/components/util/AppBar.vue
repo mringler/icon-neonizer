@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { mdiReload } from '@mdi/js'
 function reloadBackground() {
     browser.runtime.reload()
 }
@@ -26,7 +27,7 @@ function reloadBackground() {
             icon
             @click="reloadBackground"
         >
-            <v-icon>mdi-reload</v-icon>
+            <v-icon :icon="mdiReload"/>
         </v-btn>
     </v-app-bar>
 </template>

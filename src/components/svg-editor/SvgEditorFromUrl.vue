@@ -5,6 +5,7 @@ import { IconStorage } from '@/scripts/background/storage/icon-storage'
 import SvgEditor from './SvgEditor.vue'
 import { useLoadingIndicator } from '@/composables/loadingIndicator'
 import { Blacklist, BlacklistedPage } from '@/scripts/background/storage/blacklist'
+import { mdiAlertCircle } from '@mdi/js'
 
 const props = defineProps<{
     url: string
@@ -31,7 +32,7 @@ watchEffect(async () => {
         <v-alert
             v-if="blacklistEntry"
             class="my-3"
-            icon="mdi-alert-circle"
+            :icon="mdiAlertCircle"
             :title="blacklistEntry.replacementUrl ? 'Redirected URL' : 'Blacklisted URL'"
             type="warning"
             variant="outlined"

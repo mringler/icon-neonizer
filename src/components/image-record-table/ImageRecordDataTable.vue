@@ -6,6 +6,7 @@ import DownloadSvgButton from './DownloadSvgButton.vue'
 import FaviconImg from '../image-display/FaviconImg.vue'
 import FaviconSvg from '../image-display/FaviconSvg.vue'
 import { VDataTable } from 'vuetify/lib/labs/components'
+import { mdiMagnify, mdiLock, mdiDraw, mdiPen, mdiDelete } from '@mdi/js'
 
 type DT = InstanceType<typeof VDataTable>
 type Headers = DT['headers']
@@ -61,7 +62,7 @@ const faviconDisplayProps = {
 
                 <v-text-field
                     v-model="search"
-                    append-icon="mdi-magnify"
+                    :append-icon="mdiMagnify"
                     label="Search"
                     single-line
                     hide-details
@@ -104,7 +105,7 @@ const faviconDisplayProps = {
                 <div class="text-center">
                     <v-icon
                         v-if="item.columns.noAutomaticOverride"
-                        icon="mdi-lock"
+                        :icon="mdiLock"
                     />
                 </div>
             </template>
@@ -115,7 +116,7 @@ const faviconDisplayProps = {
                             <v-btn
                                 v-bind="props"
                                 variant="plain"
-                                icon="mdi-draw"
+                                :icon="mdiDraw"
                                 :to="{ name: 'trace-by-url', params: { url: item.columns.url as string} }"
                             />
                         </template>
@@ -125,7 +126,7 @@ const faviconDisplayProps = {
                             <v-btn
                                 v-bind="props"
                                 variant="plain"
-                                icon="mdi-pen"
+                                :icon="mdiPen"
                                 :to="{
                                     name: 'edit-by-url',
                                     params: { url: item.columns.url as string },
@@ -149,7 +150,7 @@ const faviconDisplayProps = {
                             <v-btn
                                 v-bind="props"
                                 variant="plain"
-                                icon="mdi-delete"
+                                :icon="mdiDelete"
                                 @click.stop="emit('removeRecord', item.raw)"
                             />
                         </template>

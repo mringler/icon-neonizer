@@ -1,6 +1,5 @@
-import { aliases, mdi } from 'vuetify/iconsets/mdi'
 import { createVuetify } from 'vuetify'
-
+import { aliases, mdi } from 'vuetify/iconsets/mdi-svg'
 import { en } from 'vuetify/locale'
 import { VDataTable } from 'vuetify/labs/VDataTable'
 
@@ -9,7 +8,6 @@ import { VDataTable } from 'vuetify/labs/VDataTable'
 //loadFonts();
 
 import 'vuetify/styles'
-import '@mdi/font/css/materialdesignicons.css'
 
 const defaultTheme = window?.matchMedia?.('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
 
@@ -51,8 +49,6 @@ export default createVuetify({
                 colors: {
                     info:  '#04d9ff',
                     success: '#0fff50',
-                    warning: '#c6f714',
-                    error: '#ff3131',
                 },
             },
             light:{
@@ -60,8 +56,6 @@ export default createVuetify({
                     primary: '#7d12ff',
                     info:  '#04d9ff',
                     success: '#0fff50',
-                    warning: '#c6f714',
-                    error: '#ff3131',
                 },
             }
         },

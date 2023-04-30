@@ -28,3 +28,7 @@ body {
 .v-overlay-container .v-tooltip .v-table .v-table__wrapper > table tbody > tr th {
     background: transparent;
 }
+
+.text-max-width{
+    max-width: 552px;
+}

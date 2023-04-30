@@ -1,4 +1,6 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { mdiHelpCircleOutline } from '@mdi/js'
+</script>
 
 <template>
     <v-tooltip
@@ -13,9 +15,8 @@
             <v-icon
                 v-bind="props"
                 color="primary"
-                icon="mdi-help-circle-outline"
+                :icon="mdiHelpCircleOutline"
             />
-            <!--v-btn icon="mdi-help" v-bind="props" size="small"/-->
         </template>
         <slot />
     </v-tooltip>

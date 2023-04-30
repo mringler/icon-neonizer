@@ -5,6 +5,7 @@ import NavigationDrawer from '@/components/util/NavigationDrawer.vue'
 import Confirmation from '@/components/util/Confirmation.vue'
 import { createConfirmationDialog } from '@/composables/confirmDialog'
 import { createLoadingSpinner } from '@/composables/loadingSpinner'
+import { mdiDraw, mdiPen, mdiDatabase, mdiCancel, mdiCog } from '@mdi/js'
 
 const loadingItems = createLoadingSpinner()
 const confirmProps = createConfirmationDialog()
@@ -12,12 +13,12 @@ const showDrawer = ref(true)
 
 const navigationItems = [
     { title: 'Page Icon', type: 'subheader' },
-    { title: 'Trace', value: 'trace', props: { to: '/', prependIcon: 'mdi-draw' } },
-    { title: 'Edit', value: 'edit', props: { to: '/edit-current', prependIcon: 'mdi-pen' } },
+    { title: 'Trace', value: 'trace', props: { to: '/', prependIcon: mdiDraw } },
+    { title: 'Edit', value: 'edit', props: { to: '/edit-current', prependIcon: mdiPen } },
     { title: 'Management', type: 'subheader' },
-    { title: 'Storage', value: 'storage', props: { to: '/storage', prependIcon: 'mdi-database' } },
-    { title: 'Blacklist', value: 'blacklist', props: { to: '/blacklist', prependIcon: 'mdi-cancel' } },
-    { title: 'Settings', value: 'settings', props: { to: '/settings', prependIcon: 'mdi-cog' } },
+    { title: 'Storage', value: 'storage', props: { to: '/storage', prependIcon: mdiDatabase } },
+    { title: 'Blacklist', value: 'blacklist', props: { to: '/blacklist', prependIcon: mdiCancel } },
+    { title: 'Settings', value: 'settings', props: { to: '/settings', prependIcon: mdiCog } },
 ]
 </script>
 

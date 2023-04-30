@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { mdiImageRemove } from '@mdi/js'
 type Props = {
     width?: string
     height?: string
@@ -33,7 +34,7 @@ const props = withDefaults(defineProps<Props>(), {
             name="no-content"
             v-else-if="props.isEmpty"
         >
-            <v-icon icon="mdi-image-remove" />
+            <v-icon :icon="mdiImageRemove" />
         </slot>
 
         <slot v-else></slot>

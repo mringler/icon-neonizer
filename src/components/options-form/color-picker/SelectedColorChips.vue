@@ -2,6 +2,8 @@
 import { ref, watchEffect } from 'vue'
 import type { RgbColor } from '@image-tracer-ts/core'
 import ColorPickerCard from './ColorPickerCard.vue'
+import { mdiPlus, mdiDelete } from '@mdi/js'
+
 
 type Props = {
     showPicker?: boolean
@@ -71,7 +73,7 @@ function showAdd(value = true) {
         </v-chip>
         <v-chip
             v-if="!props.noAdd"
-            prepend-icon="mdi-plus"
+            :prepend-icon="mdiPlus"
             @click="showAdd(!isAddOpen)"
             label
         >
@@ -79,7 +81,7 @@ function showAdd(value = true) {
         </v-chip>
         <v-chip
             v-if="props.colors.length > 0 && !props.noClear"
-            prepend-icon="mdi-delete"
+            :prepend-icon="mdiDelete"
             @click="clear"
             label
         >

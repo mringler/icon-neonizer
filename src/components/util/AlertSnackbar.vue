@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { mdiClose } from '@mdi/js'
+
 export type AlertSnackbarProps = {
     color?: string
     message: string | null
@@ -27,7 +29,7 @@ const emitClearMessage = () => {
         <template v-slot:action="{ attrs }">
             <v-btn
                 v-bind="attrs"
-                icon="mdi-close"
+                :icon="mdiClose"
                 color="green"
                 @click="emitClearMessage"
             />

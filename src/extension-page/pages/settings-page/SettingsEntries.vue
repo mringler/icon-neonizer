@@ -7,7 +7,8 @@ import { router } from '../routes';
 import Heading from '@/components/util/Heading.vue';
 import { FaviconRequestFilterType } from '@/scripts/background/request-filter/FaviconRequestFilterType';
 import { useTracerOptionsDiff } from './composables/tracerOptionsDiff';
-
+import SettingsRows from './SettingsRows.vue';
+import { mdiDeleteClockOutline, mdiMenuOpen, mdiCheckCircle, mdiMinusCircle, mdiStar, mdiFileReplaceOutline, mdiPencil } from '@mdi/js'
 
 const settings = useSettings().settings
 
@@ -27,38 +28,38 @@ const {tracerOptionsDiff} = useTracerOptionsDiff()
 
 const items: ComputedRef<SettingsEntry[]> = computed((): SettingsEntry[] => !settings.value ? [] : [
     {
-        icon: 'mdi-delete-clock-outline',
+        icon: mdiDeleteClockOutline,
         text: 'Storage period for unused icons',
         value: {
             text: settings.value.cleanupIntervalDays + ' Days',
         },
         route: { name: 'cleanup' },
     }, {
-        icon: 'mdi-menu-open',
+        icon: mdiMenuOpen,
         text: 'Add link to tabs context menu',
         value: settings.value.enableTabMenu ? {
             text: 'On',
-            icon: 'mdi-check-circle',
+            icon: mdiCheckCircle,
             iconColor: 'info',
         } : {
             text: 'Off',
-            icon: 'mdi-minus-circle',
+            icon: mdiMinusCircle,
             //iconColor: 'primary',
         },
         route: { name: 'tab-menu' },
     }, {
-        icon: 'mdi-star',
+        icon: mdiStar,
         text: 'Use custom trace options',
         value: tracerOptionsDiff.value.length > 0 ? {
             text: `Changed ${tracerOptionsDiff.value.length} ` + (tracerOptionsDiff.value.length === 1 ? 'property' : 'properties'),
-            icon: 'mdi-star',
+            icon: mdiStar,
             iconColor: 'info'
         } : {
             text: 'Using presets'
         },
         route: { name: 'reset-trace-options' },
     }, {
-        icon: 'mdi-file-replace-outline',
+        icon: mdiFileReplaceOutline,
         text: 'Replace favicon responses',
         value: {
             text: (settings.value.faviconRequestFilter == FaviconRequestFilterType.fallback ? 'When necessary' : 'When possible') 
@@ -100,10 +101,12 @@ const items: ComputedRef<SettingsEntry[]> = computed((): SettingsEntry[] => !set
                                 {{ item.value.text }}
                             </span>
                         </td>
-                        <td><v-icon>mdi-pencil</v-icon></td>
+                        <td><v-icon :icon="mdiPencil"/></td>
                     </tr>
                 </tbody>
             </v-table>
+
+            <SettingsRows :items="items" class="mt-12"/>
         </v-card>
     </div>
 </template>

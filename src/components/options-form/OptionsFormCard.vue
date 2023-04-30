@@ -6,6 +6,7 @@ import type { GradientDrawerOptions } from '@/scripts/background/tracer/svg-draw
 import { IconStorage } from '@/scripts/background/storage/icon-storage'
 import { useConfirmationDialog } from '@/composables/confirmDialog'
 import FormRows from './FormRows.vue'
+import { mdiHelpCircleOutline, mdiStar, mdiChevronDown, mdiChevronUp } from '@mdi/js'
 
 const props = defineProps<{
     options: GradientDrawerOptions
@@ -51,7 +52,7 @@ async function storeOptions() {
                 <template v-slot:activator="{ props }">
                     <v-btn
                         v-bind="props"
-                        icon="mdi-help-circle-outline"
+                        :icon="mdiHelpCircleOutline"
                         :color="showHelp ? 'primary' : undefined"
                         @click="showHelp = !showHelp"
                     />
@@ -64,7 +65,7 @@ async function storeOptions() {
                 <template v-slot:activator="{ props }">
                     <v-btn
                         v-bind="props"
-                        icon="mdi-star"
+                        :icon="mdiStar"
                         @click="storeOptions"
                     />
                 </template>
@@ -77,7 +78,7 @@ async function storeOptions() {
                 <template v-slot:activator="{ props }">
                     <v-btn
                         v-bind="props"
-                        :icon="showOnlyFavorites ? 'mdi-chevron-down' : 'mdi-chevron-up'"
+                        :icon="showOnlyFavorites ? mdiChevronDown : mdiChevronUp"
                         @click="showOnlyFavorites = !showOnlyFavorites"
                     />
                 </template>

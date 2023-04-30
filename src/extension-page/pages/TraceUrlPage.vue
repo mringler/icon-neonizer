@@ -14,6 +14,7 @@ import { useImageData } from '@/composables/imageData'
 import { useSrcUrl } from '@/composables/srcUrl'
 import TracedImageInfo from '@/components/image-display/TracedImageInfo.vue'
 import { useTracedSvg } from '@/composables/tracedSvg'
+import { mdiAlertCircle } from '@mdi/js'
 
 type Props = {
     url: string
@@ -84,7 +85,7 @@ const iconCols = {
         <v-alert
             v-if="blacklistEntry"
             class="my-3"
-            icon="mdi-alert-circle"
+            :icon="mdiAlertCircle"
             :title="blacklistEntry.replacementUrl ? 'Redirected URL' : 'Blacklisted URL'"
             type="warning"
             variant="outlined"

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, Ref, computed } from 'vue'
+import { mdiDownload } from '@mdi/js'
 
 type Props = {
     url: string
@@ -36,7 +37,7 @@ function setHref(e: MouseEvent) {
     <v-btn
         class="download-svg"
         tag="a"
-        icon="mdi-download"
+        :icon="mdiDownload"
         :href="href!"
         :download="fileName"
         @click="setHref"

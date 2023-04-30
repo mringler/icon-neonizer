@@ -3,6 +3,7 @@ import IconFrame from './IconFrame.vue'
 import { ref, toRef } from 'vue'
 import { useSrcUrl } from '@/composables/srcUrl'
 import { useAwaited } from '@/composables/awaited'
+import { mdiCloudQuestionOutline } from '@mdi/js'
 
 const props = defineProps<{
     src: string
@@ -20,10 +21,7 @@ const showEmpty = ref(false)
             class="w-100"
             @error="showEmpty = true"
         />
-        <span
-            v-else
-            class="mdi mdi-cloud-question-outline mdi-48px"
-        />
+        <v-icon v-else :icon="mdiCloudQuestionOutline" size="large"/>
     </IconFrame>
 </template>
 

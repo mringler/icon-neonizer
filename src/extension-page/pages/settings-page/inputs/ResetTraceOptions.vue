@@ -3,6 +3,7 @@ import { useConfirmationDialog } from '@/composables/confirmDialog'
 import { IconStorage } from '@/scripts/background/storage/icon-storage';
 import SettingsInput from './SettingsInput.vue';
 import { useTracerOptionsDiff } from '../composables/tracerOptionsDiff'
+import { mdiBroom, mdiStar } from '@mdi/js'
 
 const { tracerOptionsDiff, loading, reloadDiff } = useTracerOptionsDiff()
 
@@ -24,7 +25,7 @@ const resetPresetOptions = useConfirmationDialog({
         <template #description>
             The trace options used when icons are processed in the background can be
             changed on the trace icon page (look for the <v-icon
-                icon="mdi-star"
+                :icon="mdiStar"
                 size="x-small"
             /> icon).
         </template>
@@ -63,7 +64,7 @@ const resetPresetOptions = useConfirmationDialog({
                 <v-btn
                     color="medium-emphasis"
                     variant="outlined"
-                    prepend-icon="mdi-broom"
+                    :prepend-icon="mdiBroom"
                     :disabled="tracerOptionsDiff.length === 0"
                     @click="resetPresetOptions"
                 >Restore preset</v-btn>

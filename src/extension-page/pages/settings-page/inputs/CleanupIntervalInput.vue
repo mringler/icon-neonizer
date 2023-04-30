@@ -2,7 +2,7 @@
 import { useConfirmationDialog } from '@/composables/confirmDialog';
 import SettingsInput from './SettingsInput.vue';
 import type { Settings } from '@/scripts/background/storage/Settings';
-
+import { mdiBroom } from '@mdi/js'
 
 const showConfirm = useConfirmationDialog()
 
@@ -46,7 +46,7 @@ const cleanup = (settings: Settings) => {
             <v-btn
                 color="medium-emphasis"
                 variant="outlined"
-                prepend-icon="mdi-broom"
+                :prepend-icon="mdiBroom"
                 @click="() => cleanup(settings)"
             >Cleanup now</v-btn>
         </div>
