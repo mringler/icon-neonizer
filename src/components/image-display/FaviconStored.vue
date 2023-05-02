@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { toRef } from 'vue'
+import { toRef, computed } from 'vue'
 import FaviconSvg from './FaviconSvg.vue'
 import { useTracedSvg } from '@/composables/tracedSvg'
 
@@ -10,6 +10,7 @@ const props = defineProps<{
 }>()
 
 const { svgPromise, blacklistEntry } = useTracedSvg(toRef(props, 'url'))
+const isBlacklisted = computed(() => Boolean(blacklistEntry))
 </script>
 
 <template>
@@ -31,9 +32,9 @@ const { svgPromise, blacklistEntry } = useTracedSvg(toRef(props, 'url'))
                             color="secondary"
                         >url</v-btn>
                     </template>
-
-                    <div v-if="Boolean(blacklistEntry)">(Blacklisted)</div>
+                    {{ url }}
                 </v-tooltip>
+                <div v-if="isBlacklisted">(Blacklisted)</div>
             </div>
         </template>
     </FaviconSvg>
