@@ -78,6 +78,13 @@ const openExtensionPage = async () => {
                         class="image-display-icon"
                     />
                 </div>
+                <v-alert
+                    v-else
+                    type="info"
+                    density="compact"
+                    variant="outlined"
+                    title="No processable favicon on page"
+                />
             </v-card-text>
 
             <v-card-actions>
