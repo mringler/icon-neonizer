@@ -6,7 +6,7 @@ import { Blacklist, BlacklistedPage } from '@/scripts/background/storage/blackli
 import { IconStorage } from '@/scripts/background/storage/icon-storage'
 import FaviconImg from '@/components/image-display/FaviconImg.vue'
 import FaviconStored from '@/components/image-display/FaviconStored.vue'
-import { mdiFileReplace } from '@mdi/js'
+import { mdiFileReplace, mdiCancel } from '@mdi/js'
 
 const url: Ref<string | null> = ref(null)
 const blacklistEntry: Ref<BlacklistedPage | undefined> = ref()
@@ -18,15 +18,15 @@ async function loadUrl() {
         return
     }
     blacklistEntry.value = await Blacklist.getBlacklistEntry(tabUrl)
-    url.value = blacklistEntry.value?.replacementUrl ?? tabUrl
-    newImage.value = await IconStorage.loadIcon(url.value)
+    url.value = blacklistEntry.value?.replacementUrl || tabUrl
+    newImage.value = url.value ? await IconStorage.loadIcon(url.value) : ''
 }
 onBeforeMount(loadUrl)
 
 const blackListNotification = computed(() =>
     blacklistEntry.value?.replacementUrl
         ? { icon: mdiFileReplace, text: 'URL was replaced through blacklist' }
-        : { icon: '', text: 'No automatic processing: source is blacklisted.' }
+        : { icon: mdiCancel, text: 'No automatic processing: source is blacklisted.' }
 )
 
 const openExtensionPage = async () => {
