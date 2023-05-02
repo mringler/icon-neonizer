@@ -1,5 +1,6 @@
 import type { GradientDrawerOptions } from "../gradient-drawer-options"
-import { ColorGradientMapBuilder, ColorStringToGradientDataMap } from "./color-gradient-replacer"
+import { ColorExtractor } from "./color-extractor"
+import { ColorGradientMapBuilder, ColorStringToGradientDataMap } from "./color-gradient-map-builder"
 import { SvgPathEditor } from "./svg-path-editor"
 
 export namespace SvgColorReplacer {
@@ -8,12 +9,14 @@ export namespace SvgColorReplacer {
         customOptions?: Partial<GradientDrawerOptions>
     ): string {
         const svgDom = parseSvg(svgString)
-        const pathEditor = new SvgPathEditor(svgDom, customOptions)
+        const colorExtractor = new ColorExtractor((customOptions?.fullOpacityThreshold ?? 1) * 255)
+        const pathEditor = new SvgPathEditor(svgDom, colorExtractor, customOptions)
         const colorDataBuilder = new ColorGradientMapBuilder(svgDom, pathEditor.getRgbColors(), customOptions)
         const colorGradientMap = colorDataBuilder.buildColorGradients(pathEditor.colorStringMap)
         pathEditor.updatePaths(colorGradientMap)
 
         fixupSvg(svgDom)
+        fixupExistingGradients(svgDom, colorExtractor, colorDataBuilder)
         insertGradientsIntoSvg(svgDom, colorGradientMap)
         return new XMLSerializer().serializeToString(svgDom)
     }
@@ -25,6 +28,30 @@ export namespace SvgColorReplacer {
             throw new Error('Error parsing SVG: ' + errorNode.textContent)
         }
         return svgDocument
+    }
+
+
+    function fixupExistingGradients(svgDom: Document, colorExtractor: ColorExtractor, colorDataBuilder: ColorGradientMapBuilder) {
+        const stops = svgDom.querySelectorAll<SVGStopElement>('linearGradient stop')
+        stops.forEach(stop => {
+            const stopColorString = stop.getAttribute('stop-color')
+            if (!stopColorString) return
+            const stopColor = colorExtractor.extract(stopColorString)
+            const updatedColor = colorDataBuilder.findSingleColorReplacement(stopColor.rgb)
+            stop.setAttribute('stop-color', updatedColor.toCssColorHex())
+        })
+
+        const gradients = svgDom.querySelectorAll<SVGLinearGradientElement>('linearGradient')
+        gradients.forEach(gradient => {
+            const id = gradient.id
+            if (!id) return
+            const updatedId = id + '_' + (Math.random() + 1).toString(36).substring(7)
+            gradient.id = updatedId
+            const ref = `url(#${updatedId})`
+            for(const paint of ['stroke', 'fill']){
+                svgDom.querySelectorAll(`[${paint}="url(#${id})"]`).forEach(node => node.setAttribute(paint, ref))
+            }
+        })
     }
 
     function fixupSvg(svgDocument: Document) {

@@ -1,6 +1,6 @@
 import { FillStyle, RgbColor } from "@image-tracer-ts/browser"
-import { ColorExtractor, RgbColorAndHash } from "./color-extractor"
-import type { ColorStringToGradientDataMap } from "./color-gradient-replacer"
+import type { ColorExtractor, RgbColorAndHash } from "./color-extractor"
+import type { ColorStringToGradientDataMap } from "./color-gradient-map-builder"
 import type { GradientDrawerOptions } from "../gradient-drawer-options"
 
 export type SvgColorElements = SVGPathElement | SVGCircleElement | SVGRectElement
@@ -14,15 +14,14 @@ export class SvgPathEditor {
     useStroke: boolean
     useFill: boolean
     strokeWidth: number
-    fullOpacityThreshold: number
+    colorExtractor: ColorExtractor
 
 
-    constructor(svgDom: Document, customOptions: Partial<GradientDrawerOptions> | undefined) {
+    constructor(svgDom: Document, colorExtractor: ColorExtractor, customOptions: Partial<GradientDrawerOptions> | undefined) {
         this.useStroke = Boolean(customOptions?.fillStyle) && customOptions?.fillStyle  !== FillStyle.FILL
         this.useFill = customOptions?.fillStyle !== FillStyle.STROKE
-        console.log('s & f', this.useStroke, this.useFill)
         this.strokeWidth = customOptions?.strokeWidth ?? 1
-        this.fullOpacityThreshold = (customOptions?.fullOpacityThreshold ?? 1) * 255
+        this.colorExtractor = colorExtractor
 
         this.pathWithColors = this.extractPathColors(svgDom)
         this.colorStringMap = this.extractColorStringMap(this.pathWithColors)
@@ -38,7 +37,7 @@ export class SvgPathEditor {
             const style = getComputedStyle(path)
             for (const prop of colorProps) {
                 const colorString = path.getAttribute(prop) ?? style[prop]
-                if (colorString === 'none') {
+                if (colorString === 'none' || colorString.startsWith('url(')) {
                     continue
                 }
                 pathWithColor[prop] = colorString
@@ -56,11 +55,10 @@ export class SvgPathEditor {
 
     protected extractColorStringMap(pathWithColors: PathWithColors[]): ColorStringMap {
         const colorStrings = pathWithColors.map(c => c.fill).concat(this.pathWithColors.map(c => c.stroke)).filter(Boolean) as string[]
-        const extractor = new ColorExtractor(this.fullOpacityThreshold)
         const colorStringMap = new Map<string, RgbColorAndHash>()
         for (const colorString of colorStrings) {
             if (colorStringMap.has(colorString)) continue
-            colorStringMap.set(colorString, extractor.extract(colorString))
+            colorStringMap.set(colorString, this.colorExtractor.extract(colorString))
         }
 
         return colorStringMap

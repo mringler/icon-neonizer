@@ -54,5 +54,9 @@ export class ColorGradientMapBuilder {
         return colorDataMap
     }
 
-}
+    public findSingleColorReplacement(color: RgbColor){
+        const index = Math.random() >= 0.5 ? 1 : 0
+        return this.colorPairBuilder.generateColorPair(color)[index]
+    }
 
+}
