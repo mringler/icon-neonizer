@@ -36,7 +36,7 @@ export class SvgPathEditor {
             const pathWithColor: PathWithColors = { path, stroke: undefined, fill: undefined }
             const style = getComputedStyle(path)
             for (const prop of colorProps) {
-                const colorString = path.getAttribute(prop) ?? style[prop]
+                const colorString = path.getAttribute(prop) ?? path.style[prop] ?? style[prop]
                 if (colorString === 'none' || colorString.startsWith('url(')) {
                     continue
                 }
@@ -76,6 +76,7 @@ export class SvgPathEditor {
         const colorProps = ['fill', 'stroke'] as const
         for (const pathColor of this.pathWithColors) {
             for (const prop of colorProps) {
+                pathColor.path.style.removeProperty(prop)
                 if (!this.useFill && prop === 'fill') {
                     pathColor.path.setAttribute(prop, 'none')
                     continue
@@ -98,4 +99,3 @@ export class SvgPathEditor {
         }
     }
 }
-

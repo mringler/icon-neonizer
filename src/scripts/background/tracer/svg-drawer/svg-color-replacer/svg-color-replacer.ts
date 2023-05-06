@@ -18,7 +18,8 @@ export namespace SvgColorReplacer {
         fixupSvg(svgDom)
         fixupExistingGradients(svgDom, colorExtractor, colorDataBuilder)
         insertGradientsIntoSvg(svgDom, colorGradientMap)
-        return new XMLSerializer().serializeToString(svgDom)
+        const svgNode = svgDom.querySelector('svg')
+        return svgNode ? new XMLSerializer().serializeToString(svgNode) : svgString
     }
 
     export function parseSvg(svgString: string): Document {
