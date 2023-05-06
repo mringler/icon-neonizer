@@ -19,7 +19,7 @@ const { loading, sourceTab, sourceIconUrl } = createSourceTab((tab, url) =>
 
 async function updateTabIcon(svg: string) {
     const fromTab = await loadOpenerTab()
-    fromTab && callContentApi('setIcon', [svg], fromTab.id)
+    fromTab && callContentApi('setIcon', [svg, true], fromTab.id)
 }
 </script>
 

@@ -4,6 +4,7 @@ import { IconStorage } from '../storage/icon-storage'
 import { SvgColorReplacer } from '../tracer/svg-drawer/svg-color-replacer/svg-color-replacer'
 import { Tracer } from '../tracer/tracer'
 import { FaviconRequestFilterBase } from './favicon-request-filter-base'
+import { Settings } from '../storage/Settings'
 
 
 export namespace FaviconRequestFilter {
@@ -19,13 +20,16 @@ export namespace FaviconRequestFilter {
     }
 
     async function requiresHeaderUpdate(details: browser.webRequest._OnHeadersReceivedDetails): Promise<boolean> {
-        const [isFavicon, blacklistEntry] = await Promise.all([
+        const [hasLink, blacklistEntry, settings] = await Promise.all([
             isFaviconUrlInTab(details.tabId, details.url),
             Blacklist.getBlacklistEntry(details.url),
+            Settings.load()
         ] as const)
 
-        const needsUpdate = (details.url.endsWith('/favicon.ico') || isFavicon)
-            && (!blacklistEntry || !blacklistEntry.replacementUrl)
+        const isFavicon = (details.url.endsWith('/favicon.ico') || hasLink)
+        const isBlacklisted = blacklistEntry && !blacklistEntry.replacementUrl
+        const changesFormat = settings.output.format === 'svg' && !FaviconRequestFilterBase.urlIsSvg(details.url)
+        const needsUpdate = isFavicon && !isBlacklisted && changesFormat
 
         !needsUpdate && !blacklistEntry && console.log('INP- no favicon ' + details.url)
 
@@ -37,6 +41,7 @@ export namespace FaviconRequestFilter {
         callContentApi('fixupForFilteredUrl', [iconUrl])
         const isFaviconPromise = isFaviconUrlInTab(details.tabId, iconUrl)
         let largestFaviconUrlPromise: Promise<string | undefined> | null = null
+        
 
         return {
             async onStartWithoutStored(filter) { 

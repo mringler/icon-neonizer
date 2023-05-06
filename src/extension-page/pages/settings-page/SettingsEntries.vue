@@ -8,7 +8,7 @@ import Heading from '@/components/util/Heading.vue';
 import { FaviconRequestFilterType } from '@/scripts/background/request-filter/FaviconRequestFilterType';
 import { useTracerOptionsDiff } from './composables/tracerOptionsDiff';
 import SettingsRows from './SettingsRows.vue';
-import { mdiDeleteClockOutline, mdiMenuOpen, mdiCheckCircle, mdiMinusCircle, mdiStar, mdiFileReplaceOutline, mdiPencil } from '@mdi/js'
+import { mdiDeleteClockOutline, mdiMenuOpen, mdiCheckCircle, mdiMinusCircle, mdiStar, mdiFileReplaceOutline, mdiPencil, mdiImage } from '@mdi/js'
 
 const settings = useSettings().settings
 
@@ -47,6 +47,15 @@ const items: ComputedRef<SettingsEntry[]> = computed((): SettingsEntry[] => !set
             //iconColor: 'primary',
         },
         route: { name: 'tab-menu' },
+    }, {
+        icon: mdiImage,
+        text: 'Output image format',
+        value: settings.value.output.format === 'svg' ? {
+            text: 'SVG',
+        } : {
+            text: 'PNG ('+ settings.value.output.pngWidth +'px)',
+        },
+        route: { name: 'output-format' },
     }, {
         icon: mdiStar,
         text: 'Use custom trace options',

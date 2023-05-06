@@ -21,6 +21,7 @@ const backgroundApi = {
     getOptions: Tracer.getOptions,
     traceWithOptions,
     reloadSettings,
+    getPngWidthSetting,
 }
 
 async function processIconUrl(
@@ -101,4 +102,10 @@ export async function reloadSettings(){
     const settings = await Settings.load(true)
     TabMenu.setTabMenuItem(settings.enableTabMenu)
     RequestFilterManager.init(settings)
+}
+
+async function getPngWidthSetting(){
+    const {output} = await Settings.load()
+    return output.format === 'svg' ? null : output.pngWidth
+
 }

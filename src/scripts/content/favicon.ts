@@ -90,41 +90,43 @@ export namespace Favicon {
         linkElement.href = base64Icon
     }
 
-    export function setSvg(svgString: string): void {
-        updateLinkElements(svgString)
+    export function setImage(imgString: string, isSvg: boolean): void {
+        updateLinkElements(imgString, isSvg)
     }
 
     export function svgToHref(svgString: string): string {
         return 'data:image/svg+xml,' + encodeURIComponent(svgString)
     }
 
-    function updateLinkElements(svgString: string) {
-        if (!document.head || !svgString) {
+    function updateLinkElements(imgString: string, isSvg = true) {
+        if (!document.head || !imgString) {
             return
         }
 
-        const href = svgToHref(svgString)
+        const href = isSvg ? svgToHref(imgString) : imgString
         const elements = getFaviconHtmlElements()
         if (elements.length === 0) {
             const linkElement = document.createElement('link')
             linkElement.rel = 'icon'
-            fixupLinkElement(linkElement, href)
+            fixupLinkElement(linkElement, href, isSvg)
             document.head.appendChild(linkElement)
             linkElement.dataset.oldHref = 'none'
             return
         }
         for (let i = 0; i < elements.length; i++) {
             const element = elements[i]
-            fixupLinkElement(element, href)
+            fixupLinkElement(element, href, isSvg)
             document.head.appendChild(element)
         }
     }
 
-    function fixupLinkElement(linkElement: HTMLLinkElement, href: string): void {
+    function fixupLinkElement(linkElement: HTMLLinkElement, href: string, isSvg: boolean): void {
         if (!linkElement.dataset.oldHref && linkElement.href) {
             linkElement.dataset.oldHref = linkElement.href
         }
-        linkElement.type = 'image/svg+xml'
+        if (isSvg) {
+            linkElement.type = 'image/svg+xml'
+        }
         linkElement.href = href
         if (linkElement.sizes) {
             linkElement.sizes.add('any')

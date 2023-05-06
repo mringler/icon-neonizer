@@ -1,3 +1,4 @@
+import { SvgToPng } from '@/util/svg-to-png'
 import { ApiCaller, ScriptsApi, buildApi } from '../ApiInterfaces'
 import type { BackgroundApiInterface } from '../background/background-api'
 import { Favicon } from './favicon'
@@ -6,7 +7,7 @@ export type ContentApiInterface = ScriptsApi<ReturnType<typeof buildContentApi>>
 
 function buildContentApi(iconUrl: string) {
     return {
-        setIcon: Favicon.setSvg,
+        setIcon: Favicon.setImage,
         getOriginalFaviconUrl: () => iconUrl,
         verifyHref: (href: string) => verifyHref(href, iconUrl),
         getPageFaviconHref: Favicon.getPageFaviconHref,
@@ -31,12 +32,14 @@ export async function replaceFavicon(iconUrl: string, force = false, inlineData?
         ? callBackgroundApi('processInlineData', [inlineData, iconUrl, force])
         : callBackgroundApi('processIconUrl', [iconUrl, force])
 
-    const svgString = await loader
-    if (!svgString) {
+    const [imageString, isPng] = await loadImageString(loader)
+    console.log(imageString, isPng)
+    if (!imageString) {
         console.log('no icon - not updating')
         return
     }
-    Favicon.setSvg(svgString)
+    
+    Favicon.setImage(imageString, !isPng)
 }
 
 async function verifyHref(actualHref: string, iconUrl: string): Promise<void> {
@@ -44,13 +47,23 @@ async function verifyHref(actualHref: string, iconUrl: string): Promise<void> {
     if (isHandledByFilter(iconUrl)) {
         return
     }
-    const svgString = await callBackgroundApi('processIconUrl', [iconUrl, false, false])
-    const expectedHref = svgString ? Favicon.svgToHref(svgString) : null
+    const loader = callBackgroundApi('processIconUrl', [iconUrl, false, false])
+    const [imageString, isPng] = await loadImageString(loader)
+    const expectedHref = imageString && !isPng ? Favicon.svgToHref(imageString) : imageString
     if (expectedHref && expectedHref === actualHref) {
         return
     }
     console.log('ne- Found wrong favicon, restoring')
-    Favicon.setSvg(svgString!)
+    Favicon.setImage(imageString!, !isPng)
+}
+
+async function loadImageString(loader: Promise<string|null>): Promise<[string|null, boolean]>{
+    const [svgString, pngWidth] = await Promise.all([loader, callBackgroundApi('getPngWidthSetting', [])])
+    const usePng = Boolean(pngWidth)
+    return [
+        usePng && svgString ? await SvgToPng.convert(svgString, pngWidth!) : svgString,
+        usePng
+    ]
 }
 
 function isHandledByFilter(iconUrl: string) {

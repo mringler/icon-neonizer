@@ -1,5 +1,7 @@
+import { SvgToPng } from '@/util/svg-to-png'
 import { Blacklist } from '../storage/blacklist'
 import { IconStorage } from '../storage/icon-storage'
+import { Settings } from '../storage/Settings'
 
 export namespace FaviconRequestFilterBase {
 
@@ -74,6 +76,11 @@ export namespace FaviconRequestFilterBase {
         return blacklistEntry ? blacklistEntry.replacementUrl : initialUrl
     }
 
+    const isSvgUrlRegex = /\.svg($|\?.*)/
+    export function urlIsSvg(url: string){
+        return isSvgUrlRegex.test(url)
+    }
+
     function buildOnBeforeRequestCallback(configuration: Configuration) {
         return async function replaceIconFilter(
             details: browser.webRequest._OnBeforeRequestDetails
@@ -88,14 +95,19 @@ export namespace FaviconRequestFilterBase {
             const filter = browser.webRequest.filterResponseData(details.requestId)
             const data: ArrayBuffer[] = []
             const storedIconPromise = IconStorage.loadIcon(iconUrl)
+            let settingsPromise = Settings.load()
 
             const handlers = await configuration.prepareBeforeRequest(iconUrl, details)
             if (!handlers){
                 return {}
             }
 
-            const closeWithSvg = (svg: string) => {
+            const closeWithSvg = async(svg: string) => {
                 const encoder = new TextEncoder()
+                if(!urlIsSvg(iconUrl)){
+                    const {output} = await settingsPromise
+                    svg = output.format !== 'svg' && output.pngWidth > 0 ? await SvgToPng.convertInTab(details.tabId, svg, output.pngWidth): svg
+                }
                 filter.write(encoder.encode(svg))
                 filter.close()
             }

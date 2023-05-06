@@ -17,14 +17,14 @@ const triggerSettingsReload = () => callBackgroundApi('reloadSettings', [])
 
 <template>
     <div
-        class="mx-auto d-flex flex-column"
-        :style="{ maxWidth: '552px' }"
+        class="mx-auto d-flex flex-column "
+        :style="{ maxWidth: '624px' }"
         v-if="settings"
     >
         <Heading
             :title="heading"
             :subtitle="description"
-            subtitle-class="my-8 text-start"
+            subtitle-class="my-8 text-start text-max-width"
         >
             <template
                 v-if="$slots.description"
@@ -38,7 +38,7 @@ const triggerSettingsReload = () => callBackgroundApi('reloadSettings', [])
         <v-card
             variant="outlined"
             :subtitle="cardHeader"
-            :style="{ maxWidth: '624px' }"
+            
         >
             <v-card-text>
                 <slot :settings="settings" :triggerSettingsReload="triggerSettingsReload"/>

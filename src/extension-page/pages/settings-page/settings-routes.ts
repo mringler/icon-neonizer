@@ -6,6 +6,7 @@ const CleanupIntervalInput = () => import('./inputs/CleanupIntervalInput.vue')
 const UseTabMenuSwitch = () => import('./inputs/UseTabMenuSwitch.vue')
 const ResetTraceOptions = () => import('./inputs/ResetTraceOptions.vue')
 const RequestFilterOptions = () => import('./inputs/RequestFilterOptions.vue')
+const ImageOutput = () => import('./inputs/ImageOutput.vue')
 
 export namespace SettingsRoutes {
     export function declareRoutes(router: Router) {
@@ -18,6 +19,7 @@ export namespace SettingsRoutes {
                 { path: 'tab-menu', name: 'tab-menu', component: UseTabMenuSwitch, },
                 { path: 'trace-options', name: 'reset-trace-options', component: ResetTraceOptions, },
                 { path: 'request-filter-settings', name: 'request-filter-settings', component: RequestFilterOptions, },
+                { path: 'output-format', name: 'output-format', component: ImageOutput }
             ]
         })
     }
