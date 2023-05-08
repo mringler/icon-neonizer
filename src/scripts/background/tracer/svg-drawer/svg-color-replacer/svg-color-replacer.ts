@@ -3,6 +3,7 @@ import { ColorExtractor } from "./color-extractor"
 import { ColorGradientMapBuilder, ColorStringToGradientDataMap } from "./color-gradient-map-builder"
 import { SvgPathEditor } from "./svg-path-editor"
 
+
 export namespace SvgColorReplacer {
     export function replaceColorsInSvg(
         svgString: string,
@@ -49,7 +50,7 @@ export namespace SvgColorReplacer {
             const updatedId = id + '_' + (Math.random() + 1).toString(36).substring(7)
             gradient.id = updatedId
             const ref = `url(#${updatedId})`
-            for(const paint of ['stroke', 'fill']){
+            for (const paint of ['stroke', 'fill']) {
                 svgDom.querySelectorAll(`[${paint}="url(#${id})"]`).forEach(node => node.setAttribute(paint, ref))
             }
         })
@@ -57,10 +58,26 @@ export namespace SvgColorReplacer {
 
     function fixupSvg(svgDocument: Document) {
         const svgNode = svgDocument.querySelector('svg')!
+        if (!svgNode.getAttribute('viewBox')) {
+            setViewBox(svgNode)
+        }
         svgNode.removeAttribute('width')
         svgNode.removeAttribute('height')
         svgNode.querySelectorAll('style').forEach((style) => style.remove())
     }
+
+    function setViewBox(svgNode: SVGElement): void {
+        const width = svgNode.getAttribute('width')
+        const height = svgNode.getAttribute('height')
+        if (!width && !height) {
+            return
+        }
+        const w = Number(width ?? height)
+        const h = Number(height ?? width)
+        const viewBox = `0 0 ${w} ${h}`
+        svgNode.setAttribute('viewBox', viewBox)
+    }
+
 
     function insertGradientsIntoSvg(svgDocument: Document, colorMap: ColorStringToGradientDataMap) {
         const gradients = [...colorMap.values()]
