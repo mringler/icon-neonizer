@@ -6,7 +6,7 @@ import vuetify from 'vite-plugin-vuetify'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-    plugins: [vue(), vuetify({ autoImport: true })],
+    plugins: [vue({ isProduction: false }), vuetify({ autoImport: true })],
     resolve: {
         alias: {
             '@': fileURLToPath(new URL('./src', import.meta.url)),
@@ -16,16 +16,16 @@ export default defineConfig({
     },
     build: {
         target: 'firefox108',
-        emptyOutDir: false,
+        emptyOutDir: false, // deletes scripts, which are not rebuild here
         outDir: 'dist/',
-        sourcemap: true,
+        sourcemap: false,
         rollupOptions: {
             input: {
                 'popup/popup': './src/popup/popup.html',
                 'extension-page/extension-page': './src/extension-page/extension-page.html',
             },
             output: {
-                entryFileNames: '[name].js',
+                entryFileNames: '[name].js', // popup.js and extension-page.js
             },
         },
     },
