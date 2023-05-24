@@ -5,13 +5,15 @@ import { byteToKilobyte } from '@/util/byte-to-kilobyte'
 import DownloadSvgButton from './DownloadSvgButton.vue'
 import FaviconImg from '../image-display/FaviconImg.vue'
 import FaviconSvg from '../image-display/FaviconSvg.vue'
-import { VDataTable } from 'vuetify/lib/labs/components'
 import { mdiMagnify, mdiLock, mdiDraw, mdiPen, mdiDelete } from '@mdi/js'
+import type { VDataTable } from 'vuetify/lib/labs/components.mjs'
 
+type UnwrapReadonlyArray<A> = A extends Readonly<Array<infer I>> ? UnwrapReadonlyArray<I> : A;
 type DT = InstanceType<typeof VDataTable>
-type Headers = DT['headers']
-type ArrayItems<T> = T extends Array<Array<infer I>> ? I : never
-type DataTableHeader = ArrayItems<Headers>
+type Headers = DT['headers'];
+//type DeepMutable<T> = {-readonly[K in keyof T]: DeepMutable<T[K]>}
+//type DataTableHeader = DeepMutable<UnwrapReadonlyArray<Headers>>
+type DataTableHeader = UnwrapReadonlyArray<Headers>
 
 type SortItem = DT['sortBy'] extends Array<infer T> ? T : never
 

@@ -7,7 +7,6 @@ import { router } from '../routes';
 import Heading from '@/components/util/Heading.vue';
 import { FaviconRequestFilterType } from '@/scripts/background/request-filter/FaviconRequestFilterType';
 import { useTracerOptionsDiff } from './composables/tracerOptionsDiff';
-import SettingsRows from './SettingsRows.vue';
 import { mdiDeleteClockOutline, mdiMenuOpen, mdiCheckCircle, mdiMinusCircle, mdiStar, mdiFileReplaceOutline, mdiPencil, mdiImage } from '@mdi/js'
 
 const settings = useSettings().settings
