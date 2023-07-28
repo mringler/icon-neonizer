@@ -23,4 +23,3 @@ import SettingsInput from './SettingsInput.vue';
     </SettingsInput>
 </template>
 <style scoped></style>
-

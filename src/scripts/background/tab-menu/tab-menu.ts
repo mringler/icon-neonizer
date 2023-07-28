@@ -1,6 +1,3 @@
-import { loadActiveTab } from "@/util/active-tab";
-import { Settings } from "../storage/Settings";
-
 export namespace TabMenu {
     const id = "icon-neonizer__configure"
     let state: boolean = false
