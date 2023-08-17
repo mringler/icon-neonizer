@@ -24,6 +24,7 @@ export default defineConfig({
         emptyOutDir: false, // deletes scripts, which are not rebuild here
         outDir: 'dist/',
         sourcemap: false,
+        cssCodeSplit: false,
         rollupOptions: {
             input: {
                 'popup/popup': './src/popup/popup.html',
