@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { CreatePaletteMode } from '@image-tracer-ts/core'
-import { computed, h, DefineComponent, ComputedRef } from 'vue'
+import { computed, h, type DefineComponent, type ComputedRef } from 'vue'
 import type { GradientDrawerOptions } from '@/scripts/background/tracer/svg-drawer/gradient-drawer-options'
 
 import ColorBuilderSelect from './input/ColorBuilderSelect.vue'

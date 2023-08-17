@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import IconFrame from './IconFrame.vue'
-import { watch, ref, Ref } from 'vue'
+import { watch, ref, type Ref } from 'vue'
 
 type Props = {
     svg: string | null | undefined | Promise<string | null>

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { loadActiveTab } from '@/util/active-tab'
-import { onBeforeMount, ref, Ref, computed } from 'vue'
+import { onBeforeMount, ref, type Ref, computed } from 'vue'
 import { loadOriginalUrl as loadOriginalFaviconUrl } from '../util/content-api-caller'
-import { Blacklist, BlacklistedPage } from '@/scripts/background/storage/blacklist'
+import { Blacklist, type BlacklistedPage } from '@/scripts/background/storage/blacklist'
 import { IconStorage } from '@/scripts/background/storage/icon-storage'
 import FaviconImg from '@/components/image-display/FaviconImg.vue'
 import FaviconStored from '@/components/image-display/FaviconStored.vue'

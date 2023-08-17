@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, Ref, toRef, onBeforeMount, toRaw, computed, ComputedRef } from 'vue'
+import { ref, type Ref, toRef, onBeforeMount, toRaw, computed, type ComputedRef } from 'vue'
 import OptionsFormCard from '@/components/options-form/OptionsFormCard.vue'
 import { callBackgroundApi } from '@/util/background-api-caller'
 import AlertSnackbar from '@/components/util/AlertSnackbar.vue'

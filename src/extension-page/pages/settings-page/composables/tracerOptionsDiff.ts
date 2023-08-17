@@ -2,7 +2,7 @@
 import { IconStorage } from '@/scripts/background/storage/icon-storage';
 import { GradientDrawerOptionsUtil } from '@/scripts/background/tracer/svg-drawer/gradient-drawer-options';
 import { Tracer } from '@/scripts/background/tracer/tracer';
-import { Ref, ref } from 'vue';
+import { type Ref, ref } from 'vue';
 
 export type TracerOptionDiff = {
     property: string

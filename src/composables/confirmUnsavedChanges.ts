@@ -1,6 +1,6 @@
-import { Ref, watchEffect, onBeforeUnmount } from 'vue'
+import { type Ref, watchEffect, onBeforeUnmount } from 'vue'
 import type { ConfirmProps } from '../components/util/Confirmation.vue'
-import { NavigationGuard, onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
+import { type NavigationGuard, onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
 import { useConfirmationDialog } from '@/composables/confirmDialog'
 
 export function useConfirmUnsavedChanges(

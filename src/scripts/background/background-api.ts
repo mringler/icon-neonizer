@@ -1,4 +1,4 @@
-import { ScriptsApi, buildApi } from '../ApiInterfaces'
+import { type ScriptsApi, buildApi } from '../ApiInterfaces'
 import { InlineImageLoader } from './inline-image-loader'
 import { Blacklist } from './storage/blacklist'
 import { IconStorage } from './storage/icon-storage'

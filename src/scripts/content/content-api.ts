@@ -1,5 +1,5 @@
 import { SvgToPng } from '@/util/svg-to-png'
-import { ApiCaller, ScriptsApi, buildApi } from '../ApiInterfaces'
+import { type ApiCaller, type ScriptsApi, buildApi } from '../ApiInterfaces'
 import type { BackgroundApiInterface } from '../background/background-api'
 import { Favicon } from './favicon'
 

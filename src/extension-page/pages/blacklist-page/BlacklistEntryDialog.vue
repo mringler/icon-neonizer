@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { BlacklistedPage } from '@/scripts/background/storage/blacklist'
-import { Ref, ref, watch, toRaw } from 'vue'
+import { type Ref, ref, watch, toRaw } from 'vue'
 
 type Props = {
     page?: BlacklistedPage

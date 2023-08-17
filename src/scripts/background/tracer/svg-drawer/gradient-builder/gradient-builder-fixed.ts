@@ -1,4 +1,4 @@
-import { GradientPoints, GradientBuilder } from './gradient-builder'
+import { type GradientPoints, GradientBuilder } from './gradient-builder'
 
 export class GradientBuilderFixed extends GradientBuilder {
     protected gradientPoints!: GradientPoints

@@ -1,7 +1,7 @@
 import type { RgbColor, TraceData } from "@image-tracer-ts/browser"
 import type { ColorPairBuilder } from "../color-pair-builder/color-pair-builder"
 import type { GradientBuilder, GradientTags } from "../gradient-builder/gradient-builder"
-import { GradientDrawerOptions, GradientDrawerOptionsUtil } from "../gradient-drawer-options"
+import { type GradientDrawerOptions, GradientDrawerOptionsUtil } from "../gradient-drawer-options"
 import type { ColorStringMap } from "./svg-path-editor"
 import type { ColorHash } from "./color-extractor"
 

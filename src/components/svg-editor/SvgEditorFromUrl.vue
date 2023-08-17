@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { ref, Ref, watchEffect } from 'vue'
+import { ref, type Ref, watchEffect } from 'vue'
 import Heading from '@/components/util/Heading.vue'
 import { IconStorage } from '@/scripts/background/storage/icon-storage'
 import SvgEditor from './SvgEditor.vue'
 import { useLoadingIndicator } from '@/composables/loadingIndicator'
-import { Blacklist, BlacklistedPage } from '@/scripts/background/storage/blacklist'
+import { Blacklist, type BlacklistedPage } from '@/scripts/background/storage/blacklist'
 import { mdiAlertCircle } from '@mdi/js'
 
 const props = defineProps<{

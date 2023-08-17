@@ -1,6 +1,6 @@
 import { InlineImageLoader } from '@/scripts/background/inline-image-loader'
 import { ImageLoader } from '@image-tracer-ts/browser'
-import { ref, Ref, isRef, watchEffect } from 'vue'
+import { ref, type Ref, isRef, watchEffect } from 'vue'
 import { useSrcUrl } from './srcUrl'
 
 export function useImageData(url: string | Ref<string>): Ref<Promise<ImageData> | null> {

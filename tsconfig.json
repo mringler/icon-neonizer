@@ -18,7 +18,11 @@
     },
     // custom
     "moduleResolution": "node",
+    // workaround for https://github.com/vuejs/tsconfig/issues/6
     "preserveValueImports": false,
+    "importsNotUsedAsValues": "remove",
+    "verbatimModuleSyntax": true,
+    // end workaround
     "types": [
       "firefox-webext-browser"
     ]

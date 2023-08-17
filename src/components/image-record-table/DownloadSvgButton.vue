@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, Ref, computed } from 'vue'
+import { ref, type Ref, computed } from 'vue'
 import { mdiDownload } from '@mdi/js'
 
 type Props = {

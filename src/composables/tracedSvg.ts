@@ -1,8 +1,8 @@
-import { Blacklist, BlacklistedPage } from '@/scripts/background/storage/blacklist'
+import { Blacklist, type BlacklistedPage } from '@/scripts/background/storage/blacklist'
 import { IconStorage } from '@/scripts/background/storage/icon-storage'
 import { SvgColorReplacer } from '@/scripts/background/tracer/svg-drawer/svg-color-replacer/svg-color-replacer'
 import { svgToKilobyte } from '@/util/byte-to-kilobyte'
-import { ref, Ref, isRef, unref, watchEffect, computed } from 'vue'
+import { ref, type Ref, isRef, unref, watchEffect, computed } from 'vue'
 
 export function useTracedSvg(url: string | null | undefined | Ref<string | null | undefined>) {
     const svg: Ref<string | null> = ref(null)

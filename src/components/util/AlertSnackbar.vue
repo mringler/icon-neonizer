@@ -26,9 +26,8 @@ const emitClearMessage = () => {
     >
         {{ props.message }}
 
-        <template v-slot:action="{ attrs }">
+        <template v-slot:actions>
             <v-btn
-                v-bind="attrs"
                 :icon="mdiClose"
                 color="green"
                 @click="emitClearMessage"

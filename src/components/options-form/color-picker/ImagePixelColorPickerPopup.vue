@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { watch, ref, Ref } from 'vue'
+import { watch, ref, type Ref } from 'vue'
 import type { RgbColor } from '@image-tracer-ts/core'
 import ImagePixelColorPicker from './ImagePixelColorPicker.vue'
 import SelectedColorChips from './SelectedColorChips.vue'

@@ -1,6 +1,6 @@
 import type { RgbColor, TraceData } from '@image-tracer-ts/core'
 import type { ColorPairBuilder } from '../color-pair-builder/color-pair-builder'
-import { GradientBuilder, GradientPoints, GradientTags } from './gradient-builder'
+import { GradientBuilder, type GradientPoints, type GradientTags } from './gradient-builder'
 
 export class GradientBuilderFlat extends GradientBuilder {
     protected gradientPoints!: GradientPoints

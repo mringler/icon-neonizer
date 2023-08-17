@@ -1,6 +1,6 @@
 import { InlineImageLoader } from '@/scripts/background/inline-image-loader'
 import { toFaviconDownloadUrl } from '@/util/to-favicon-download-url'
-import { ref, Ref, isRef, unref, watchEffect } from 'vue'
+import { ref, type Ref, isRef, unref, watchEffect } from 'vue'
 
 export function useSrcUrl(url: string | Ref<string>) {
     const srcUrl: Ref<Promise<string>> = ref() as Ref<Promise<string>>

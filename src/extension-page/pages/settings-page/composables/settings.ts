@@ -1,5 +1,5 @@
 import { Settings } from "@/scripts/background/storage/Settings";
-import { Ref, ref, watchEffect } from "vue";
+import { type Ref, ref, watchEffect } from "vue";
 
 let settings:Ref<Settings|undefined> | undefined
 let loadingPromise: Promise<Ref<Settings>>|undefined

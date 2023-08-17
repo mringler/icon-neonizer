@@ -1,6 +1,6 @@
 import type { GradientDrawerOptions } from "../gradient-drawer-options"
 import { ColorExtractor } from "./color-extractor"
-import { ColorGradientMapBuilder, ColorStringToGradientDataMap } from "./color-gradient-map-builder"
+import { ColorGradientMapBuilder, type  ColorStringToGradientDataMap } from "./color-gradient-map-builder"
 import { SvgPathEditor } from "./svg-path-editor"
 
 

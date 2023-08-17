@@ -7,7 +7,7 @@ const TraceTabPage = () => import('./TraceTabPage.vue')
 const BlacklistPage = () => import('./blacklist-page/BlacklistPage.vue')
 
 
-import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHashHistory, type RouteRecordRaw } from 'vue-router'
 import { SettingsRoutes } from './settings-page/settings-routes'
 
 const routes: RouteRecordRaw[] = [

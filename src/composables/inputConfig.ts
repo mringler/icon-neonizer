@@ -1,4 +1,4 @@
-import { h, ref, Ref, unref, watchEffect } from 'vue'
+import { h, ref,type Ref, unref, watchEffect } from 'vue'
 import HelpOverlay from '@/components/util/HelpOverlay.vue'
 import { VDataTable } from 'vuetify/labs/components'
 
@@ -8,9 +8,11 @@ type HelpProps<D> = {
     tableData?: { data: D[]; keys: Partial<Record<keyof D, string>> }
 }
 
+type CommonSlotName = 'append'
+
 type InputConfig = {
     attrs: Record<string, any>
-    slots: Record<string, () => ReturnType<typeof h>>
+    slots: {} | {[key in CommonSlotName]: () => ReturnType<typeof h>}
 }
 
 export function useInputConfig<D>(showHelp: Ref<boolean>, helpProps: HelpProps<D>) {

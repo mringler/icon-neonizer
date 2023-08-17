@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Heading from '@/components/util/Heading.vue'
-import { Blacklist, BlacklistedPage } from '@/scripts/background/storage/blacklist'
-import { onBeforeMount, Ref, ref, toRaw } from 'vue'
+import { Blacklist, type BlacklistedPage } from '@/scripts/background/storage/blacklist'
+import { onBeforeMount, type Ref, ref, toRaw } from 'vue'
 import BlacklistEntryDialog from './BlacklistEntryDialog.vue'
 import { mdiPen, mdiDelete } from '@mdi/js'
 

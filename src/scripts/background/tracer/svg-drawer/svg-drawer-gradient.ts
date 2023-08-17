@@ -1,7 +1,7 @@
 import { TraceData, RgbColor, SvgDrawer } from '@image-tracer-ts/core'
 import type { ColorPairBuilder } from './color-pair-builder/color-pair-builder'
 import type { GradientBuilder, GradientTags } from './gradient-builder/gradient-builder'
-import { GradientDrawerOptions, GradientDrawerOptionsUtil } from './gradient-drawer-options'
+import { type GradientDrawerOptions, GradientDrawerOptionsUtil } from './gradient-drawer-options'
 
 export class SvgDrawerGradient extends SvgDrawer {
     protected colorToGradientId = new Map<RgbColor, string>()

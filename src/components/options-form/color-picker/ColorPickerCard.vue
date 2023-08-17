@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, Ref } from 'vue'
+import { ref, type Ref } from 'vue'
 import { RgbColor } from '@image-tracer-ts/core'
 
 const colorHex: Ref<string | null> = ref(null)

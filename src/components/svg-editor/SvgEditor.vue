@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, Ref, watch, computed, watchEffect } from 'vue'
+import { ref, type Ref, computed, watchEffect } from 'vue'
 import AlertSnackbar from '../util/AlertSnackbar.vue'
 import { IconStorage } from '@/scripts/background/storage/icon-storage'
 import FaviconSvg from '../image-display/FaviconSvg.vue'

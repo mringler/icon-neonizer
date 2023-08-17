@@ -8,7 +8,7 @@ import {
     ImageTracer,
 } from '@image-tracer-ts/browser'
 import { IconStorage } from '../storage/icon-storage'
-import { ColorBuilderOption, GradientDrawerOptions, GradientDrawerOptionsUtil } from './svg-drawer/gradient-drawer-options'
+import { ColorBuilderOption, type GradientDrawerOptions, GradientDrawerOptionsUtil } from './svg-drawer/gradient-drawer-options'
 import { SvgDrawerGradient } from './svg-drawer/svg-drawer-gradient'
 
 export namespace Tracer {
