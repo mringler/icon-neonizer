@@ -11,6 +11,19 @@ export default defineConfig({
         vue({ isProduction: false }),
         vuetify({ autoImport: true }),
         checker({vueTsc: true,}),
+        {
+            name: 'remove-src-from-html',
+            enforce: 'post',
+            generateBundle(_,bundle){
+                const pattern = /^src\/.*\.html$/
+                for(const outputItem of Object.values(bundle)){
+                    if(!pattern.test(outputItem.fileName)){
+                        continue
+                    }
+                    outputItem.fileName = outputItem.fileName.replace('src/', '')
+                }
+            }
+        }
     ],
     resolve: {
         alias: {

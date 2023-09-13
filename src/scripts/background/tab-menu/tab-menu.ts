@@ -19,7 +19,7 @@ export namespace TabMenu {
             documentUrlPatterns: ['*://*/*'],
             onclick(info, tab) {
                 const createData: browser.tabs._CreateCreateProperties = {
-                    url: '/src/extension-page/extension-page.html',
+                    url: '/extension-page/extension-page.html',
                     openerTabId: tab?.id,
                 }
                 browser.tabs.create(createData)

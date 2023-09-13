@@ -32,7 +32,7 @@ const blackListNotification = computed(() =>
 const openExtensionPage = async () => {
     const tab = await loadActiveTab()
     const createData = {
-        url: '/src/extension-page/extension-page.html',
+        url: '/extension-page/extension-page.html',
         openerTabId: tab?.id,
     }
     browser.tabs.create(createData)
