@@ -3,8 +3,8 @@ export async function loadActiveTab(): Promise<browser.tabs.Tab | null> {
     return tabs.length > 0 ? tabs[0] : null
 }
 
-async function loadCurrentTab(): Promise<browser.tabs.Tab> {
-    return await browser.tabs.getCurrent()
+async function loadCurrentTab(): Promise<browser.tabs.Tab|undefined> {
+    return browser.tabs.getCurrent()
 }
 export async function loadOpenerTab(): Promise<browser.tabs.Tab | null> {
     const tab = await loadCurrentTab()
