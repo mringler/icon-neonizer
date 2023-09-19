@@ -5,6 +5,7 @@ import { SaturatedColorPairBuilder } from './saturated-color-pair-builder'
 const upperColors: RgbColorData[] = [
     { r: 25, g: 255, b: 255 }, // aqua
     { r: 255, g: 25, b: 255 }, // hotpink
+    { r: 255, g: 125, b: 0 }, // orange
     { r: 255, g: 255, b: 25 }, // lemon
     { r: 255, g: 25, b: 125 }, // guava
     { r: 25, g: 255, b: 125 }, // mint
