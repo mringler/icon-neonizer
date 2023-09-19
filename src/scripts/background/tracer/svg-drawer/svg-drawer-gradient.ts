@@ -45,7 +45,7 @@ export class SvgDrawerGradient extends SvgDrawer {
 
     protected removeBackgroundArea(traceData: TraceData) {
         const [colorIx, areaIx] = this.findBackgroundIndex(traceData)
-        if (colorIx === undefined || areaIx === undefined) {
+        if (colorIx === undefined || areaIx === undefined || traceData.areasByColor.every((colorAreas, ix) => colorAreas.length === 0 || ix === colorIx)) {
             return
         }
         const areas = traceData.areasByColor[colorIx]
