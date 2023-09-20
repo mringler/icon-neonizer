@@ -33,7 +33,6 @@ export async function replaceFavicon(iconUrl: string, force = false, inlineData?
         : callBackgroundApi('processIconUrl', [iconUrl, force])
 
     const [imageString, isPng] = await loadImageString(loader)
-    console.log(imageString, isPng)
     if (!imageString) {
         console.log('no icon - not updating')
         return
