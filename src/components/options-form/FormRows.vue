@@ -25,7 +25,7 @@ import ImageColorPicker from './input/ImageColorPicker.vue'
 import NumberOfColorsInput from './input/NumberOfColorsInput.vue'
 import ClusteringCyclesInput from './input/ClusteringCyclesInput.vue'
 import MinimumQuotaInput from './input/MinimumQuotaInput.vue'
-import { VRow, VCol } from 'vuetify/components'
+import { VRow, VCol } from 'vuetify/components/VGrid'
 import MinOpacityThresholdInput from './input/MinOpacityThresholdInput.vue'
 
 const props = defineProps<{

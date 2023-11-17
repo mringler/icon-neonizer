@@ -1,7 +1,6 @@
 import { createVuetify } from 'vuetify'
 import { aliases, mdi } from 'vuetify/iconsets/mdi-svg'
 import { en } from 'vuetify/locale'
-import { VDataTable } from 'vuetify/labs/VDataTable'
 
 // Misc
 //import { loadFonts } from './webfontloader';
@@ -59,8 +58,5 @@ export default createVuetify({
                 },
             }
         },
-    },
-    components: {
-        VDataTable,
     },
 })

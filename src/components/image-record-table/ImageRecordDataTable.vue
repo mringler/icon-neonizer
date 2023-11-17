@@ -6,9 +6,10 @@ import DownloadSvgButton from './DownloadSvgButton.vue'
 import FaviconImg from '../image-display/FaviconImg.vue'
 import FaviconSvg from '../image-display/FaviconSvg.vue'
 import { mdiMagnify, mdiLock, mdiDraw, mdiPen, mdiDelete } from '@mdi/js'
-import type { VDataTable } from 'vuetify/lib/labs/components.mjs'
+import type { VDataTable } from 'vuetify/lib/components/index.mjs'
 
-type UnwrapReadonlyArray<A> = A extends Readonly<Array<infer I>> ? UnwrapReadonlyArray<I> : A;
+type UnwrapReadonlyArray<A> = A extends Readonly<Array<infer I>> ? I : never;
+//type UnwrapArray<A>         = A extends Readonly<Array<infer I>> ? UnwrapArray<I> : {[k in keyof I]; I[k]};
 type DT = InstanceType<typeof VDataTable>
 type Headers = DT['headers'];
 //type DeepMutable<T> = {-readonly[K in keyof T]: DeepMutable<T[K]>}
@@ -84,29 +85,29 @@ const faviconDisplayProps = {
         >
             <template v-slot:item.originalIcon="{ item }">
                 <FaviconImg
-                    :src="item.columns.url as string"
+                    :src="item.url as string"
                     v-bind="faviconDisplayProps"
                     class="overflow-hidden"
                 />
             </template>
             <template v-slot:item.icon="{ item }">
                 <FaviconSvg
-                    :svg="item.columns.icon as string"
+                    :svg="item.icon as string"
                     v-bind="faviconDisplayProps"
                 />
             </template>
 
             <template v-slot:item.lastAccess="{ item }">
-                {{ timestampToDate(item.columns.lastAccess as number) }}
+                {{ timestampToDate(item.lastAccess as number) }}
             </template>
             <template v-slot:item.size="{ item }">
-                {{ byteToKilobyte(item.columns.size as number) }}
+                {{ byteToKilobyte(item.size as number) }}
             </template>
 
             <template v-slot:item.noAutomaticOverride="{ item }">
                 <div class="text-center">
                     <v-icon
-                        v-if="item.columns.noAutomaticOverride"
+                        v-if="item.noAutomaticOverride"
                         :icon="mdiLock"
                     />
                 </div>
@@ -119,7 +120,7 @@ const faviconDisplayProps = {
                                 v-bind="props"
                                 variant="plain"
                                 :icon="mdiDraw"
-                                :to="{ name: 'trace-by-url', params: { url: item.columns.url as string} }"
+                                :to="{ name: 'trace-by-url', params: { url: item.url as string} }"
                             />
                         </template>
                     </v-tooltip>
@@ -131,8 +132,8 @@ const faviconDisplayProps = {
                                 :icon="mdiPen"
                                 :to="{
                                     name: 'edit-by-url',
-                                    params: { url: item.columns.url as string },
-                                    query: { isLocked: item.columns.noAutomaticOverride ? 1 : 0 },
+                                    params: { url: item.url as string },
+                                    query: { isLocked: item.noAutomaticOverride ? 1 : 0 },
                                 }"
                             />
                         </template>
@@ -142,8 +143,8 @@ const faviconDisplayProps = {
                             <DownloadSvgButton
                                 v-bind="props"
                                 variant="plain"
-                                :url="item.columns.url as string"
-                                :svg="item.columns.icon as string"
+                                :url="item.url as string"
+                                :svg="item.icon as string"
                             />
                         </template>
                     </v-tooltip>
@@ -153,7 +154,7 @@ const faviconDisplayProps = {
                                 v-bind="props"
                                 variant="plain"
                                 :icon="mdiDelete"
-                                @click.stop="emit('removeRecord', item.raw)"
+                                @click.stop="emit('removeRecord', item)"
                             />
                         </template>
                     </v-tooltip>

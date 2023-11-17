@@ -18,23 +18,20 @@ function getFileName(urlLike: string): string {
 const fileName = computed(() => {
     return getFileName(props.url) + '.svg'
 })
-let didRun = false
 
 function setHref(e: MouseEvent) {
-    if (didRun) {
+    if (href.value) {
         return
     }
-    didRun = true
 
     href.value = 'data:text/plain;charset=utf-8,' + encodeURIComponent(props.svg)
     name.value = getFileName(props.url)
-    const target = e.target as HTMLAnchorElement
-    target.click()
 }
 </script>
 
 <template>
     <v-btn
+        ref="btn"
         class="download-svg"
         tag="a"
         :icon="mdiDownload"

@@ -1,6 +1,6 @@
 import { h, ref,type Ref, unref, watchEffect } from 'vue'
 import HelpOverlay from '@/components/util/HelpOverlay.vue'
-import { VDataTable } from 'vuetify/labs/components'
+import { VDataTable } from 'vuetify/lib/components/VDataTable/index.mjs'
 
 type HelpProps<D> = {
     maxWidth?: number
