@@ -12,7 +12,7 @@ type CommonSlotName = 'append'
 
 type InputConfig = {
     attrs: Record<string, any>
-    slots: {} | {[key in CommonSlotName]: () => ReturnType<typeof h>}
+    slots: Partial<{[key in CommonSlotName]: () => ReturnType<typeof h>}>
 }
 
 export function useInputConfig<D>(showHelp: Ref<boolean>, helpProps: HelpProps<D>) {
