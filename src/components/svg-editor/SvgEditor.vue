@@ -9,16 +9,13 @@ import { useConfirmUnsavedChanges } from '@/composables/confirmUnsavedChanges'
 
 const props = defineProps<{
     url: string
-    svg: string
     isLocked?: boolean
 }>()
 
-const emit = defineEmits<{
-    (e: 'update:svg', svg: string): void
-}>()
+const svg = defineModel<string>('svg', {required: true})
 
-const originalSvg: Ref<string | null> = ref(null)
-const editedSvg: Ref<string | null> = ref(null)
+const originalSvg: Ref<string | undefined> = ref()
+const editedSvg: Ref<string | undefined> = ref()
 const snackbarMessage = ref<string | null>(null)
 const lock = ref(false)
 
@@ -29,8 +26,8 @@ const showConfirm = useConfirmationDialog()
 useConfirmUnsavedChanges(svgHasChanged)
 
 watchEffect(() => {
-    editedSvg.value = props.svg
-    originalSvg.value = props.svg
+    editedSvg.value = svg.value
+    originalSvg.value = svg.value
 })
 watchEffect(() => (lock.value = Boolean(props.isLocked)))
 
@@ -54,7 +51,7 @@ const store = async () => {
     await IconStorage.storeIcon(props.url, editedSvg.value, lock.value)
     originalSvg.value = editedSvg.value
     snackbarMessage.value = 'Icon updated'
-    emit('update:svg', editedSvg.value)
+    svg.value = editedSvg.value
 }
 </script>
 

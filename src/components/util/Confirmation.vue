@@ -7,20 +7,16 @@ export interface ConfirmProps {
     confirmText?: string
     cancelText?: string
 }
-interface Props extends ConfirmProps {
-    showConfirm: boolean
-}
-const props = withDefaults(defineProps<Props>(), {
+
+const props = withDefaults(defineProps<ConfirmProps>(), {
     cancelText: 'cancel',
     confirmText: 'confirm',
 })
 
-const emit = defineEmits<{
-    (e: 'update:showConfirm', value: boolean): void
-}>()
+const showConfirm = defineModel<boolean>('showConfirm', { required: true })
 
 function emitClose() {
-    emit('update:showConfirm', false)
+    showConfirm.value = false
 }
 function cancel() {
     props.onCancel && props.onCancel()
@@ -35,8 +31,7 @@ function confirm() {
 
 <template>
     <v-dialog
-        :model-value="props.showConfirm"
-        @update:model-value="(value) => emit('update:showConfirm', value)"
+        v-model="showConfirm"
         persistent
     >
         <template v-slot:activator="{ props }">
@@ -72,4 +67,5 @@ function confirm() {
     </v-dialog>
 </template>
 
-<style scoped></style>
+<style scoped>
+</style>

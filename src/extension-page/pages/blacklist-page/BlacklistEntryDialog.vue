@@ -2,30 +2,23 @@
 import type { BlacklistedPage } from '@/scripts/background/storage/blacklist'
 import { type Ref, ref, watch, toRaw } from 'vue'
 
-type Props = {
-    page?: BlacklistedPage
-}
-const props = defineProps<Props>()
+const page = defineModel<BlacklistedPage>('page')
+const editedPage: Ref<BlacklistedPage> = ref({ url: '', replacementUrl: '', comment: '' })
 
-const page: Ref<BlacklistedPage> = ref({ url: '', replacementUrl: '', comment: '' })
 const showModal = ref(false)
 
-watch(() => props.page, resetPage, { immediate: true })
-
-const emit = defineEmits<{
-    (e: 'update:page', page: BlacklistedPage): void
-}>()
+watch(() => page, resetPage, { immediate: true })
 
 function resetPage() {
-    if (!props.page) {
-        page.value = { url: '', replacementUrl: '', comment: '' }
+    if (!page.value) {
+        editedPage.value = { url: '', replacementUrl: '', comment: '' }
         return
     }
-    Object.assign(page.value, props.page)
+    Object.assign(editedPage.value, page.value)
 }
 
 function addUrl() {
-    emit('update:page', toRaw(page.value))
+    page.value = toRaw(editedPage.value)
     close()
 }
 
@@ -54,19 +47,19 @@ function close() {
                 <v-text-field
                     label="URL Fragment"
                     required
-                    v-model="page.url"
+                    v-model="editedPage.url"
                     autofocus
-                    @keyup.enter.stop="page.url && addUrl()"
+                    @keyup.enter.stop="editedPage.url && addUrl()"
                 ></v-text-field>
                 <v-text-field
                     label="Replacement URL"
-                    v-model="page.replacementUrl"
-                    @keyup.enter.stop="page.replacementUrl && page.url && addUrl()"
+                    v-model="editedPage.replacementUrl"
+                    @keyup.enter.stop="editedPage.replacementUrl && editedPage.url && addUrl()"
                 ></v-text-field>
                 <v-text-field
                     label="Note"
-                    v-model="page.comment"
-                    @keyup.enter.stop="page.url && addUrl()"
+                    v-model="editedPage.comment"
+                    @keyup.enter.stop="editedPage.url && addUrl()"
                 ></v-text-field>
             </v-card-text>
             <v-card-actions>
@@ -79,7 +72,7 @@ function close() {
                 <v-btn
                     color="primary"
                     variant="outlined"
-                    :disabled="!page.url"
+                    :disabled="!editedPage.url"
                     @click="addUrl"
                 >
                     Save

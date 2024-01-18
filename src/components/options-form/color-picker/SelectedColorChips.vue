@@ -6,57 +6,50 @@ import { mdiPlus, mdiDelete } from '@mdi/js'
 
 
 type Props = {
-    showPicker?: boolean
-    colors: RgbColor[]
     unique?: boolean
     noAdd?: boolean
     noClear?: boolean
 }
-const props = withDefaults(defineProps<Props>(), {
-    colors: () => [] as RgbColor[],
-})
+const props = defineProps<Props>()
+
+const colors = defineModel('colors', {default: () => [] as RgbColor[], required: true})
+const showPicker = defineModel<boolean>('showPicker')
 
 const isAddOpen = ref(false)
-watchEffect(() => props.showPicker !== undefined && (isAddOpen.value = props.showPicker))
+watchEffect(() => showPicker.value !== undefined && (isAddOpen.value = showPicker.value))
 
 const emit = defineEmits<{
-    (e: 'update:colors', colors: RgbColor[]): void
     (e: 'doAdd'): void
-    (e: 'update:showPicker', value: boolean): void
 }>()
 
-function emitUpdate(colors: RgbColor[]) {
-    emit('update:colors', colors)
-}
-
 function addColor(color: RgbColor) {
-    if (props.unique && props.colors.some((existing) => existing.equals(color))) {
+    if (props.unique && colors.value.some((existing) => existing.equals(color))) {
         return
     }
-    emitUpdate(props.colors.concat([color]))
+    colors.value.concat([color])
 }
 
 function removeColor(color: RgbColor, index: number) {
-    const colorClone = props.colors.slice()
+    const colorClone = colors.value.slice()
     colorClone.splice(index, 1)
-    emitUpdate(colorClone)
+    colors.value = colorClone
 }
 
 function clear() {
-    emitUpdate([])
+    colors.value = []
 }
 
 function showAdd(value = true) {
     value && emit('doAdd')
     isAddOpen.value = value
-    emit('update:showPicker', value)
+    showPicker.value = value
 }
 </script>
 
 <template>
     <v-chip-group class="flex-wrap mx-2">
         <v-chip
-            v-for="(color, ix) in props.colors"
+            v-for="(color, ix) in colors"
             :key="color.toInt32()"
             :color="color.toCssColor()"
             class="color-chip"
@@ -80,7 +73,7 @@ function showAdd(value = true) {
             Pick Color
         </v-chip>
         <v-chip
-            v-if="props.colors.length > 0 && !props.noClear"
+            v-if="colors.length > 0 && !props.noClear"
             :prepend-icon="mdiDelete"
             @click="clear"
             label
@@ -97,7 +90,7 @@ function showAdd(value = true) {
             :removeColor="removeColor"
             :unique="unique"
             :colors="colors.slice()"
-            :updateColors="emitUpdate"
+            :updateColors="(v:RgbColor[]) => colors = v"
         >
             <v-dialog
                 v-model="isAddOpen"

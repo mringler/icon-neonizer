@@ -1,30 +1,28 @@
 <script setup lang="ts">
 import { mdiClose } from '@mdi/js'
 
-export type AlertSnackbarProps = {
+export type Props = {
     color?: string
+}
+export type AlertSnackbarProps = Props & {
     message: string | null
 }
-const props = withDefaults(defineProps<AlertSnackbarProps>(), {
-    color: 'purple',
-})
+const props = defineProps<Props>()
+const message = defineModel<string | null>('message', { default: 'purple', required: true })
 
-const emit = defineEmits<{
-    (e: 'update:message', message: string|null): void
-}>()
 const emitClearMessage = () => {
-    emit('update:message', null)
+    message.value = null
 }
 </script>
 
 <template>
     <v-snackbar
-        :model-value="Boolean(props.message)"
+        :model-value="Boolean(message)"
         @update:model-value="emitClearMessage"
         :color="color"
         v-bind="$attrs"
     >
-        {{ props.message }}
+        {{ message }}
 
         <template v-slot:actions>
             <v-btn
@@ -36,4 +34,5 @@ const emitClearMessage = () => {
     </v-snackbar>
 </template>
 
-<style scoped></style>
+<style scoped>
+</style>

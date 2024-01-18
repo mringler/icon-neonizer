@@ -5,35 +5,25 @@ import ImagePixelColorPicker from './ImagePixelColorPicker.vue'
 import SelectedColorChips from './SelectedColorChips.vue'
 
 type Props = {
-    modelValue: boolean
-    colors: RgbColor[]
     unique?: boolean
     imageData: ImageData | (() => Promise<ImageData>)
 }
 
-const props = withDefaults(defineProps<Props>(), {
-    colors: () => [] as RgbColor[],
-})
+const colors = defineModel<RgbColor[]>('colors', { required: true, default: () => [] as RgbColor[] })
+const model = defineModel<boolean>({required: true})
+
+const props = defineProps<Props>()
 const pickedColors: Ref<RgbColor[]> = ref([])
 
 watch(
-    () => props.colors,
-    () => (pickedColors.value = props.colors.slice()),
+    colors,
+    () => (pickedColors.value = colors.value.slice()),
     { immediate: true }
 )
 
-const emit = defineEmits<{
-    (e: 'update:colors', colors: RgbColor[]): void
-    (e: 'update:modelValue', value: boolean): void 
-}>()
-
-function emitIsOpen(value: boolean) {
-    emit('update:modelValue', value)
-}
-
 function emitUpdate() {
-    emit('update:colors', pickedColors.value)
-    emitIsOpen(false)
+    colors.value = pickedColors.value
+    model.value = false
 }
 
 function addColor(color: RgbColor) {
@@ -46,8 +36,7 @@ function addColor(color: RgbColor) {
 
 <template>
     <v-dialog
-        :model-value="props.modelValue"
-        @update:model-value="emitIsOpen"
+        v-model="model"
         content-class="align-center"
     >
         <v-card max-width="fit-content">
@@ -74,7 +63,7 @@ function addColor(color: RgbColor) {
                 <v-btn
                     color="secondary"
                     variant="text"
-                    @click="emitIsOpen(false)"
+                    @click="model = false"
                 > Cancel </v-btn>
                 <v-btn
                     color="primary"
