@@ -44,7 +44,7 @@ function buildHelpRenderer<D>(helpProps: HelpProps<D>) {
                     headers: Object.entries(tableData.keys).map(([key, title]) => ({
                         key,
                         title,
-                    })) as VDataTable['headers'],
+                    })) as VDataTable['$props']['headers'],
                     class: 'border mt-3',
                 },
                 {

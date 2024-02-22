@@ -10,7 +10,8 @@ import type { VDataTable } from 'vuetify/lib/components/index.mjs'
 
 type UnwrapReadonlyArray<A> = A extends Readonly<Array<infer I>> ? I : never;
 //type UnwrapArray<A>         = A extends Readonly<Array<infer I>> ? UnwrapArray<I> : {[k in keyof I]; I[k]};
-type Headers = VDataTable['headers'];
+type Headers = VDataTable['$props']['headers'];
+
 //type DeepMutable<T> = {-readonly[K in keyof T]: DeepMutable<T[K]>}
 //type DataTableHeader = DeepMutable<UnwrapReadonlyArray<Headers>>
 type DataTableHeader = UnwrapReadonlyArray<Headers>

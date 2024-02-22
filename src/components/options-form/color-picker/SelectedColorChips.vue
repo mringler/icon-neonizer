@@ -47,7 +47,7 @@ function showAdd(value = true) {
 </script>
 
 <template>
-    <v-chip-group class="flex-wrap mx-2">
+    <v-chip-group class="flex-wrap mx-2" column>
         <v-chip
             v-for="(color, ix) in colors"
             :key="color.toInt32()"
